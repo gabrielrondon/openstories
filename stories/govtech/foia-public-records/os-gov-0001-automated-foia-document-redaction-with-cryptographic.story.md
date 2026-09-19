@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: PDF export containing redacted text layer on foia-public-records combined
     with High Concurrency & Load Spikes
   given: A public records release containing confidential citizen documents
-  when: The redaction tool processes the document%!(EXTRA string=foia-public-records)
+  when: The redaction tool processes the document
   then: It must completely burn down the vector font glyphs into flattened pixels,
     ensuring zero OCR or clipboard retrieval
 edge_cases:
 - Metadata properties (author, document edit history, comment annotations) left intact
-  leaking confidential data%!(EXTRA string=foia-public-records) exacerbated by High
-  Concurrency & Load Spikes
+  leaking confidential data exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://news.ycombinator.com/item?id=36190281
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate metadata properties (author, document edit history,
-  comment annotations) left intact leaking confidential data%!(extra string=foia-public-records)
-  exacerbated by high concurrency & load spikes without manual intervention?
+  comment annotations) left intact leaking confidential data exacerbated by high concurrency
+  & load spikes without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - foia-public-records

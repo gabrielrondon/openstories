@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Device loses power mid-flash during firmware update on ota-firmware-updates
     combined with High Concurrency & Load Spikes
   given: An embedded device writing new firmware to Partition B
-  when: Power is cut at 80% completion and restored%!(EXTRA string=ota-firmware-updates)
+  when: Power is cut at 80%% completion and restored
   then: The bootloader must detect invalid CRC checksum and boot immediately back
     into the operational Partition A
 edge_cases:
 - Firmware that boots successfully but crashes after 5 minutes when connecting to
-  WiFi, evading simple boot watchdogs%!(EXTRA string=ota-firmware-updates) exacerbated
-  by High Concurrency & Load Spikes
+  WiFi, evading simple boot watchdogs exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://github.com/espressif/esp-idf/issues/5291
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate firmware that boots successfully but crashes after
-  5 minutes when connecting to wifi, evading simple boot watchdogs%!(extra string=ota-firmware-updates)
-  exacerbated by high concurrency & load spikes without manual intervention?
+  5 minutes when connecting to wifi, evading simple boot watchdogs exacerbated by
+  high concurrency & load spikes without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ota-firmware-updates

@@ -22,13 +22,12 @@ acceptance_criteria:
     combined with Disaster Recovery & Cascading Failover
   given: A user uploading an MP4 video from an older mobile phone
   when: The video file has the metadata index (moov atom) placed at the end of the
-    file%!(EXTRA string=feed-ranking)
+    file
   then: The ingestion pipeline must run fast-start relocation to enable streaming
     without downloading the whole file
 edge_cases:
 - High resolution 4K 60fps uploads overwhelming transcoder worker memory during viral
-  events%!(EXTRA string=feed-ranking) exacerbated by Disaster Recovery & Cascading
-  Failover
+  events exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://github.com/FFmpeg/FFmpeg/issues/8291
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate high resolution 4k 60fps uploads overwhelming transcoder
-  worker memory during viral events%!(extra string=feed-ranking) exacerbated by disaster
-  recovery & cascading failover without manual intervention?
+  worker memory during viral events exacerbated by disaster recovery & cascading failover
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - feed-ranking

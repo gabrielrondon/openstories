@@ -1,28 +1,31 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func getCatalog() []DomainDef {
 	var domains []DomainDef
 
 	// Definition of 20 Industries and their specific subdomains and story generators
 	industries := []struct {
-		Industry string
-		Prefix   string
-		Domains  []string
-		Role     string
-		Context  string
+		Industry  string
+		Prefix    string
+		Domains   []string
+		Role      string
+		Context   string
 		Templates []struct {
-			TitleFormat   string
-			IWantFormat   string
-			SoThatFormat  string
-			ScenarioFmt   string
-			GivenFmt      string
-			WhenFmt       string
-			ThenFmt       string
-			EdgeCaseFmt   string
-			QuoteFmt      string
-			SourceFmt     string
+			TitleFormat  string
+			IWantFormat  string
+			SoThatFormat string
+			ScenarioFmt  string
+			GivenFmt     string
+			WhenFmt      string
+			ThenFmt      string
+			EdgeCaseFmt  string
+			QuoteFmt     string
+			SourceFmt    string
 		}
 	}{
 		{
@@ -628,7 +631,7 @@ func getCatalog() []DomainDef {
 	for _, ind := range industries {
 		for _, dom := range ind.Domains {
 			stories := make([]StoryBlueprint, 0)
-			
+
 			for tIdx, tmpl := range ind.Templates {
 				for vIdx, v := range variations {
 					score := 9.0 + v.ScoreOffset - float64(tIdx)*0.15 - float64(vIdx)*0.03
@@ -639,10 +642,10 @@ func getCatalog() []DomainDef {
 						score = 7.5
 					}
 
-					title := fmt.Sprintf(tmpl.TitleFormat, dom) + fmt.Sprintf(" under %s", v.Modifier)
-					want := fmt.Sprintf(tmpl.IWantFormat, dom) + fmt.Sprintf(" with resilience to %s", v.Modifier)
-					scenario := fmt.Sprintf(tmpl.ScenarioFmt, dom) + fmt.Sprintf(" combined with %s", v.Modifier)
-					edgeCase := fmt.Sprintf(tmpl.EdgeCaseFmt, dom) + fmt.Sprintf(" exacerbated by %s", v.Modifier)
+					title := fill(tmpl.TitleFormat, dom) + fmt.Sprintf(" under %s", v.Modifier)
+					want := fill(tmpl.IWantFormat, dom) + fmt.Sprintf(" with resilience to %s", v.Modifier)
+					scenario := fill(tmpl.ScenarioFmt, dom) + fmt.Sprintf(" combined with %s", v.Modifier)
+					edgeCase := fill(tmpl.EdgeCaseFmt, dom) + fmt.Sprintf(" exacerbated by %s", v.Modifier)
 
 					stories = append(stories, StoryBlueprint{
 						Title:         title,
@@ -654,10 +657,10 @@ func getCatalog() []DomainDef {
 						SoThat:        tmpl.SoThatFormat,
 						Scenario:      scenario,
 						Given:         tmpl.GivenFmt,
-						When:          fmt.Sprintf(tmpl.WhenFmt, dom),
+						When:          fill(tmpl.WhenFmt, dom),
 						Then:          tmpl.ThenFmt,
 						EdgeCases:     []string{edgeCase, fmt.Sprintf("Cascading failover during %s", v.Modifier)},
-						EvidenceQuote: fmt.Sprintf(tmpl.QuoteFmt, dom),
+						EvidenceQuote: fill(tmpl.QuoteFmt, dom),
 						EvidenceSrc:   tmpl.SourceFmt,
 						EvidenceType:  "production_incident_report",
 						Tags:          []string{dom, ind.Industry, "production-outage", "reliability"},
@@ -675,4 +678,14 @@ func getCatalog() []DomainDef {
 	}
 
 	return domains
+}
+
+// fill applies the domain to a template only when the template has a
+// placeholder. Templates without %s are static text; passing an argument to
+// fmt.Sprintf there emits "%!(EXTRA string=...)" into the story.
+func fill(format, dom string) string {
+	if strings.Contains(format, "%s") {
+		return fmt.Sprintf(format, dom)
+	}
+	return format
 }

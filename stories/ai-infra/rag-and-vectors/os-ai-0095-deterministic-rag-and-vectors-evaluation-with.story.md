@@ -21,11 +21,11 @@ acceptance_criteria:
 - scenario: Upstream model provider alters system prompt formatting for rag-and-vectors
     combined with Multi-Tenant Data Leakage & Isolation Breaches
   given: An automated test suite evaluating baseline responses
-  when: Model accuracy drops by more than 3% on standard benchmarks%!(EXTRA string=rag-and-vectors)
+  when: Model accuracy drops by more than 3%% on standard benchmarks
   then: The CI pipeline must block model deployment and alert the on-call AI engineer
 edge_cases:
-- Non-deterministic temperature output causing sporadic false-positive test failures%!(EXTRA
-  string=rag-and-vectors) exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
+- Non-deterministic temperature output causing sporadic false-positive test failures
+  exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://github.com/vllm-project/vllm/issues/3102
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate non-deterministic temperature output causing sporadic
-  false-positive test failures%!(extra string=rag-and-vectors) exacerbated by multi-tenant
-  data leakage & isolation breaches without manual intervention?
+  false-positive test failures exacerbated by multi-tenant data leakage & isolation
+  breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - rag-and-vectors

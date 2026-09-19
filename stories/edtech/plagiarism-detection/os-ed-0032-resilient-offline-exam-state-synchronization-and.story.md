@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Internet connection drops while student is submitting timed exam on plagiarism-detection
     combined with Network Partitions & Distributed Timeout Failures
   given: A student actively answering a 60-minute certification test
-  when: The browser loses network connectivity 3 minutes before the timer expires%!(EXTRA
-    string=plagiarism-detection)
+  when: The browser loses network connectivity 3 minutes before the timer expires
   then: The client must continue storing encrypted keystrokes locally and automatically
     synchronize upon reconnect
 edge_cases:
 - System clock tampering on student laptops to artificially extend examination time
-  limits%!(EXTRA string=plagiarism-detection) exacerbated by Network Partitions &
-  Distributed Timeout Failures
+  limits exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://reddit.com/r/professors/comments/18k192a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate system clock tampering on student laptops to artificially
-  extend examination time limits%!(extra string=plagiarism-detection) exacerbated
-  by network partitions & distributed timeout failures without manual intervention?
+  extend examination time limits exacerbated by network partitions & distributed timeout
+  failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - plagiarism-detection

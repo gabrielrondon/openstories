@@ -21,11 +21,11 @@ acceptance_criteria:
 - scenario: Upstream model provider alters system prompt formatting for fine-tuning
     combined with High Concurrency & Load Spikes
   given: An automated test suite evaluating baseline responses
-  when: Model accuracy drops by more than 3% on standard benchmarks%!(EXTRA string=fine-tuning)
+  when: Model accuracy drops by more than 3%% on standard benchmarks
   then: The CI pipeline must block model deployment and alert the on-call AI engineer
 edge_cases:
-- Non-deterministic temperature output causing sporadic false-positive test failures%!(EXTRA
-  string=fine-tuning) exacerbated by High Concurrency & Load Spikes
+- Non-deterministic temperature output causing sporadic false-positive test failures
+  exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://github.com/vllm-project/vllm/issues/3102
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate non-deterministic temperature output causing sporadic
-  false-positive test failures%!(extra string=fine-tuning) exacerbated by high concurrency
-  & load spikes without manual intervention?
+  false-positive test failures exacerbated by high concurrency & load spikes without
+  manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - fine-tuning

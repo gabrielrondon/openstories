@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Lab technician approving clinical assay result on genomic-pipelines combined
     with Zero-Trust Authentication & Token Invalidation
   given: A completed PCR or genomic sequencing run
-  when: The certifying analyst submits approval%!(EXTRA string=genomic-pipelines)
+  when: The certifying analyst submits approval
   then: The system must prompt for fresh re-authentication and bind the signature
     cryptographically to the exact file hash
 edge_cases:
 - Sample re-testing producing discordant results requiring formal discrepancy deviation
-  investigations%!(EXTRA string=genomic-pipelines) exacerbated by Zero-Trust Authentication
-  & Token Invalidation
+  investigations exacerbated by Zero-Trust Authentication & Token Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://www.fda.gov/regulatory-information/search-fda-guidance-documents/part-11-electronic-records
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate sample re-testing producing discordant results
-  requiring formal discrepancy deviation investigations%!(extra string=genomic-pipelines)
-  exacerbated by zero-trust authentication & token invalidation without manual intervention?
+  requiring formal discrepancy deviation investigations exacerbated by zero-trust
+  authentication & token invalidation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - genomic-pipelines

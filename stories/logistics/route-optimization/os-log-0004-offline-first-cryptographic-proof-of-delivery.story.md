@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Driver delivering package in cellular dead zone on route-optimization
     combined with Strict Compliance & Regulatory Audit Enforcement
   given: A mobile dispatch scanner with zero cellular signal
-  when: The driver captures recipient signature and GPS photo timestamp%!(EXTRA string=route-optimization)
+  when: The driver captures recipient signature and GPS photo timestamp
   then: The mobile app must cryptographically sign the package receipt and queue it
     for opportunistic sync
 edge_cases:
 - Recipient disputing delivery when photo metadata shows GPS coordinates 50 meters
-  away from address%!(EXTRA string=route-optimization) exacerbated by Strict Compliance
-  & Regulatory Audit Enforcement
+  away from address exacerbated by Strict Compliance & Regulatory Audit Enforcement
 - Cascading failover during Strict Compliance & Regulatory Audit Enforcement
 evidence:
 - source: https://news.ycombinator.com/item?id=38192019
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate recipient disputing delivery when photo metadata
-  shows gps coordinates 50 meters away from address%!(extra string=route-optimization)
-  exacerbated by strict compliance & regulatory audit enforcement without manual intervention?
+  shows gps coordinates 50 meters away from address exacerbated by strict compliance
+  & regulatory audit enforcement without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - route-optimization

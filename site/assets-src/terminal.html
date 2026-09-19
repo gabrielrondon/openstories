@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>OpenStories terminal renders</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background: transparent; font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
+  .term { width: 1200px; background: #0f0f15; border: 1px solid #2a2a36; border-radius: 16px; box-shadow: 0 30px 80px rgba(0,0,0,.6); overflow: hidden; color: #e6e6ee; }
+  .bar { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; background: #171720; border-bottom: 1px solid #2a2a36; }
+  .bar i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .bar i:nth-child(1) { background: #ff5f57; } .bar i:nth-child(2) { background: #febc2e; } .bar i:nth-child(3) { background: #28c840; }
+  .bar span { margin-left: auto; margin-right: auto; color: #8a8a9e; font-size: 13px; }
+  pre { margin: 0; padding: 22px 26px; font-size: 15.5px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+  .p { color: #a78bfa; } .c { color: #22d3ee; } .b { font-weight: 700; color: #fff; } .y { color: #fbbf24; } .g { color: #34d399; } .r { color: #f87171; } .d { color: #8a8a9e; }
+  .page { padding: 40px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="page" id="list"><div class="term"><div class="bar"><i></i><i></i><i></i><span>openstories — zsh</span></div><pre><span class="p">$</span> openstories list
+
+📚 Total Registered Stories: <span class="b">1628</span>
+
+• <span class="c">OS-AI-001   </span> <span class="b">Automated Infinite Tool-Calling Loop Breaker with Graceful Degradation</span> [<span class="y">ai-infra</span>] (Score: 9.8)
+• <span class="c">OS-FIN-001  </span> <span class="b">Resilience to Asynchronous and Out-of-Order Payment Webhook Delivery</span> [<span class="y">fintech</span>] (Score: 9.7)
+• <span class="c">OS-DEV-001  </span> <span class="b">Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries</span> [<span class="y">devtools</span>] (Score: 9.6)
+• <span class="c">OS-AI-002   </span> <span class="b">Graceful Multi-Provider Fallback Cascade Against HTTP 429 Token Rate Limits</span> [<span class="y">ai-infra</span>] (Score: 9.5)
+• <span class="c">OS-DEV-002  </span> <span class="b">Preventing Magic Link Token Invalidation by Enterprise Email Security Scanners (Pre-fetching)</span> [<span class="y">devtools</span>] (Score: 9.4)
+• <span class="c">OS-HLTH-0062</span> <span class="b">End-to-end audit logging of PHI access on prescription-management under Network Partitions</span> [<span class="y">healthcare</span>] (Score: 9.4)
+• <span class="c">OS-SEC-0002 </span> <span class="b">Automated high-entropy secret detection with pre-commit and CI blocking for zero-trust-access</span> [<span class="y">cybersecurity</span>] (Score: 9.4)
+• <span class="c">OS-FIN-0122 </span> <span class="b">Double-entry immutable ledger journaling for card-issuing transactions under Network Partitions</span> [<span class="y">fintech</span>] (Score: 9.4)
+<span class="d">… 1,620 more across 20 industries</span>
+
+<span class="p">$</span> openstories search "magic link"
+
+🔍 Found <span class="b">101</span> stories matching: "magic link"
+
+• <span class="c">[OS-DEV-002]</span> <span class="b">Preventing Magic Link Token Invalidation by Enterprise Email Security Scanners (Pre-fetching)</span> (Score: <span class="g">9.4</span>)
+  Industry: devtools | Domain: auth-and-iam | Evidence: 2 sources
+  <span class="d">Want: The link in my email to avoid instant invalidation before my deliberate human click</span></pre></div></div>
+
+<div class="page" id="get"><div class="term"><div class="bar"><i></i><i></i><i></i><span>openstories — zsh</span></div><pre><span class="p">$</span> openstories get OS-DEV-001
+
+ID: <span class="c">OS-DEV-001</span> | Industry: devtools | Domain: apis-and-sdks | Demand Score: <span class="g">9.6</span>
+Title: <span class="b">Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries</span>
+
+📋 <span class="b">USER STORY STATEMENT:</span>
+  As a: Backend engineer integrating third-party APIs
+  I want: Mutation endpoints (POST/PATCH) to support an Idempotency-Key header with atomic deduplication and response caching
+  So that: Transient network drops, client timeouts, or connection resets never duplicate state mutations or charge customers twice
+
+✅ <span class="b">GHERKIN ACCEPTANCE CRITERIA:</span>
+  • Scenario: Replaying an identical request with the same idempotency key within 24h
+    GIVEN: A previous request with Idempotency-Key "idemp_9921_x" completed with HTTP 201 and payload {"id": "tx_123"}
+    WHEN:  A new request arrives with the exact same key "idemp_9921_x" and identical payload
+    THEN:  The API must return HTTP 201 with the cached payload and header "Idempotent-Replayed: true", without re-executing business logic
+  • Scenario: Payload mismatch conflict on identical key
+    GIVEN: The key "idemp_9921_x" was already processed with payload A
+    WHEN:  A client submits the same key "idemp_9921_x" with a different payload B
+    THEN:  The API must reject with HTTP 422 Unprocessable Entity and error code "idempotency_key_payload_mismatch"
+  • Scenario: Concurrent in-flight requests sharing the same key
+    GIVEN: A request with key "idemp_9921_x" is currently being processed by a worker
+    WHEN:  A second concurrent request arrives with the exact same key before completion
+    THEN:  The API must return HTTP 409 Conflict or hold a distributed lock until the first completes
+
+⚠️ <span class="b">OBSERVED PRODUCTION EDGE CASES:</span>
+  • Idempotency key TTL expiration after the standard retention window (24 hours).
+  • Sub-millisecond race conditions mitigated via distributed locks (e.g. Redis Redlock or Postgres advisory locks).
+  • Full header and status code preservation (replaying original response headers, not just raw JSON body).
+
+🔗 <span class="b">GROUNDED REAL-WORLD EVIDENCE:</span>
+  • <span class="y">"During network drops on cloud providers, client retries without idempotency keys produced duplicate customer charges totaling over $45k in less than 20 minutes."</span> - https://github.com/stripe/stripe-go/issues/632 (2024-09-14)
+  • <span class="y">"Building distributed systems without first-class idempotency in API design is tech debt that will eventually wake someone up at 3 AM with data corruption."</span> - https://news.ycombinator.com/item?id=38192801 (2025-01-18)</pre></div></div>
+
+<div class="page" id="eval"><div class="term"><div class="bar"><i></i><i></i><i></i><span>openstories — zsh</span></div><pre><span class="p">$</span> openstories eval --industry devtools "Credit card charge endpoint that retries Stripe on network timeout."
+
+🛡️  <span class="b">REALITY STRESS-TEST REPORT</span>
+Reality Coverage Score: <span class="r">54/100</span>
+Summary: Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.
+
+🚨 <span class="y">PRODUCTION BLIND SPOTS UNHANDLED IN SPEC:</span>
+  <span class="r">❌</span> [OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints: Idempotency key TTL expiration after the standard retention window (24 hours).
+  <span class="r">❌</span> [OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints: Sub-millisecond race conditions mitigated via distributed locks (Redis Redlock or Postgres advisory locks).
+  <span class="r">❌</span> [OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints: Full header and status code preservation (replaying original response headers, not just raw JSON body).
+  <span class="r">❌</span> [OS-DEV-0011] High-throughput apis-and-sdks rate limiting with distributed sliding window under High Concurrency &amp; Load Spikes: Clock drift between distributed nodes skewing sliding window timestamp calculations exacerbated by High Concurrency &amp; Load Spikes
+  <span class="r">❌</span> [OS-DEV-0011] High-throughput apis-and-sdks rate limiting with distributed sliding window under High Concurrency &amp; Load Spikes: Cascading failover during High Concurrency &amp; Load Spikes
+
+💡 <span class="y">ACTIONABLE RECOMMENDATIONS:</span>
+  • Add explicit integration and failure-injection tests covering the flagged production edge cases.
+  • Document explicit architectural answers to the quality checklist rubrics before writing code.
+  • Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite.</pre></div></div>
+
+<div class="page" id="install"><div class="term"><div class="bar"><i></i><i></i><i></i><span>openstories — zsh</span></div><pre><span class="p">$</span> go install github.com/gabrielrondon/openstories/cmd/openstories@latest
+
+<span class="p">$</span> openstories install claude
+<span class="g">✅</span> Configured OpenStories MCP in Claude Code CLI: /Users/you/.claude.json
+<span class="g">✅</span> Configured OpenStories MCP in: /Users/you/Library/Application Support/Claude/claude_desktop_config.json
+
+<span class="p">$</span> openstories install cursor
+<span class="g">✅</span> Configured OpenStories MCP in: /Users/you/.cursor/mcp.json
+
+<span class="d"># restart the client; the agent now has search_stories, get_story, evaluate_spec, list_taxonomies, save_custom_story</span>
+
+<span class="p">$</span> openstories serve --port 8080
+🌐 OpenStories Web Interface rodando em http://localhost:8080
+🚀 Pronto para servir localmente ou via openstories.tuturama.com!</pre></div></div>
+
+</body>
+</html>

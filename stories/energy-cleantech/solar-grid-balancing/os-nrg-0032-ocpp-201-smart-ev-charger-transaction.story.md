@@ -22,13 +22,12 @@ acceptance_criteria:
     on solar-grid-balancing combined with Network Partitions & Distributed Timeout
     Failures
   given: An active high-power DC fast charging session delivering 150 kW
-  when: The station's cellular uplink drops%!(EXTRA string=solar-grid-balancing)
+  when: The station's cellular uplink drops
   then: The charger must continue dispensing power safely and buffer meter values
     locally until cloud connectivity recovers
 edge_cases:
 - Emergency stop button pressed during offline session requiring local safety cut-off
-  within 100ms%!(EXTRA string=solar-grid-balancing) exacerbated by Network Partitions
-  & Distributed Timeout Failures
+  within 100ms exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://github.com/Open-Charge-Alliance/OCPP/issues/219
@@ -39,9 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate emergency stop button pressed during offline session
-  requiring local safety cut-off within 100ms%!(extra string=solar-grid-balancing)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  requiring local safety cut-off within 100ms exacerbated by network partitions &
+  distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - solar-grid-balancing

@@ -21,12 +21,11 @@ acceptance_criteria:
 - scenario: Stale timestamp in webhook signature header for observability combined
     with Zero-Trust Authentication & Token Invalidation
   given: An incoming webhook signed with valid secret key
-  when: The event timestamp is older than 300 seconds%!(EXTRA string=observability)
+  when: The event timestamp is older than 300 seconds
   then: The ingestion pipeline must reject the payload with HTTP 401 Unauthorized
 edge_cases:
 - Slow asynchronous delivery queues causing legitimate events to arrive near the 5-minute
-  threshold%!(EXTRA string=observability) exacerbated by Zero-Trust Authentication
-  & Token Invalidation
+  threshold exacerbated by Zero-Trust Authentication & Token Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://github.com/stripe/stripe-node/issues/1420
@@ -37,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate slow asynchronous delivery queues causing legitimate
-  events to arrive near the 5-minute threshold%!(extra string=observability) exacerbated
-  by zero-trust authentication & token invalidation without manual intervention?
+  events to arrive near the 5-minute threshold exacerbated by zero-trust authentication
+  & token invalidation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - observability

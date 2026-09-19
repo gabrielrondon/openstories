@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Card testing attack trying 50 distinct CVVs per minute on payments-and-checkout
     combined with Multi-Tenant Data Leakage & Isolation Breaches
   given: Traffic originating from a single IP or fingerprint hash
-  when: More than 3 card authorization declines occur within 10 seconds%!(EXTRA string=payments-and-checkout)
+  when: More than 3 card authorization declines occur within 10 seconds
   then: The gateway must trigger mandatory Captcha and biometric 3DS verification
     on all subsequent requests
 edge_cases:
 - Distributed botnet cycling residential proxies to evade naive single-IP velocity
-  limits%!(EXTRA string=payments-and-checkout) exacerbated by Multi-Tenant Data Leakage
-  & Isolation Breaches
+  limits exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://reddit.com/r/stripe/comments/16k29a1
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate distributed botnet cycling residential proxies
-  to evade naive single-ip velocity limits%!(extra string=payments-and-checkout) exacerbated
-  by multi-tenant data leakage & isolation breaches without manual intervention?
+  to evade naive single-ip velocity limits exacerbated by multi-tenant data leakage
+  & isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - payments-and-checkout

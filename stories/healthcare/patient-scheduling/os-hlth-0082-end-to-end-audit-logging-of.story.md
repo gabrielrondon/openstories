@@ -21,14 +21,13 @@ acceptance_criteria:
 - scenario: Staff member querying patient records without assigned care relationship
     on patient-scheduling combined with Network Partitions & Distributed Timeout Failures
   given: A logged-in nurse or doctor in the hospital network
-  when: The user views the medical chart of a patient not under their direct care%!(EXTRA
-    string=patient-scheduling)
+  when: The user views the medical chart of a patient not under their direct care
   then: The system must log a high-priority compliance audit event and prompt the
     clinician for a clinical justification reason
 edge_cases:
 - Emergency department 'break-the-glass' protocols requiring immediate chart override
-  during life-threatening triage%!(EXTRA string=patient-scheduling) exacerbated by
-  Network Partitions & Distributed Timeout Failures
+  during life-threatening triage exacerbated by Network Partitions & Distributed Timeout
+  Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/index.html
@@ -39,9 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate emergency department 'break-the-glass' protocols
-  requiring immediate chart override during life-threatening triage%!(extra string=patient-scheduling)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  requiring immediate chart override during life-threatening triage exacerbated by
+  network partitions & distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - patient-scheduling

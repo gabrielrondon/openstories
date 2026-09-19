@@ -21,11 +21,11 @@ acceptance_criteria:
 - scenario: Upstream model provider alters system prompt formatting for prompt-caching
     combined with Cold-Start Latency & Resource Starvation
   given: An automated test suite evaluating baseline responses
-  when: Model accuracy drops by more than 3% on standard benchmarks%!(EXTRA string=prompt-caching)
+  when: Model accuracy drops by more than 3%% on standard benchmarks
   then: The CI pipeline must block model deployment and alert the on-call AI engineer
 edge_cases:
-- Non-deterministic temperature output causing sporadic false-positive test failures%!(EXTRA
-  string=prompt-caching) exacerbated by Cold-Start Latency & Resource Starvation
+- Non-deterministic temperature output causing sporadic false-positive test failures
+  exacerbated by Cold-Start Latency & Resource Starvation
 - Cascading failover during Cold-Start Latency & Resource Starvation
 evidence:
 - source: https://github.com/vllm-project/vllm/issues/3102
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate non-deterministic temperature output causing sporadic
-  false-positive test failures%!(extra string=prompt-caching) exacerbated by cold-start
-  latency & resource starvation without manual intervention?
+  false-positive test failures exacerbated by cold-start latency & resource starvation
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - prompt-caching

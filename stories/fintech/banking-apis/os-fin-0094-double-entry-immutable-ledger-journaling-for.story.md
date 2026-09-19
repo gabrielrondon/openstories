@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Asynchronous database rollback during partial ledger write for banking-apis
     combined with Strict Compliance & Regulatory Audit Enforcement
   given: A multi-leg balance transfer in progress
-  when: The secondary account credit query times out%!(EXTRA string=banking-apis)
+  when: The secondary account credit query times out
   then: The transaction coordinator must execute a full atomic rollback, preventing
     money from vanishing into thin air
 edge_cases:
 - Concurrent debit operations on accounts with balance near zero triggering race condition
-  overdrafts%!(EXTRA string=banking-apis) exacerbated by Strict Compliance & Regulatory
-  Audit Enforcement
+  overdrafts exacerbated by Strict Compliance & Regulatory Audit Enforcement
 - Cascading failover during Strict Compliance & Regulatory Audit Enforcement
 evidence:
 - source: https://news.ycombinator.com/item?id=36192801
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate concurrent debit operations on accounts with balance
-  near zero triggering race condition overdrafts%!(extra string=banking-apis) exacerbated
-  by strict compliance & regulatory audit enforcement without manual intervention?
+  near zero triggering race condition overdrafts exacerbated by strict compliance
+  & regulatory audit enforcement without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - banking-apis

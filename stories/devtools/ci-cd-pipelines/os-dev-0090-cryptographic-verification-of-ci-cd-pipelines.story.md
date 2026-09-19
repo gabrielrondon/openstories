@@ -21,12 +21,11 @@ acceptance_criteria:
 - scenario: Stale timestamp in webhook signature header for ci-cd-pipelines combined
     with Disaster Recovery & Cascading Failover
   given: An incoming webhook signed with valid secret key
-  when: The event timestamp is older than 300 seconds%!(EXTRA string=ci-cd-pipelines)
+  when: The event timestamp is older than 300 seconds
   then: The ingestion pipeline must reject the payload with HTTP 401 Unauthorized
 edge_cases:
 - Slow asynchronous delivery queues causing legitimate events to arrive near the 5-minute
-  threshold%!(EXTRA string=ci-cd-pipelines) exacerbated by Disaster Recovery & Cascading
-  Failover
+  threshold exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://github.com/stripe/stripe-node/issues/1420
@@ -37,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate slow asynchronous delivery queues causing legitimate
-  events to arrive near the 5-minute threshold%!(extra string=ci-cd-pipelines) exacerbated
-  by disaster recovery & cascading failover without manual intervention?
+  events to arrive near the 5-minute threshold exacerbated by disaster recovery &
+  cascading failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ci-cd-pipelines

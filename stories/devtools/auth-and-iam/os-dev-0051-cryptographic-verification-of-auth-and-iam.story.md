@@ -21,11 +21,11 @@ acceptance_criteria:
 - scenario: Stale timestamp in webhook signature header for auth-and-iam combined
     with High Concurrency & Load Spikes
   given: An incoming webhook signed with valid secret key
-  when: The event timestamp is older than 300 seconds%!(EXTRA string=auth-and-iam)
+  when: The event timestamp is older than 300 seconds
   then: The ingestion pipeline must reject the payload with HTTP 401 Unauthorized
 edge_cases:
 - Slow asynchronous delivery queues causing legitimate events to arrive near the 5-minute
-  threshold%!(EXTRA string=auth-and-iam) exacerbated by High Concurrency & Load Spikes
+  threshold exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://github.com/stripe/stripe-node/issues/1420
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate slow asynchronous delivery queues causing legitimate
-  events to arrive near the 5-minute threshold%!(extra string=auth-and-iam) exacerbated
-  by high concurrency & load spikes without manual intervention?
+  events to arrive near the 5-minute threshold exacerbated by high concurrency & load
+  spikes without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - auth-and-iam

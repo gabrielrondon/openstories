@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Employee relocates without notifying HR until mid-quarter on ats-resume-parsing
     combined with Data Drift & Silent Schema Corruption
   given: An employee moving from New York to New Jersey or Florida
-  when: The address change is retroactively submitted into the payroll system%!(EXTRA
-    string=ats-resume-parsing)
+  when: The address change is retroactively submitted into the payroll system
   then: The payroll engine must compute prior-quarter withholding adjustments and
     generate corrected tax reports
 edge_cases:
 - Local city income taxes (e.g. NYC, Philadelphia, Columbus) missed when using state-level
-  lookup tables%!(EXTRA string=ats-resume-parsing) exacerbated by Data Drift & Silent
-  Schema Corruption
+  lookup tables exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://reddit.com/r/humanresources/comments/16u182a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate local city income taxes (e.g. nyc, philadelphia,
-  columbus) missed when using state-level lookup tables%!(extra string=ats-resume-parsing)
-  exacerbated by data drift & silent schema corruption without manual intervention?
+  columbus) missed when using state-level lookup tables exacerbated by data drift
+  & silent schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ats-resume-parsing

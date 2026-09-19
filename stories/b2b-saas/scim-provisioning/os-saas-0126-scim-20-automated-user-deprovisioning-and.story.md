@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Okta or Azure AD sends deprovision PATCH command for scim-provisioning
     combined with Cold-Start Latency & Resource Starvation
   given: An active user with valid session tokens in multiple browser tabs
-  when: The identity provider issues a SCIM active=false request%!(EXTRA string=scim-provisioning)
+  when: The identity provider issues a SCIM active=false request
   then: The backend must revoke all active refresh tokens and WebSocket connections
     in under 500ms
 edge_cases:
 - User reassigned to a different department with reduced permissions while currently
-  holding an active session%!(EXTRA string=scim-provisioning) exacerbated by Cold-Start
-  Latency & Resource Starvation
+  holding an active session exacerbated by Cold-Start Latency & Resource Starvation
 - Cascading failover during Cold-Start Latency & Resource Starvation
 evidence:
 - source: https://github.com/boxyhq/jackson/issues/612
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate user reassigned to a different department with
-  reduced permissions while currently holding an active session%!(extra string=scim-provisioning)
-  exacerbated by cold-start latency & resource starvation without manual intervention?
+  reduced permissions while currently holding an active session exacerbated by cold-start
+  latency & resource starvation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - scim-provisioning

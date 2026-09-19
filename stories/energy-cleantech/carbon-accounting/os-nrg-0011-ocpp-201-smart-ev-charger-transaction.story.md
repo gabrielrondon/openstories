@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: EV charger loses cellular modem connection during active charging session
     on carbon-accounting combined with High Concurrency & Load Spikes
   given: An active high-power DC fast charging session delivering 150 kW
-  when: The station's cellular uplink drops%!(EXTRA string=carbon-accounting)
+  when: The station's cellular uplink drops
   then: The charger must continue dispensing power safely and buffer meter values
     locally until cloud connectivity recovers
 edge_cases:
 - Emergency stop button pressed during offline session requiring local safety cut-off
-  within 100ms%!(EXTRA string=carbon-accounting) exacerbated by High Concurrency &
-  Load Spikes
+  within 100ms exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://github.com/Open-Charge-Alliance/OCPP/issues/219
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate emergency stop button pressed during offline session
-  requiring local safety cut-off within 100ms%!(extra string=carbon-accounting) exacerbated
-  by high concurrency & load spikes without manual intervention?
+  requiring local safety cut-off within 100ms exacerbated by high concurrency & load
+  spikes without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - carbon-accounting

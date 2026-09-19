@@ -22,13 +22,12 @@ acceptance_criteria:
     combined with Asynchronous Race Conditions & Deadlocks
   given: A user uploading an MP4 video from an older mobile phone
   when: The video file has the metadata index (moov atom) placed at the end of the
-    file%!(EXTRA string=hls-video-streaming)
+    file
   then: The ingestion pipeline must run fast-start relocation to enable streaming
     without downloading the whole file
 edge_cases:
 - High resolution 4K 60fps uploads overwhelming transcoder worker memory during viral
-  events%!(EXTRA string=hls-video-streaming) exacerbated by Asynchronous Race Conditions
-  & Deadlocks
+  events exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://github.com/FFmpeg/FFmpeg/issues/8291
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate high resolution 4k 60fps uploads overwhelming transcoder
-  worker memory during viral events%!(extra string=hls-video-streaming) exacerbated
-  by asynchronous race conditions & deadlocks without manual intervention?
+  worker memory during viral events exacerbated by asynchronous race conditions &
+  deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - hls-video-streaming

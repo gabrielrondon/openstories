@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Employee relocates without notifying HR until mid-quarter on interview-scheduling
     combined with Zero-Trust Authentication & Token Invalidation
   given: An employee moving from New York to New Jersey or Florida
-  when: The address change is retroactively submitted into the payroll system%!(EXTRA
-    string=interview-scheduling)
+  when: The address change is retroactively submitted into the payroll system
   then: The payroll engine must compute prior-quarter withholding adjustments and
     generate corrected tax reports
 edge_cases:
 - Local city income taxes (e.g. NYC, Philadelphia, Columbus) missed when using state-level
-  lookup tables%!(EXTRA string=interview-scheduling) exacerbated by Zero-Trust Authentication
-  & Token Invalidation
+  lookup tables exacerbated by Zero-Trust Authentication & Token Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://reddit.com/r/humanresources/comments/16u182a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate local city income taxes (e.g. nyc, philadelphia,
-  columbus) missed when using state-level lookup tables%!(extra string=interview-scheduling)
-  exacerbated by zero-trust authentication & token invalidation without manual intervention?
+  columbus) missed when using state-level lookup tables exacerbated by zero-trust
+  authentication & token invalidation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - interview-scheduling

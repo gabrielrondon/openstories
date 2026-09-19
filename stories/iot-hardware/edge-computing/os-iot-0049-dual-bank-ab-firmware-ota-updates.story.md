@@ -21,13 +21,13 @@ acceptance_criteria:
 - scenario: Device loses power mid-flash during firmware update on edge-computing
     combined with Zero-Trust Authentication & Token Invalidation
   given: An embedded device writing new firmware to Partition B
-  when: Power is cut at 80% completion and restored%!(EXTRA string=edge-computing)
+  when: Power is cut at 80%% completion and restored
   then: The bootloader must detect invalid CRC checksum and boot immediately back
     into the operational Partition A
 edge_cases:
 - Firmware that boots successfully but crashes after 5 minutes when connecting to
-  WiFi, evading simple boot watchdogs%!(EXTRA string=edge-computing) exacerbated by
-  Zero-Trust Authentication & Token Invalidation
+  WiFi, evading simple boot watchdogs exacerbated by Zero-Trust Authentication & Token
+  Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://github.com/espressif/esp-idf/issues/5291
@@ -38,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate firmware that boots successfully but crashes after
-  5 minutes when connecting to wifi, evading simple boot watchdogs%!(extra string=edge-computing)
-  exacerbated by zero-trust authentication & token invalidation without manual intervention?
+  5 minutes when connecting to wifi, evading simple boot watchdogs exacerbated by
+  zero-trust authentication & token invalidation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - edge-computing

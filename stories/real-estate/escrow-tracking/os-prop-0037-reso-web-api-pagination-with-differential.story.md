@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: MLS server drops pagination token during large 50k listing pull for escrow-tracking
     combined with Idempotency & Replay Attack Vulnerabilities
   given: A background synchronization job consuming RESO API
-  when: The upstream server returns HTTP 500 midway through a paginated sync%!(EXTRA
-    string=escrow-tracking)
+  when: The upstream server returns HTTP 500 midway through a paginated sync
   then: The job must resume from the last committed ModificationTimestamp without
     re-pulling identical records
 edge_cases:
 - Listings deleted or marked private by agents leaving phantom listings active on
-  public search%!(EXTRA string=escrow-tracking) exacerbated by Idempotency & Replay
-  Attack Vulnerabilities
+  public search exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://github.com/reso-standards/reso-web-api/issues/102
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate listings deleted or marked private by agents leaving
-  phantom listings active on public search%!(extra string=escrow-tracking) exacerbated
-  by idempotency & replay attack vulnerabilities without manual intervention?
+  phantom listings active on public search exacerbated by idempotency & replay attack
+  vulnerabilities without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - escrow-tracking

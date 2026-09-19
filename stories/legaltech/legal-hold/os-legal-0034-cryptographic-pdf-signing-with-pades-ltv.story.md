@@ -21,13 +21,13 @@ acceptance_criteria:
 - scenario: Signatory certificate revocation check during offline contract verification
     on legal-hold combined with Strict Compliance & Regulatory Audit Enforcement
   given: A signed legal agreement with embedded OCSP response
-  when: An auditor inspects the PDF document a decade later%!(EXTRA string=legal-hold)
+  when: An auditor inspects the PDF document a decade later
   then: The embedded LTV record must confirm the certificate was valid at the exact
     second of signing
 edge_cases:
 - PDF visual layer alterations where hidden text layers under black highlight boxes
-  are exposed upon copy-paste%!(EXTRA string=legal-hold) exacerbated by Strict Compliance
-  & Regulatory Audit Enforcement
+  are exposed upon copy-paste exacerbated by Strict Compliance & Regulatory Audit
+  Enforcement
 - Cascading failover during Strict Compliance & Regulatory Audit Enforcement
 evidence:
 - source: https://news.ycombinator.com/item?id=34918201
@@ -38,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate pdf visual layer alterations where hidden text
-  layers under black highlight boxes are exposed upon copy-paste%!(extra string=legal-hold)
-  exacerbated by strict compliance & regulatory audit enforcement without manual intervention?
+  layers under black highlight boxes are exposed upon copy-paste exacerbated by strict
+  compliance & regulatory audit enforcement without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - legal-hold

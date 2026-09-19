@@ -21,11 +21,11 @@ acceptance_criteria:
 - scenario: Upstream model provider alters system prompt formatting for rag-and-vectors
     combined with Data Drift & Silent Schema Corruption
   given: An automated test suite evaluating baseline responses
-  when: Model accuracy drops by more than 3% on standard benchmarks%!(EXTRA string=rag-and-vectors)
+  when: Model accuracy drops by more than 3%% on standard benchmarks
   then: The CI pipeline must block model deployment and alert the on-call AI engineer
 edge_cases:
-- Non-deterministic temperature output causing sporadic false-positive test failures%!(EXTRA
-  string=rag-and-vectors) exacerbated by Data Drift & Silent Schema Corruption
+- Non-deterministic temperature output causing sporadic false-positive test failures
+  exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/vllm-project/vllm/issues/3102
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate non-deterministic temperature output causing sporadic
-  false-positive test failures%!(extra string=rag-and-vectors) exacerbated by data
-  drift & silent schema corruption without manual intervention?
+  false-positive test failures exacerbated by data drift & silent schema corruption
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - rag-and-vectors

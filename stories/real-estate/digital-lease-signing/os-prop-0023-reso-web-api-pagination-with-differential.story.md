@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: MLS server drops pagination token during large 50k listing pull for digital-lease-signing
     combined with Data Drift & Silent Schema Corruption
   given: A background synchronization job consuming RESO API
-  when: The upstream server returns HTTP 500 midway through a paginated sync%!(EXTRA
-    string=digital-lease-signing)
+  when: The upstream server returns HTTP 500 midway through a paginated sync
   then: The job must resume from the last committed ModificationTimestamp without
     re-pulling identical records
 edge_cases:
 - Listings deleted or marked private by agents leaving phantom listings active on
-  public search%!(EXTRA string=digital-lease-signing) exacerbated by Data Drift &
-  Silent Schema Corruption
+  public search exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/reso-standards/reso-web-api/issues/102
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate listings deleted or marked private by agents leaving
-  phantom listings active on public search%!(extra string=digital-lease-signing) exacerbated
-  by data drift & silent schema corruption without manual intervention?
+  phantom listings active on public search exacerbated by data drift & silent schema
+  corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - digital-lease-signing

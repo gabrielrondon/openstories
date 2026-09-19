@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Receiving custom proprietary extensions in FHIR bundle for hipaa-compliance
     combined with Asynchronous Race Conditions & Deadlocks
   given: An incoming HL7 FHIR payload from an external EHR system (Epic or Cerner)
-  when: The bundle contains unmapped LOINC or SNOMED CT terminology codes%!(EXTRA
-    string=hipaa-compliance)
+  when: The bundle contains unmapped LOINC or SNOMED CT terminology codes
   then: The ingestion adapter must safely quarantine the message and alert clinical
     informatics rather than discarding the lab value
 edge_cases:
 - Mismatched patient identifier matching rules resulting in chart merging errors across
-  different hospital networks%!(EXTRA string=hipaa-compliance) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  different hospital networks exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://github.com/hapifhir/hapi-fhir/issues/3891
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate mismatched patient identifier matching rules resulting
-  in chart merging errors across different hospital networks%!(extra string=hipaa-compliance)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  in chart merging errors across different hospital networks exacerbated by asynchronous
+  race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - hipaa-compliance

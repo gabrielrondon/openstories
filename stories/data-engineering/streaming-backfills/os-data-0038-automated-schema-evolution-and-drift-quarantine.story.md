@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Upstream database drops column or changes int32 to string in streaming-backfills
     combined with Asynchronous Race Conditions & Deadlocks
   given: A streaming Debezium CDC connector reading MySQL binlogs
-  when: An event with an incompatible schema alteration arrives%!(EXTRA string=streaming-backfills)
+  when: An event with an incompatible schema alteration arrives
   then: The consumer must route non-compliant records to a Dead Letter Queue (DLQ)
     without halting stream ingestion
 edge_cases:
 - High-frequency column renames causing silent data loss if mapping rules rely on
-  strict name equality%!(EXTRA string=streaming-backfills) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  strict name equality exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://github.com/debezium/debezium/issues/4512
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate high-frequency column renames causing silent data
-  loss if mapping rules rely on strict name equality%!(extra string=streaming-backfills)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  loss if mapping rules rely on strict name equality exacerbated by asynchronous race
+  conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - streaming-backfills

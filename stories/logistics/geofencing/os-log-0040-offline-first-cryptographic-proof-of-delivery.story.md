@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Driver delivering package in cellular dead zone on geofencing combined
     with Disaster Recovery & Cascading Failover
   given: A mobile dispatch scanner with zero cellular signal
-  when: The driver captures recipient signature and GPS photo timestamp%!(EXTRA string=geofencing)
+  when: The driver captures recipient signature and GPS photo timestamp
   then: The mobile app must cryptographically sign the package receipt and queue it
     for opportunistic sync
 edge_cases:
 - Recipient disputing delivery when photo metadata shows GPS coordinates 50 meters
-  away from address%!(EXTRA string=geofencing) exacerbated by Disaster Recovery &
-  Cascading Failover
+  away from address exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://news.ycombinator.com/item?id=38192019
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate recipient disputing delivery when photo metadata
-  shows gps coordinates 50 meters away from address%!(extra string=geofencing) exacerbated
-  by disaster recovery & cascading failover without manual intervention?
+  shows gps coordinates 50 meters away from address exacerbated by disaster recovery
+  & cascading failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - geofencing

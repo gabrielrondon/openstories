@@ -23,12 +23,12 @@ acceptance_criteria:
     combined with Data Drift & Silent Schema Corruption
   given: A hotel with 1 remaining suite
   when: Booking.com and Airbnb submit confirmed reservations within 500ms of each
-    other%!(EXTRA string=gds-flight-inventory)
+    other
   then: The channel manager must process the first reservation and immediately send
     a zero-inventory push to all other channels
 edge_cases:
-- Channel API latency delays of several minutes during peak holiday booking events%!(EXTRA
-  string=gds-flight-inventory) exacerbated by Data Drift & Silent Schema Corruption
+- Channel API latency delays of several minutes during peak holiday booking events
+  exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://news.ycombinator.com/item?id=37128941
@@ -39,8 +39,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate channel api latency delays of several minutes during
-  peak holiday booking events%!(extra string=gds-flight-inventory) exacerbated by
-  data drift & silent schema corruption without manual intervention?
+  peak holiday booking events exacerbated by data drift & silent schema corruption
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - gds-flight-inventory

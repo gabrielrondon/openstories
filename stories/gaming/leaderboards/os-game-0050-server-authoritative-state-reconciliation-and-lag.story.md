@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Malicious player transmitting spoofed client timestamp packets on leaderboards
     combined with Disaster Recovery & Cascading Failover
   given: A competitive multiplayer match in progress
-  when: A client reports movement coordinates exceeding physical maximum speed vectors%!(EXTRA
-    string=leaderboards)
+  when: A client reports movement coordinates exceeding physical maximum speed vectors
   then: The authoritative game server must reject the delta, snap the player back
     to validated state, and flag telemetry
 edge_cases:
-- Legitimate packet loss causing server reconciliation rubber-banding for fair players%!(EXTRA
-  string=leaderboards) exacerbated by Disaster Recovery & Cascading Failover
+- Legitimate packet loss causing server reconciliation rubber-banding for fair players
+  exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://reddit.com/r/gamedev/comments/15k918a
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate legitimate packet loss causing server reconciliation
-  rubber-banding for fair players%!(extra string=leaderboards) exacerbated by disaster
-  recovery & cascading failover without manual intervention?
+  rubber-banding for fair players exacerbated by disaster recovery & cascading failover
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - leaderboards

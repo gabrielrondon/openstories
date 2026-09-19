@@ -20,12 +20,12 @@ acceptance_criteria:
 - scenario: Dense document containing conflicting historical revisions of fine-tuning
     combined with Disaster Recovery & Cascading Failover
   given: A user asking for current active policy
-  when: Vector similarity returns outdated chunks with high cosine score%!(EXTRA string=fine-tuning)
+  when: Vector similarity returns outdated chunks with high cosine score
   then: The temporal re-ranker must prioritize the chunk with the latest verifiable
     effective date
 edge_cases:
-- Tables and code blocks split across chunk boundaries corrupting syntax during generation%!(EXTRA
-  string=fine-tuning) exacerbated by Disaster Recovery & Cascading Failover
+- Tables and code blocks split across chunk boundaries corrupting syntax during generation
+  exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://news.ycombinator.com/item?id=39120481
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate tables and code blocks split across chunk boundaries
-  corrupting syntax during generation%!(extra string=fine-tuning) exacerbated by disaster
-  recovery & cascading failover without manual intervention?
+  corrupting syntax during generation exacerbated by disaster recovery & cascading
+  failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - fine-tuning

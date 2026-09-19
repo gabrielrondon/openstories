@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: EV charger loses cellular modem connection during active charging session
     on smart-meter-telemetry combined with Data Drift & Silent Schema Corruption
   given: An active high-power DC fast charging session delivering 150 kW
-  when: The station's cellular uplink drops%!(EXTRA string=smart-meter-telemetry)
+  when: The station's cellular uplink drops
   then: The charger must continue dispensing power safely and buffer meter values
     locally until cloud connectivity recovers
 edge_cases:
 - Emergency stop button pressed during offline session requiring local safety cut-off
-  within 100ms%!(EXTRA string=smart-meter-telemetry) exacerbated by Data Drift & Silent
-  Schema Corruption
+  within 100ms exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/Open-Charge-Alliance/OCPP/issues/219
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate emergency stop button pressed during offline session
-  requiring local safety cut-off within 100ms%!(extra string=smart-meter-telemetry)
-  exacerbated by data drift & silent schema corruption without manual intervention?
+  requiring local safety cut-off within 100ms exacerbated by data drift & silent schema
+  corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - smart-meter-telemetry

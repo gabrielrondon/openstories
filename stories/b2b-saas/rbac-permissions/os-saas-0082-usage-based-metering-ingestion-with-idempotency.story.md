@@ -22,13 +22,12 @@ acceptance_criteria:
     after monthly invoice finalization combined with Network Partitions & Distributed
     Timeout Failures
   given: The billing cycle closed on midnight of the 1st
-  when: Usage metrics timestamped for the 31st arrive 6 hours late%!(EXTRA string=rbac-permissions)
+  when: Usage metrics timestamped for the 31st arrive 6 hours late
   then: The engine must record the usage as an adjustment credit/debit on the subsequent
     cycle rather than mutating locked invoices
 edge_cases:
 - Client replay of telemetry batches leading to double-counting of billable compute
-  metrics%!(EXTRA string=rbac-permissions) exacerbated by Network Partitions & Distributed
-  Timeout Failures
+  metrics exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://news.ycombinator.com/item?id=37890124
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate client replay of telemetry batches leading to double-counting
-  of billable compute metrics%!(extra string=rbac-permissions) exacerbated by network
-  partitions & distributed timeout failures without manual intervention?
+  of billable compute metrics exacerbated by network partitions & distributed timeout
+  failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - rbac-permissions

@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: EV charger loses cellular modem connection during active charging session
     on battery-storage combined with Idempotency & Replay Attack Vulnerabilities
   given: An active high-power DC fast charging session delivering 150 kW
-  when: The station's cellular uplink drops%!(EXTRA string=battery-storage)
+  when: The station's cellular uplink drops
   then: The charger must continue dispensing power safely and buffer meter values
     locally until cloud connectivity recovers
 edge_cases:
 - Emergency stop button pressed during offline session requiring local safety cut-off
-  within 100ms%!(EXTRA string=battery-storage) exacerbated by Idempotency & Replay
-  Attack Vulnerabilities
+  within 100ms exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://github.com/Open-Charge-Alliance/OCPP/issues/219
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate emergency stop button pressed during offline session
-  requiring local safety cut-off within 100ms%!(extra string=battery-storage) exacerbated
-  by idempotency & replay attack vulnerabilities without manual intervention?
+  requiring local safety cut-off within 100ms exacerbated by idempotency & replay
+  attack vulnerabilities without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - battery-storage

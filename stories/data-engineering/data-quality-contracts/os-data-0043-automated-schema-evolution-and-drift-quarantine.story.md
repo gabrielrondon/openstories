@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Upstream database drops column or changes int32 to string in data-quality-contracts
     combined with Data Drift & Silent Schema Corruption
   given: A streaming Debezium CDC connector reading MySQL binlogs
-  when: An event with an incompatible schema alteration arrives%!(EXTRA string=data-quality-contracts)
+  when: An event with an incompatible schema alteration arrives
   then: The consumer must route non-compliant records to a Dead Letter Queue (DLQ)
     without halting stream ingestion
 edge_cases:
 - High-frequency column renames causing silent data loss if mapping rules rely on
-  strict name equality%!(EXTRA string=data-quality-contracts) exacerbated by Data
-  Drift & Silent Schema Corruption
+  strict name equality exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/debezium/debezium/issues/4512
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate high-frequency column renames causing silent data
-  loss if mapping rules rely on strict name equality%!(extra string=data-quality-contracts)
-  exacerbated by data drift & silent schema corruption without manual intervention?
+  loss if mapping rules rely on strict name equality exacerbated by data drift & silent
+  schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - data-quality-contracts

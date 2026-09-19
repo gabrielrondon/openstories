@@ -23,13 +23,13 @@ acceptance_criteria:
     on contract-versioning combined with Network Partitions & Distributed Timeout
     Failures
   given: A signed legal agreement with embedded OCSP response
-  when: An auditor inspects the PDF document a decade later%!(EXTRA string=contract-versioning)
+  when: An auditor inspects the PDF document a decade later
   then: The embedded LTV record must confirm the certificate was valid at the exact
     second of signing
 edge_cases:
 - PDF visual layer alterations where hidden text layers under black highlight boxes
-  are exposed upon copy-paste%!(EXTRA string=contract-versioning) exacerbated by Network
-  Partitions & Distributed Timeout Failures
+  are exposed upon copy-paste exacerbated by Network Partitions & Distributed Timeout
+  Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://news.ycombinator.com/item?id=34918201
@@ -40,9 +40,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate pdf visual layer alterations where hidden text
-  layers under black highlight boxes are exposed upon copy-paste%!(extra string=contract-versioning)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  layers under black highlight boxes are exposed upon copy-paste exacerbated by network
+  partitions & distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - contract-versioning

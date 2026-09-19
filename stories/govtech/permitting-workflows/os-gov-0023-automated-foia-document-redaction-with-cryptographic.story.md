@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: PDF export containing redacted text layer on permitting-workflows combined
     with Data Drift & Silent Schema Corruption
   given: A public records release containing confidential citizen documents
-  when: The redaction tool processes the document%!(EXTRA string=permitting-workflows)
+  when: The redaction tool processes the document
   then: It must completely burn down the vector font glyphs into flattened pixels,
     ensuring zero OCR or clipboard retrieval
 edge_cases:
 - Metadata properties (author, document edit history, comment annotations) left intact
-  leaking confidential data%!(EXTRA string=permitting-workflows) exacerbated by Data
-  Drift & Silent Schema Corruption
+  leaking confidential data exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://news.ycombinator.com/item?id=36190281
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate metadata properties (author, document edit history,
-  comment annotations) left intact leaking confidential data%!(extra string=permitting-workflows)
-  exacerbated by data drift & silent schema corruption without manual intervention?
+  comment annotations) left intact leaking confidential data exacerbated by data drift
+  & silent schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - permitting-workflows

@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: PDF export containing redacted text layer on citizen-digital-id combined
     with Strict Compliance & Regulatory Audit Enforcement
   given: A public records release containing confidential citizen documents
-  when: The redaction tool processes the document%!(EXTRA string=citizen-digital-id)
+  when: The redaction tool processes the document
   then: It must completely burn down the vector font glyphs into flattened pixels,
     ensuring zero OCR or clipboard retrieval
 edge_cases:
 - Metadata properties (author, document edit history, comment annotations) left intact
-  leaking confidential data%!(EXTRA string=citizen-digital-id) exacerbated by Strict
-  Compliance & Regulatory Audit Enforcement
+  leaking confidential data exacerbated by Strict Compliance & Regulatory Audit Enforcement
 - Cascading failover during Strict Compliance & Regulatory Audit Enforcement
 evidence:
 - source: https://news.ycombinator.com/item?id=36190281
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate metadata properties (author, document edit history,
-  comment annotations) left intact leaking confidential data%!(extra string=citizen-digital-id)
-  exacerbated by strict compliance & regulatory audit enforcement without manual intervention?
+  comment annotations) left intact leaking confidential data exacerbated by strict
+  compliance & regulatory audit enforcement without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - citizen-digital-id

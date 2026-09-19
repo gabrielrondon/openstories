@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Driver delivering package in cellular dead zone on route-optimization
     combined with Asynchronous Race Conditions & Deadlocks
   given: A mobile dispatch scanner with zero cellular signal
-  when: The driver captures recipient signature and GPS photo timestamp%!(EXTRA string=route-optimization)
+  when: The driver captures recipient signature and GPS photo timestamp
   then: The mobile app must cryptographically sign the package receipt and queue it
     for opportunistic sync
 edge_cases:
 - Recipient disputing delivery when photo metadata shows GPS coordinates 50 meters
-  away from address%!(EXTRA string=route-optimization) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  away from address exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://news.ycombinator.com/item?id=38192019
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate recipient disputing delivery when photo metadata
-  shows gps coordinates 50 meters away from address%!(extra string=route-optimization)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  shows gps coordinates 50 meters away from address exacerbated by asynchronous race
+  conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - route-optimization

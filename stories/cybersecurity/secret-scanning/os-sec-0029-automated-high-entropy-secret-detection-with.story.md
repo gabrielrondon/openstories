@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Developer pushing commit containing valid production API key for secret-scanning
     combined with Zero-Trust Authentication & Token Invalidation
   given: A git push event received by the VCS server
-  when: The scanner detects a known high-entropy token pattern%!(EXTRA string=secret-scanning)
+  when: The scanner detects a known high-entropy token pattern
   then: The server must reject the git push with exit code 1 and link the developer
     to secret rotation instructions
 edge_cases:
 - Test mocks and dummy keys generating high false-positive rates that desensitize
-  developers to warnings%!(EXTRA string=secret-scanning) exacerbated by Zero-Trust
-  Authentication & Token Invalidation
+  developers to warnings exacerbated by Zero-Trust Authentication & Token Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://github.com/trufflesecurity/trufflehog/issues/1209
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate test mocks and dummy keys generating high false-positive
-  rates that desensitize developers to warnings%!(extra string=secret-scanning) exacerbated
-  by zero-trust authentication & token invalidation without manual intervention?
+  rates that desensitize developers to warnings exacerbated by zero-trust authentication
+  & token invalidation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - secret-scanning
