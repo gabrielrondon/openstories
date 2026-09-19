@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenStories | Evidence-Backed User Stories for AI Agents</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              900: '#4c1d95',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #0b0f19; color: #f3f4f6; }
+    .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card { background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.2s ease; }
+    .glass-card:hover { border-color: rgba(139, 92, 246, 0.4); transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.15); }
+    .badge-score { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .gradient-text { background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-brand-600 selection:text-white">
+
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 glass border-b border-gray-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+          <i class="fa-solid fa-layer-group text-lg"></i>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight text-white">Open<span class="text-brand-500">Stories</span></span>
+          <span class="text-xs ml-2 px-2 py-0.5 rounded-full bg-brand-900/50 text-brand-300 border border-brand-700/50 font-medium">v1.0 • tuturama</span>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a href="#playground" class="text-sm font-medium text-gray-300 hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-solid fa-bolt text-brand-400"></i> Spec Stress-Tester
+        </a>
+        <a href="#mcp-guide" class="text-sm font-medium text-gray-300 hover:text-white transition flex items-center gap-1.5">
+          <i class="fa-solid fa-terminal text-blue-400"></i> Claude & Cursor MCP
+        </a>
+        <a href="https://github.com/gabrielrondon/openstories" target="_blank" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-sm font-medium text-white flex items-center gap-2 border border-gray-700 transition">
+          <i class="fa-brands fa-github text-base"></i> Star on GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="relative py-20 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+    <div class="absolute inset-0 -z-10 flex items-center justify-center opacity-25">
+      <div class="w-[600px] h-[600px] bg-brand-600/30 rounded-full blur-[140px]"></div>
+      <div class="w-[400px] h-[400px] bg-blue-600/20 rounded-full blur-[100px] -translate-x-32 translate-y-20"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-900/40 border border-brand-500/30 text-brand-300 text-xs font-semibold uppercase tracking-wider mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Biblioteca Aberta com Evidências Reais da Web
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        Aterre as features da sua IA em <span class="gradient-text">problemas reais</span> do mundo.
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+        Chega de alucinações de "happy path". O OpenStories fornece aos agentes Claude, Cursor e Antigravity uma biblioteca de User Stories respaldada por discussões, issues e post-mortems reais da indústria.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="max-w-2xl mx-auto relative mb-8">
+        <div class="relative flex items-center">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 text-gray-400 text-lg"></i>
+          <input 
+            type="text" 
+            id="searchInput"
+            placeholder="Buscar por dor, conceito ou tecnologia (ex: idempotência, magic link, estorno MDR)..." 
+            class="w-full pl-12 pr-4 py-4 rounded-2xl glass text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-2xl text-base transition"
+          >
+        </div>
+      </div>
+
+      <!-- Industry Pills Filter -->
+      <div class="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto" id="industryFilters">
+        <button class="filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-600 text-white shadow-md shadow-brand-600/20 transition" data-industry="">
+          Todas as Indústrias
+        </button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition" data-industry="devtools">
+          <i class="fa-solid fa-code mr-1 text-purple-400"></i> DevTools
+        </button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition" data-industry="ai-infra">
+          <i class="fa-solid fa-microchip mr-1 text-cyan-400"></i> AI Infra
+        </button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition" data-industry="fintech">
+          <i class="fa-solid fa-credit-card mr-1 text-emerald-400"></i> Fintech
+        </button>
+        <button class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition" data-industry="b2b-saas">
+          <i class="fa-solid fa-building mr-1 text-amber-400"></i> B2B SaaS
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Catalog Grid -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <span>Histórias Curadas com Evidência Empírica</span>
+          <span id="storyCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-gray-800 text-gray-300 border border-gray-700">Carregando...</span>
+        </h2>
+        <p class="text-sm text-gray-400 mt-1">Clique em qualquer história para inspecionar os critérios de aceitação e os links de incidentes reais.</p>
+      </div>
+    </div>
+
+    <!-- Stories Container -->
+    <div id="storiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Cards rendered via JS -->
+    </div>
+
+    <!-- Playground: Spec Stress-Tester -->
+    <section id="playground" class="mt-24 pt-16 border-t border-gray-800">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-4">
+          <i class="fa-solid fa-shield-halved"></i>
+          Spec Stress-Tester Interativo
+        </div>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight">
+          Avalie sua Feature ou PR contra a Realidade
+        </h2>
+        <p class="text-gray-400 text-sm sm:text-base mt-2">
+          Cole abaixo a proposta de arquitetura ou PR gerado pela sua IA. O OpenStories compara contra centenas de falhas reais e pontua a cobertura de casos de borda.
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto glass p-6 sm:p-8 rounded-3xl shadow-2xl border border-gray-800">
+        <div class="mb-4 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+          <label class="text-sm font-semibold text-gray-200">Descrição Técnica / Especificação da Feature:</label>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-400">Indústria:</span>
+            <select id="evalIndustry" class="text-xs bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-500">
+              <option value="">Detecção Automática</option>
+              <option value="devtools">DevTools</option>
+              <option value="ai-infra">AI Infra</option>
+              <option value="fintech">Fintech</option>
+              <option value="b2b-saas">B2B SaaS</option>
+            </select>
+          </div>
+        </div>
+
+        <textarea 
+          id="specTextarea" 
+          rows="6" 
+          placeholder="Exemplo: Vamos implementar um endpoint POST /api/checkout que recebe o cartão e cria a transação. Se falhar por timeout, o cliente fará retry..."
+          class="w-full bg-gray-900/90 text-gray-100 text-sm rounded-xl p-4 border border-gray-700/80 focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono leading-relaxed placeholder-gray-500"
+        ></textarea>
+
+        <div class="mt-4 flex justify-between items-center">
+          <button id="sampleBtn" class="text-xs text-brand-400 hover:text-brand-300 transition underline underline-offset-4">
+            Carregar exemplo de especificação vulnerável
+          </button>
+          <button id="runEvalBtn" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/25 flex items-center gap-2 transition">
+            <i class="fa-solid fa-play text-xs"></i>
+            Executar Stress-Test
+          </button>
+        </div>
+
+        <!-- Evaluation Results Container -->
+        <div id="evalResultContainer" class="mt-8 hidden border-t border-gray-800 pt-6">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- MCP Integration Guide Section -->
+    <section id="mcp-guide" class="mt-24 pt-16 border-t border-gray-800">
+      <div class="max-w-4xl mx-auto glass p-8 rounded-3xl border border-gray-800">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-blue-900/40 border border-blue-600/40 text-blue-400 flex items-center justify-center">
+            <i class="fa-solid fa-plug text-lg"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-white">Instalação 1-Click no Claude Desktop & Cursor</h3>
+            <p class="text-xs text-gray-400">Zero configuração manual. O próprio CLI injeta os servidores MCP locais.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+          <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs">
+            <div class="text-gray-400 mb-1 flex items-center justify-between">
+              <span>Claude Desktop:</span>
+              <span class="text-[10px] text-emerald-400 font-sans">Automático</span>
+            </div>
+            <code class="text-brand-300 font-bold">openstories install claude</code>
+          </div>
+          <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs">
+            <div class="text-gray-400 mb-1 flex items-center justify-between">
+              <span>Cursor IDE:</span>
+              <span class="text-[10px] text-cyan-400 font-sans">Automático</span>
+            </div>
+            <code class="text-brand-300 font-bold">openstories install cursor</code>
+          </div>
+        </div>
+
+        <p class="text-sm text-gray-300 leading-relaxed">
+          Após rodar o comando acima, quando você pedir para o Claude ou Cursor: <br>
+          <span class="text-gray-400 italic">"Escreva uma feature de estorno parcial de pagamentos"</span>, o modelo invocará a ferramenta <code class="text-brand-300 bg-brand-950/60 px-1.5 py-0.5 rounded">evaluate_spec</code> do OpenStories para prever falhas reais antes de codificar!
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Story Details Modal -->
+  <div id="storyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+    <div class="glass max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 border border-gray-700 shadow-2xl relative">
+      <button id="closeModalBtn" class="absolute top-6 right-6 text-gray-400 hover:text-white transition w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="modalContent">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-20 border-t border-gray-800/80 py-10 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+      <div class="flex items-center gap-2">
+        <span>OpenStories • Desenvolvido com amor para a comunidade de IA</span>
+        <span>•</span>
+        <a href="https://tuturama.com" target="_blank" class="text-gray-400 hover:text-white transition">tuturama.com</a>
+      </div>
+      <div>
+        <span>Licença MIT • 100% Open-Source</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let allStories = [];
+    let currentFilter = '';
+
+    // Fetch initial data
+    async function loadStories() {
+      try {
+        const res = await fetch('/api/stories');
+        allStories = await res.json();
+        document.getElementById('storyCountBadge').innerText = `${allStories.length} histórias registradas`;
+        renderStories();
+      } catch (err) {
+        console.error('Failed to load stories:', err);
+        document.getElementById('storyCountBadge').innerText = 'Offline / Standalone';
+      }
+    }
+
+    function renderStories() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const grid = document.getElementById('storiesGrid');
+      grid.innerHTML = '';
+
+      const filtered = allStories.filter(s => {
+        const matchesIndustry = !currentFilter || s.industry.toLowerCase() === currentFilter.toLowerCase();
+        if (!matchesIndustry) return false;
+
+        if (!query) return true;
+        const text = (s.title + ' ' + s.id + ' ' + (s.story?.i_want || '') + ' ' + (s.persona?.role || '') + ' ' + (s.tags || []).join(' ')).toLowerCase();
+        return text.includes(query);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-gray-400">
+            <i class="fa-solid fa-circle-question text-3xl mb-3 text-gray-600"></i>
+            <p>Nenhuma história encontrada para os critérios selecionados.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'glass-card p-6 rounded-2xl flex flex-col justify-between cursor-pointer';
+        card.onclick = () => openStoryModal(s);
+
+        const industryColors = {
+          'devtools': 'text-purple-400 bg-purple-950/60 border-purple-800/40',
+          'ai-infra': 'text-cyan-400 bg-cyan-950/60 border-cyan-800/40',
+          'fintech': 'text-emerald-400 bg-emerald-950/60 border-emerald-800/40',
+          'b2b-saas': 'text-amber-400 bg-amber-950/60 border-amber-800/40',
+        };
+        const indClass = industryColors[s.industry] || 'text-gray-300 bg-gray-800 border-gray-700';
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded border ${indClass} uppercase">
+                ${s.industry} • ${s.domain}
+              </span>
+              <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full badge-score text-white shadow-sm">
+                <i class="fa-solid fa-fire text-[9px]"></i> ${s.demand_score.toFixed(1)}
+              </span>
+            </div>
+            <h3 class="text-base font-bold text-white group-hover:text-brand-400 transition mb-2 leading-snug">
+              ${s.title}
+            </h3>
+            <p class="text-xs text-gray-400 line-clamp-3 mb-4 leading-relaxed">
+              <strong class="text-gray-300">Quero:</strong> ${s.story?.i_want || ''}
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-gray-800/80 flex items-center justify-between text-xs text-gray-500">
+            <span class="font-mono text-gray-400">${s.id}</span>
+            <div class="flex items-center gap-2">
+              <span class="flex items-center gap-1 text-emerald-400">
+                <i class="fa-solid fa-link text-[10px]"></i> ${s.evidence ? s.evidence.length : 0} evidências
+              </span>
+              <i class="fa-solid fa-chevron-right text-[10px] text-gray-600"></i>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function openStoryModal(s) {
+      const modal = document.getElementById('storyModal');
+      const content = document.getElementById('modalContent');
+
+      content.innerHTML = `
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-xs font-mono px-2 py-0.5 rounded bg-brand-900 text-brand-300 border border-brand-700 font-bold">${s.id}</span>
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-gray-800 text-gray-300 uppercase">${s.industry} • ${s.domain}</span>
+          <span class="ml-auto inline-flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded-full badge-score text-white">
+            Score: ${s.demand_score}
+          </span>
+        </div>
+
+        <h2 class="text-2xl font-extrabold text-white mt-2 mb-4">${s.title}</h2>
+
+        <div class="bg-gray-900/80 p-4 rounded-xl border border-gray-800 mb-6 text-sm">
+          <div class="text-xs text-gray-400 uppercase font-semibold mb-2">Declaração da User Story</div>
+          <p class="text-gray-200 leading-relaxed mb-1"><strong class="text-brand-400">Como:</strong> ${s.story?.as_a || ''}</p>
+          <p class="text-gray-200 leading-relaxed mb-1"><strong class="text-brand-400">Quero:</strong> ${s.story?.i_want || ''}</p>
+          <p class="text-gray-200 leading-relaxed"><strong class="text-brand-400">Para que:</strong> ${s.story?.so_that || ''}</p>
+        </div>
+
+        <!-- Criteria -->
+        <div class="mb-6">
+          <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Critérios de Aceitação (Gherkin)
+          </h4>
+          <div class="space-y-3">
+            ${(s.acceptance_criteria || []).map(ac => `
+              <div class="p-3 bg-gray-900/50 rounded-lg border border-gray-800 text-xs font-mono">
+                <div class="text-white font-bold mb-1">Cenário: ${ac.scenario}</div>
+                <div class="text-gray-400"><strong class="text-purple-400">DADO</strong> ${ac.given}</div>
+                <div class="text-gray-400"><strong class="text-cyan-400">QUANDO</strong> ${ac.when}</div>
+                <div class="text-gray-400"><strong class="text-emerald-400">ENTÃO</strong> ${ac.then}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Edge cases -->
+        <div class="mb-6">
+          <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Casos de Borda Críticos Observados
+          </h4>
+          <ul class="space-y-1.5 text-xs text-gray-300">
+            ${(s.edge_cases || []).map(ec => `
+              <li class="flex items-start gap-2">
+                <span class="text-amber-400 font-bold">•</span>
+                <span>${ec}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+
+        <!-- Evidence -->
+        <div>
+          <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-quote-left text-brand-400"></i> Evidências Reais da Web (Grounding)
+          </h4>
+          <div class="space-y-3">
+            ${(s.evidence || []).map(ev => `
+              <div class="p-3.5 bg-gray-950/80 rounded-xl border border-gray-800/80 text-xs">
+                <p class="text-gray-300 italic mb-2">"${ev.quote}"</p>
+                <div class="flex items-center justify-between text-[11px] text-gray-500">
+                  <span>Tipo: <strong class="text-gray-400">${ev.type}</strong> (${ev.date})</span>
+                  <a href="${ev.source}" target="_blank" class="text-brand-400 hover:text-brand-300 flex items-center gap-1 font-semibold">
+                    Ver fonte original <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                  </a>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    // Close modal handlers
+    document.getElementById('closeModalBtn').onclick = () => {
+      document.getElementById('storyModal').classList.add('hidden');
+    };
+    document.getElementById('storyModal').onclick = (e) => {
+      if (e.target.id === 'storyModal') {
+        document.getElementById('storyModal').classList.add('hidden');
+      }
+    };
+
+    // Filter clicks
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.className = 'filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition';
+        });
+        btn.className = 'filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-600 text-white shadow-md shadow-brand-600/20 transition';
+        currentFilter = btn.dataset.industry;
+        renderStories();
+      };
+    });
+
+    document.getElementById('searchInput').oninput = () => renderStories();
+
+    // Sample spec button
+    document.getElementById('sampleBtn').onclick = () => {
+      document.getElementById('specTextarea').value = 
+`Planejamento de Feature: Endpoint de Processamento de Pagamento
+Objetivo:
+Criar um endpoint POST /api/v1/charge para processar cartões de crédito.
+Fluxo:
+1. Receber dados do cartão e valor.
+2. Chamar o gateway Stripe.
+3. Se houver timeout de rede, o cliente mobile fará retry imediatamente.
+4. Salvar o registro no banco de dados e retornar HTTP 200.`;
+      document.getElementById('evalIndustry').value = 'devtools';
+    };
+
+    // Stress test execution
+    document.getElementById('runEvalBtn').onclick = async () => {
+      const spec = document.getElementById('specTextarea').value.trim();
+      const industry = document.getElementById('evalIndustry').value;
+      if (!spec) {
+        alert('Por favor, informe uma especificação ou clique em carregar exemplo.');
+        return;
+      }
+
+      const resDiv = document.getElementById('evalResultContainer');
+      resDiv.classList.remove('hidden');
+      resDiv.innerHTML = '<div class="text-center py-6 text-sm text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Avaliando spec contra evidências empíricas...</div>';
+
+      try {
+        const res = await fetch('/api/eval', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ spec, industry })
+        });
+        const data = await res.json();
+
+        const scoreColor = data.score >= 80 ? 'text-emerald-400' : (data.score >= 50 ? 'text-amber-400' : 'text-red-400');
+        const scoreBg = data.score >= 80 ? 'bg-emerald-950/60 border-emerald-600/40' : (data.score >= 50 ? 'bg-amber-950/60 border-amber-600/40' : 'bg-red-950/60 border-red-600/40');
+
+        resDiv.innerHTML = `
+          <div class="p-6 rounded-2xl ${scoreBg} border mb-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Score de Cobertura de Realidade</span>
+              <span class="text-3xl font-extrabold ${scoreColor} font-mono">${data.score}/100</span>
+            </div>
+            <p class="text-sm text-gray-200 leading-relaxed font-medium">${data.summary}</p>
+          </div>
+
+          ${data.edge_case_alerts && data.edge_case_alerts.length > 0 ? `
+            <div class="mb-6">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-red-400 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-skull-crossbones"></i> Pontos Cegos de Produção Ignorados na Spec:
+              </h4>
+              <div class="space-y-2">
+                ${data.edge_case_alerts.map(alert => `
+                  <div class="p-3 bg-red-950/30 border border-red-900/50 rounded-xl text-xs text-red-200 flex items-start gap-2">
+                    <i class="fa-solid fa-circle-exclamation mt-0.5 text-red-400"></i>
+                    <span>${alert}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          ${data.recommendations && data.recommendations.length > 0 ? `
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-brand-400 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-list-check"></i> Recomendações de Ação:
+              </h4>
+              <ul class="space-y-1.5 text-xs text-gray-300">
+                ${data.recommendations.map(rec => `
+                  <li class="flex items-start gap-2">
+                    <i class="fa-solid fa-check text-emerald-400 text-[10px] mt-1"></i>
+                    <span>${rec}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          ` : ''}
+        `;
+      } catch (err) {
+        resDiv.innerHTML = `<div class="p-4 bg-red-950 text-red-300 text-xs rounded-xl">Erro ao avaliar especificação: ${err.message}</div>`;
+      }
+    };
+
+    loadStories();
+  </script>
+</body>
+</html>

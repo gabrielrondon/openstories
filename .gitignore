@@ -1,0 +1,24 @@
+# Binaries
+/openstories
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, output & coverage
+*.test
+*.out
+coverage.html
+
+# Local custom stories & cache
+.openstories/
+.stories/
+*.sqlite
+*.db
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
