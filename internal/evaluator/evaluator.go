@@ -20,10 +20,8 @@ func New(s *store.Store) *Evaluator {
 
 // Evaluate analyzes the provided spec text against relevant stories in the domain/industry.
 func (e *Evaluator) Evaluate(specText string, industry string, domain string) *model.SpecEvaluationResult {
-	// Search for relevant stories matching the spec
 	matches := e.store.Search(specText, industry, domain, 0)
 	if len(matches) == 0 {
-		// Fallback to searching by industry if specified
 		if industry != "" {
 			matches = e.store.Search("", industry, domain, 0)
 		}
@@ -41,7 +39,6 @@ func (e *Evaluator) Evaluate(specText string, industry string, domain string) *m
 	totalEdgeCases := 0
 	coveredEdgeCases := 0
 
-	// Consider top 5 most relevant stories
 	limit := 5
 	if len(matches) < limit {
 		limit = len(matches)
@@ -81,7 +78,6 @@ func (e *Evaluator) Evaluate(specText string, industry string, domain string) *m
 		check.Covered = storyCovered
 		result.MatchedStories = append(result.MatchedStories, check)
 
-		// Check evaluation rubrics
 		for _, rubric := range st.EvaluationRubric {
 			tokens := extractKeyPhrases(rubric)
 			found := false
@@ -93,39 +89,37 @@ func (e *Evaluator) Evaluate(specText string, industry string, domain string) *m
 			}
 			if !found {
 				result.CriticalGaps = append(result.CriticalGaps,
-					fmt.Sprintf("[%s] Checklist não atendido: %s", st.ID, rubric))
+					fmt.Sprintf("[%s] Unaddressed Quality Rubric: %s", st.ID, rubric))
 			}
 		}
 	}
 
-	// Calculate realistic score
 	if totalEdgeCases == 0 {
 		result.Score = 75
-		result.Summary = "Nenhuma história específica com casos de borda encontrada para comparação detalhada. A especificação parece aceitável mas sem validação empírica."
+		result.Summary = "No domain-specific stories with failure criteria found for detailed comparison. Specification appears reasonable but lacks empirical validation."
 	} else {
 		scorePercent := int((float64(coveredEdgeCases) / float64(totalEdgeCases)) * 100)
 		result.Score = scorePercent
 
 		if scorePercent >= 85 {
-			result.Summary = "Excelente cobertura! A especificação antecipou os principais pontos de falha reportados por usuários em produção."
+			result.Summary = "High resilience! The technical specification preemptively mitigates known production failure modes documented in field reports."
 		} else if scorePercent >= 60 {
-			result.Summary = "Cobertura moderada. A especificação trata o fluxo principal, mas possui pontos cegos críticos observados em incidentes reais de produção."
+			result.Summary = "Moderate coverage. The happy path is addressed, but critical production blind spots frequently reported by users in the wild are missing."
 		} else {
-			result.Summary = "Atenção: Alta vulnerabilidade a incidentes de produção. A especificação negligenciou múltiplos casos de borda severos com alto volume de reclamações reais na internet."
+			result.Summary = "Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification."
 		}
 	}
 
-	// Generate actionable recommendations
 	if len(result.EdgeCaseAlerts) > 0 {
 		result.Recommendations = append(result.Recommendations,
-			"Adicionar testes automatizados específicos para os casos de borda listados nos alertas.")
+			"Add explicit integration and failure-injection tests covering the flagged production edge cases.")
 	}
 	if len(result.CriticalGaps) > 0 {
 		result.Recommendations = append(result.Recommendations,
-			"Incorporar na documentação do PR ou RFC as respostas aos itens do checklist não atendidos.")
+			"Document explicit architectural answers to the quality checklist rubrics before writing code.")
 	}
 	result.Recommendations = append(result.Recommendations,
-		"Utilizar os critérios de aceitação no formato Gherkin das histórias mapeadas como suíte de testes E2E.")
+		"Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite.")
 
 	return result
 }

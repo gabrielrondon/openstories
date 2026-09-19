@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenStories | Evidence-Backed User Stories for AI Agents</title>
+  <title>OpenStories | Evidence-Backed User Stories for AI Coding Agents</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -72,13 +72,13 @@
     <div class="max-w-4xl mx-auto">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-900/40 border border-brand-500/30 text-brand-300 text-xs font-semibold uppercase tracking-wider mb-6">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        Biblioteca Aberta com Evidências Reais da Web
+        Open-Source Living Library of Real-World Grounded Stories
       </div>
       <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-        Aterre as features da sua IA em <span class="gradient-text">problemas reais</span> do mundo.
+        Ground your AI agents in <span class="gradient-text">real-world problems</span>.
       </h1>
       <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-        Chega de alucinações de "happy path". O OpenStories fornece aos agentes Claude, Cursor e Antigravity uma biblioteca de User Stories respaldada por discussões, issues e post-mortems reais da indústria.
+        No more "happy path" hallucinations. OpenStories provides Claude Code, Cursor, and Antigravity with a library of user stories backed by real-world GitHub issues, post-mortems, and community pain points.
       </p>
 
       <!-- Search Bar -->
@@ -88,7 +88,7 @@
           <input 
             type="text" 
             id="searchInput"
-            placeholder="Buscar por dor, conceito ou tecnologia (ex: idempotência, magic link, estorno MDR)..." 
+            placeholder="Search by problem, tech, or failure mode (e.g. idempotency, magic link, partial refund)..." 
             class="w-full pl-12 pr-4 py-4 rounded-2xl glass text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-2xl text-base transition"
           >
         </div>
@@ -97,7 +97,7 @@
       <!-- Industry Pills Filter -->
       <div class="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto" id="industryFilters">
         <button class="filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-600 text-white shadow-md shadow-brand-600/20 transition" data-industry="">
-          Todas as Indústrias
+          All Industries
         </button>
         <button class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 transition" data-industry="devtools">
           <i class="fa-solid fa-code mr-1 text-purple-400"></i> DevTools
@@ -120,10 +120,10 @@
     <div class="flex items-center justify-between mb-8">
       <div>
         <h2 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-          <span>Histórias Curadas com Evidência Empírica</span>
-          <span id="storyCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-gray-800 text-gray-300 border border-gray-700">Carregando...</span>
+          <span>Curated Empirical Stories</span>
+          <span id="storyCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-gray-800 text-gray-300 border border-gray-700">Loading...</span>
         </h2>
-        <p class="text-sm text-gray-400 mt-1">Clique em qualquer história para inspecionar os critérios de aceitação e os links de incidentes reais.</p>
+        <p class="text-sm text-gray-400 mt-1">Click any card to inspect executable Gherkin criteria and real-world failure citations.</p>
       </div>
     </div>
 
@@ -137,23 +137,23 @@
       <div class="text-center max-w-3xl mx-auto mb-10">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-4">
           <i class="fa-solid fa-shield-halved"></i>
-          Spec Stress-Tester Interativo
+          Interactive Spec Stress-Tester
         </div>
         <h2 class="text-3xl font-extrabold text-white tracking-tight">
-          Avalie sua Feature ou PR contra a Realidade
+          Benchmark Your Feature Plan Against Production Reality
         </h2>
         <p class="text-gray-400 text-sm sm:text-base mt-2">
-          Cole abaixo a proposta de arquitetura ou PR gerado pela sua IA. O OpenStories compara contra centenas de falhas reais e pontua a cobertura de casos de borda.
+          Paste an architectural proposal, PR draft, or user story below. OpenStories cross-checks it against documented real-world outages and scores your edge-case coverage.
         </p>
       </div>
 
       <div class="max-w-4xl mx-auto glass p-6 sm:p-8 rounded-3xl shadow-2xl border border-gray-800">
         <div class="mb-4 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-          <label class="text-sm font-semibold text-gray-200">Descrição Técnica / Especificação da Feature:</label>
+          <label class="text-sm font-semibold text-gray-200">Technical Specification / Feature Draft:</label>
           <div class="flex items-center gap-2">
-            <span class="text-xs text-gray-400">Indústria:</span>
+            <span class="text-xs text-gray-400">Industry:</span>
             <select id="evalIndustry" class="text-xs bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-gray-200 focus:outline-none focus:ring-1 focus:ring-brand-500">
-              <option value="">Detecção Automática</option>
+              <option value="">Auto-Detect</option>
               <option value="devtools">DevTools</option>
               <option value="ai-infra">AI Infra</option>
               <option value="fintech">Fintech</option>
@@ -165,17 +165,17 @@
         <textarea 
           id="specTextarea" 
           rows="6" 
-          placeholder="Exemplo: Vamos implementar um endpoint POST /api/checkout que recebe o cartão e cria a transação. Se falhar por timeout, o cliente fará retry..."
+          placeholder="Example: Implement POST /api/v1/charge to process credit cards with Stripe. On network timeout, the mobile client will retry..."
           class="w-full bg-gray-900/90 text-gray-100 text-sm rounded-xl p-4 border border-gray-700/80 focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono leading-relaxed placeholder-gray-500"
         ></textarea>
 
         <div class="mt-4 flex justify-between items-center">
           <button id="sampleBtn" class="text-xs text-brand-400 hover:text-brand-300 transition underline underline-offset-4">
-            Carregar exemplo de especificação vulnerável
+            Load vulnerable sample feature spec
           </button>
           <button id="runEvalBtn" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/25 flex items-center gap-2 transition">
             <i class="fa-solid fa-play text-xs"></i>
-            Executar Stress-Test
+            Run Reality Stress-Test
           </button>
         </div>
 
@@ -194,31 +194,31 @@
             <i class="fa-solid fa-plug text-lg"></i>
           </div>
           <div>
-            <h3 class="text-xl font-bold text-white">Instalação 1-Click no Claude Desktop & Cursor</h3>
-            <p class="text-xs text-gray-400">Zero configuração manual. O próprio CLI injeta os servidores MCP locais.</p>
+            <h3 class="text-xl font-bold text-white">1-Click MCP Setup for Claude Code & Cursor</h3>
+            <p class="text-xs text-gray-400">Zero manual configuration. The OpenStories CLI automatically registers into your local client config.</p>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
           <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs">
             <div class="text-gray-400 mb-1 flex items-center justify-between">
-              <span>Claude Desktop:</span>
-              <span class="text-[10px] text-emerald-400 font-sans">Automático</span>
+              <span>Claude Code CLI & Desktop:</span>
+              <span class="text-[10px] text-emerald-400 font-sans">Automatic</span>
             </div>
             <code class="text-brand-300 font-bold">openstories install claude</code>
           </div>
           <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs">
             <div class="text-gray-400 mb-1 flex items-center justify-between">
               <span>Cursor IDE:</span>
-              <span class="text-[10px] text-cyan-400 font-sans">Automático</span>
+              <span class="text-[10px] text-cyan-400 font-sans">Automatic</span>
             </div>
             <code class="text-brand-300 font-bold">openstories install cursor</code>
           </div>
         </div>
 
         <p class="text-sm text-gray-300 leading-relaxed">
-          Após rodar o comando acima, quando você pedir para o Claude ou Cursor: <br>
-          <span class="text-gray-400 italic">"Escreva uma feature de estorno parcial de pagamentos"</span>, o modelo invocará a ferramenta <code class="text-brand-300 bg-brand-950/60 px-1.5 py-0.5 rounded">evaluate_spec</code> do OpenStories para prever falhas reais antes de codificar!
+          Once installed, when you prompt Claude or Cursor: <br>
+          <span class="text-gray-400 italic">"Design a partial payment refund feature"</span>, your AI will invoke OpenStories' <code class="text-brand-300 bg-brand-950/60 px-1.5 py-0.5 rounded">evaluate_spec</code> and <code class="text-brand-300 bg-brand-950/60 px-1.5 py-0.5 rounded">search_stories</code> tools to preempt failure modes before generating code!
         </p>
       </div>
     </section>
@@ -241,12 +241,12 @@
   <footer class="mt-20 border-t border-gray-800/80 py-10 glass">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
       <div class="flex items-center gap-2">
-        <span>OpenStories • Desenvolvido com amor para a comunidade de IA</span>
+        <span>OpenStories • Open-Source Grounding for AI Coding Agents</span>
         <span>•</span>
         <a href="https://tuturama.com" target="_blank" class="text-gray-400 hover:text-white transition">tuturama.com</a>
       </div>
       <div>
-        <span>Licença MIT • 100% Open-Source</span>
+        <span>MIT License • 100% Open Source</span>
       </div>
     </div>
   </footer>
@@ -255,12 +255,11 @@
     let allStories = [];
     let currentFilter = '';
 
-    // Fetch initial data
     async function loadStories() {
       try {
         const res = await fetch('/api/stories');
         allStories = await res.json();
-        document.getElementById('storyCountBadge').innerText = `${allStories.length} histórias registradas`;
+        document.getElementById('storyCountBadge').innerText = `${allStories.length} stories indexed`;
         renderStories();
       } catch (err) {
         console.error('Failed to load stories:', err);
@@ -286,7 +285,7 @@
         grid.innerHTML = `
           <div class="col-span-full py-16 text-center text-gray-400">
             <i class="fa-solid fa-circle-question text-3xl mb-3 text-gray-600"></i>
-            <p>Nenhuma história encontrada para os critérios selecionados.</p>
+            <p>No stories matched your filter criteria.</p>
           </div>
         `;
         return;
@@ -319,7 +318,7 @@
               ${s.title}
             </h3>
             <p class="text-xs text-gray-400 line-clamp-3 mb-4 leading-relaxed">
-              <strong class="text-gray-300">Quero:</strong> ${s.story?.i_want || ''}
+              <strong class="text-gray-300">Want:</strong> ${s.story?.i_want || ''}
             </p>
           </div>
 
@@ -327,7 +326,7 @@
             <span class="font-mono text-gray-400">${s.id}</span>
             <div class="flex items-center gap-2">
               <span class="flex items-center gap-1 text-emerald-400">
-                <i class="fa-solid fa-link text-[10px]"></i> ${s.evidence ? s.evidence.length : 0} evidências
+                <i class="fa-solid fa-link text-[10px]"></i> ${s.evidence ? s.evidence.length : 0} citations
               </span>
               <i class="fa-solid fa-chevron-right text-[10px] text-gray-600"></i>
             </div>
@@ -353,24 +352,24 @@
         <h2 class="text-2xl font-extrabold text-white mt-2 mb-4">${s.title}</h2>
 
         <div class="bg-gray-900/80 p-4 rounded-xl border border-gray-800 mb-6 text-sm">
-          <div class="text-xs text-gray-400 uppercase font-semibold mb-2">Declaração da User Story</div>
-          <p class="text-gray-200 leading-relaxed mb-1"><strong class="text-brand-400">Como:</strong> ${s.story?.as_a || ''}</p>
-          <p class="text-gray-200 leading-relaxed mb-1"><strong class="text-brand-400">Quero:</strong> ${s.story?.i_want || ''}</p>
-          <p class="text-gray-200 leading-relaxed"><strong class="text-brand-400">Para que:</strong> ${s.story?.so_that || ''}</p>
+          <div class="text-xs text-gray-400 uppercase font-semibold mb-2">User Story Statement</div>
+          <p class="text-gray-200 leading-relaxed mb-1"><strong class="text-brand-400">As a:</strong> ${s.story?.as_a || ''}</p>
+          <p class="text-gray-200 leading-relaxed mb-1"><strong class="text-brand-400">I want:</strong> ${s.story?.i_want || ''}</p>
+          <p class="text-gray-200 leading-relaxed"><strong class="text-brand-400">So that:</strong> ${s.story?.so_that || ''}</p>
         </div>
 
         <!-- Criteria -->
         <div class="mb-6">
           <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-circle-check text-emerald-400"></i> Critérios de Aceitação (Gherkin)
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Gherkin Acceptance Criteria
           </h4>
           <div class="space-y-3">
             ${(s.acceptance_criteria || []).map(ac => `
               <div class="p-3 bg-gray-900/50 rounded-lg border border-gray-800 text-xs font-mono">
-                <div class="text-white font-bold mb-1">Cenário: ${ac.scenario}</div>
-                <div class="text-gray-400"><strong class="text-purple-400">DADO</strong> ${ac.given}</div>
-                <div class="text-gray-400"><strong class="text-cyan-400">QUANDO</strong> ${ac.when}</div>
-                <div class="text-gray-400"><strong class="text-emerald-400">ENTÃO</strong> ${ac.then}</div>
+                <div class="text-white font-bold mb-1">Scenario: ${ac.scenario}</div>
+                <div class="text-gray-400"><strong class="text-purple-400">GIVEN</strong> ${ac.given}</div>
+                <div class="text-gray-400"><strong class="text-cyan-400">WHEN</strong> ${ac.when}</div>
+                <div class="text-gray-400"><strong class="text-emerald-400">THEN</strong> ${ac.then}</div>
               </div>
             `).join('')}
           </div>
@@ -379,7 +378,7 @@
         <!-- Edge cases -->
         <div class="mb-6">
           <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
-            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Casos de Borda Críticos Observados
+            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Documented Production Edge Cases
           </h4>
           <ul class="space-y-1.5 text-xs text-gray-300">
             ${(s.edge_cases || []).map(ec => `
@@ -394,16 +393,16 @@
         <!-- Evidence -->
         <div>
           <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-quote-left text-brand-400"></i> Evidências Reais da Web (Grounding)
+            <i class="fa-solid fa-quote-left text-brand-400"></i> Grounded Real-World Evidence & Outages
           </h4>
           <div class="space-y-3">
             ${(s.evidence || []).map(ev => `
               <div class="p-3.5 bg-gray-950/80 rounded-xl border border-gray-800/80 text-xs">
                 <p class="text-gray-300 italic mb-2">"${ev.quote}"</p>
                 <div class="flex items-center justify-between text-[11px] text-gray-500">
-                  <span>Tipo: <strong class="text-gray-400">${ev.type}</strong> (${ev.date})</span>
+                  <span>Source: <strong class="text-gray-400">${ev.type}</strong> (${ev.date})</span>
                   <a href="${ev.source}" target="_blank" class="text-brand-400 hover:text-brand-300 flex items-center gap-1 font-semibold">
-                    Ver fonte original <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    View original source <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                   </a>
                 </div>
               </div>
@@ -415,7 +414,6 @@
       modal.classList.remove('hidden');
     }
 
-    // Close modal handlers
     document.getElementById('closeModalBtn').onclick = () => {
       document.getElementById('storyModal').classList.add('hidden');
     };
@@ -425,7 +423,6 @@
       }
     };
 
-    // Filter clicks
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.filter-btn').forEach(b => {
@@ -439,32 +436,30 @@
 
     document.getElementById('searchInput').oninput = () => renderStories();
 
-    // Sample spec button
     document.getElementById('sampleBtn').onclick = () => {
       document.getElementById('specTextarea').value = 
-`Planejamento de Feature: Endpoint de Processamento de Pagamento
-Objetivo:
-Criar um endpoint POST /api/v1/charge para processar cartões de crédito.
-Fluxo:
-1. Receber dados do cartão e valor.
-2. Chamar o gateway Stripe.
-3. Se houver timeout de rede, o cliente mobile fará retry imediatamente.
-4. Salvar o registro no banco de dados e retornar HTTP 200.`;
+`Feature: Credit Card Charge Endpoint
+Objective:
+Create a POST /api/v1/charge endpoint to handle credit card payments.
+Flow:
+1. Receive card tokens and amount.
+2. Dispatch payment call to Stripe API.
+3. If network drops or timeouts occur, mobile client retries immediately.
+4. Save transaction in PostgreSQL and return HTTP 200 OK.`;
       document.getElementById('evalIndustry').value = 'devtools';
     };
 
-    // Stress test execution
     document.getElementById('runEvalBtn').onclick = async () => {
       const spec = document.getElementById('specTextarea').value.trim();
       const industry = document.getElementById('evalIndustry').value;
       if (!spec) {
-        alert('Por favor, informe uma especificação ou clique em carregar exemplo.');
+        alert('Please enter a technical specification or click load sample.');
         return;
       }
 
       const resDiv = document.getElementById('evalResultContainer');
       resDiv.classList.remove('hidden');
-      resDiv.innerHTML = '<div class="text-center py-6 text-sm text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Avaliando spec contra evidências empíricas...</div>';
+      resDiv.innerHTML = '<div class="text-center py-6 text-sm text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Evaluating specification against empirical production failures...</div>';
 
       try {
         const res = await fetch('/api/eval', {
@@ -480,7 +475,7 @@ Fluxo:
         resDiv.innerHTML = `
           <div class="p-6 rounded-2xl ${scoreBg} border mb-6">
             <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Score de Cobertura de Realidade</span>
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-300">Reality Coverage Score</span>
               <span class="text-3xl font-extrabold ${scoreColor} font-mono">${data.score}/100</span>
             </div>
             <p class="text-sm text-gray-200 leading-relaxed font-medium">${data.summary}</p>
@@ -489,7 +484,7 @@ Fluxo:
           ${data.edge_case_alerts && data.edge_case_alerts.length > 0 ? `
             <div class="mb-6">
               <h4 class="text-xs font-bold uppercase tracking-wider text-red-400 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-skull-crossbones"></i> Pontos Cegos de Produção Ignorados na Spec:
+                <i class="fa-solid fa-skull-crossbones"></i> Production Blind Spots Unhandled in Spec:
               </h4>
               <div class="space-y-2">
                 ${data.edge_case_alerts.map(alert => `
@@ -505,7 +500,7 @@ Fluxo:
           ${data.recommendations && data.recommendations.length > 0 ? `
             <div>
               <h4 class="text-xs font-bold uppercase tracking-wider text-brand-400 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-list-check"></i> Recomendações de Ação:
+                <i class="fa-solid fa-list-check"></i> Actionable Recommendations:
               </h4>
               <ul class="space-y-1.5 text-xs text-gray-300">
                 ${data.recommendations.map(rec => `
@@ -519,7 +514,7 @@ Fluxo:
           ` : ''}
         `;
       } catch (err) {
-        resDiv.innerHTML = `<div class="p-4 bg-red-950 text-red-300 text-xs rounded-xl">Erro ao avaliar especificação: ${err.message}</div>`;
+        resDiv.innerHTML = `<div class="p-4 bg-red-950 text-red-300 text-xs rounded-xl">Error evaluating specification: ${err.message}</div>`;
       }
     };
 

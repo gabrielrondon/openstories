@@ -1,30 +1,31 @@
 ---
 id: OS-AI-002
+locale: en
 industry: ai-infra
 domain: llm-gateways
-title: "Degradação graciosa e cascata de fallback contra erros 429 (Rate Limit de Tokens)"
+title: "Graceful Multi-Provider Fallback Cascade Against HTTP 429 Token Rate Limits"
 demand_score: 9.5
 status: verified
 persona:
-  role: "AI Platform Engineer / Infrastructure Lead"
-  context: "Sistemas de alta escala que dependem de APIs de LLMs (OpenAI, Anthropic, Gemini) com picos imprevisíveis de tráfego"
+  role: "AI Platform Infrastructure Lead / Site Reliability Engineer"
+  context: "High-throughput production LLM gateways serving enterprise traffic across OpenAI, Anthropic, and Gemini with spiky demand"
 story:
-  as_a: "Engenheiro de infraestrutura de aplicações de IA"
-  i_want: "Que o gateway de IA gerencie rate limits proativamente com algoritmo Token Bucket local e chaveamento automático para provedores de fallback"
-  so_that: "Picos repentinos de usuários ou cotas TPM (Tokens Per Minute) esgotadas não gerem telas de erro 500 para os clientes finais"
+  as_a: "Platform engineer maintaining AI infrastructure"
+  i_want: "The AI gateway to proactively manage rate limits using a local Token Bucket algorithm and trigger seamless failover to secondary providers"
+  so_that: "Sudden concurrency surges or exhausted Tokens Per Minute (TPM) quotas never surface HTTP 500 error screens to end users"
 acceptance_criteria:
-  - scenario: "Provedor principal retorna HTTP 429 Too Many Requests"
-    given: "A rota padrão configurada para Claude 3.5 Sonnet"
-    when: 'A requisição falhar com HTTP 429 e cabeçalho "Retry-After: 12"'
-    then: "O gateway deve rotear imediatamente a chamada para o provedor secundário (ex: Gemini 1.5 Pro ou fallback pool) em menos de 100ms sem repassar o erro ao cliente"
-  - scenario: "Estimativa pré-voo de tokens da requisição"
-    given: "A janela atual de tokens consumidos no minuto atual"
-    when: "Uma nova requisição longa for solicitada e a contagem estimada estourar o limite local de segurança (90% do TPM)"
-    then: "O gateway deve desviar a chamada para o provedor alternativo antes mesmo de enviar a requisição ao provedor primário"
+  - scenario: "Primary model provider returns HTTP 429 Too Many Requests"
+    given: "The default routing policy directs requests to Claude 3.5 Sonnet"
+    when: 'The upstream provider returns HTTP 429 with header "Retry-After: 15"'
+    then: "The gateway must dynamically reroute the request to an equivalent fallback model (e.g. Gemini 1.5 Pro) in under 100ms without exposing upstream failure to the client"
+  - scenario: "Pre-flight token estimation exceeds local safety threshold"
+    given: "The current rolling TPM usage tracking window"
+    when: "A large prompt is submitted and estimated token consumption exceeds 90% of provider quota"
+    then: "The gateway must preemptively divert the prompt to an alternative provider pool before hitting the upstream rate limit"
 edge_cases:
-  - "Disparidade de parâmetros específicos entre provedores (ex: diferenças entre formatação de Tool Calls e JSON Mode da OpenAI vs Anthropic)."
-  - "Preservação do streaming SSE durante o chaveamento de fallback."
-  - "Alerta de telemetria emitido para métricas de observabilidade (Prometheus/DataDog) quando o fallback for ativado."
+  - "Translating provider-specific dialect nuances (e.g. tool call formatting, function calling schemas, JSON mode across OpenAI vs Anthropic)."
+  - "Preserving Server-Sent Events (SSE) streaming connections across failovers."
+  - "Emitting real-time Prometheus / Datadog telemetry alerts when fallback routes are activated."
 evidence:
   - source: "https://news.ycombinator.com/item?id=38419201"
     type: "hackernews"
@@ -35,9 +36,9 @@ evidence:
     quote: "Without local pre-emptive token tracking, sudden concurrent spikes trigger burst 429 limits that lock out the API key for minutes."
     date: "2024-04-09"
 evaluation_rubric:
-  - "O gateway implementa chaveamento automático transparente para outro provedor em resposta a erros 429/503?"
-  - "A lógica traduz esquemas de ferramentas e system prompts para o formato aceito pelo modelo alternativo?"
-  - "Existe amortecimento local (client-side rate limiter / token bucket) para evitar atingir o limite estrito da API externa?"
+  - "Does the architecture implement automatic, transparent model switching on 429/503 upstream responses?"
+  - "Is there local client-side token bucket buffering to prevent sudden burst overruns?"
+  - "Are system prompts and tool schemas dynamically normalized across target providers?"
 tags:
   - llm
   - gateway
@@ -47,6 +48,6 @@ tags:
   - ai-infra
 ---
 
-# Contexto Operacional
+# Operational Reliability Context
 
-Depender de um único provedor de inteligência artificial ou de um único modelo em produção é uma das principais vulnerabilidades de confiabilidade em sistemas modernos. Limites de taxa baseados em tokens (TPM) e requisições (RPM) são atingidos sem aviso prévio em momentos de pico. Um gateway resiliente precisa estimar o uso de tokens antes do envio e manter rotas de fallback ativas com chaveamento imperceptível para o usuário final.
+Coupling production systems to a single model provider without dynamic fallback routing is an unacceptable availability risk. Token limits (TPM) and request limits (RPM) are enforced abruptly during global traffic surges. A resilient AI gateway estimates prompt tokens locally and maintains hot standby routes to ensure zero user-visible disruption.

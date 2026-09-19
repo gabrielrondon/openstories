@@ -108,6 +108,11 @@ type SearchResult struct {
 
 // Search queries stories by query terms, industry, domain and minimum demand score.
 func (s *Store) Search(query string, industry string, domain string, minScore float64) []SearchResult {
+	return s.SearchWithLocale(query, industry, domain, minScore, "")
+}
+
+// SearchWithLocale queries stories with an optional locale filter (e.g. "en", "pt-br").
+func (s *Store) SearchWithLocale(query string, industry string, domain string, minScore float64, locale string) []SearchResult {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
@@ -115,6 +120,9 @@ func (s *Store) Search(query string, industry string, domain string, minScore fl
 	results := make([]SearchResult, 0)
 
 	for _, story := range s.allStories {
+		if locale != "" && !strings.EqualFold(story.Locale, locale) {
+			continue
+		}
 		if industry != "" && !strings.EqualFold(story.Industry, industry) {
 			continue
 		}

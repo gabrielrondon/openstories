@@ -1,34 +1,35 @@
 ---
 id: OS-DEV-001
+locale: en
 industry: devtools
 domain: apis-and-sdks
-title: "Idempotência obrigatória em endpoints de mutação com retries automáticos"
+title: "Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries"
 demand_score: 9.6
 status: verified
 persona:
-  role: "Engenheiro de Integração de APIs / Backend Lead"
-  context: "Microsserviços e sistemas de missão crítica lidando com transações e webhooks"
+  role: "Backend Integration Engineer / API Platform Lead"
+  context: "Mission-critical microservices and payment gateways handling distributed transactions and webhooks"
 story:
-  as_a: "Engenheiro integrador de APIs de terceiros"
-  i_want: "Que todos os endpoints de criação e mutação (POST/PATCH) suportem o cabeçalho Idempotency-Key com deduplicação atômica e cache da resposta"
-  so_that: "Falhas transitórias de rede, timeouts ou reconexões de cliente nunca dupliquem registros no banco nem cobrem o cliente duas vezes"
+  as_a: "Backend engineer integrating third-party APIs"
+  i_want: "Mutation endpoints (POST/PATCH) to support an Idempotency-Key header with atomic deduplication and response caching"
+  so_that: "Transient network drops, client timeouts, or connection resets never duplicate state mutations or charge customers twice"
 acceptance_criteria:
-  - scenario: "Replay de requisição idêntica com mesma chave dentro de 24h"
-    given: 'Uma requisição anterior com Idempotency-Key "idemp_9921_x" concluiu com status 201'
-    when: 'Uma nova requisição for enviada com a mesma chave "idemp_9921_x" e mesmo payload'
-    then: 'A API deve retornar HTTP 201 com o payload original, adicionando o cabeçalho "Idempotent-Replayed: true", sem reexecutar a lógica'
-  - scenario: "Conflito de payload com a mesma chave"
-    given: 'A chave "idemp_9921_x" foi usada com o payload A'
-    when: 'O cliente enviar a mesma chave "idemp_9921_x" mas com payload B'
-    then: 'A API deve rejeitar com HTTP 422 Unprocessable Entity e código "idempotency_key_payload_mismatch"'
-  - scenario: "Requisição concorrente em trânsito com a mesma chave"
-    given: 'Uma requisição com a chave "idemp_9921_x" ainda está sendo processada no backend'
-    when: "Uma segunda requisição chegar simultaneamente com a mesma chave"
-    then: "A API deve retornar HTTP 409 Conflict ou segurar o lock distribuído até a primeira concluir, nunca executando duas threads em paralelo"
+  - scenario: "Replaying an identical request with the same idempotency key within 24h"
+    given: 'A previous request with Idempotency-Key "idemp_9921_x" completed with HTTP 201 and payload {"id": "tx_123"}'
+    when: 'A new request arrives with the exact same key "idemp_9921_x" and identical payload'
+    then: 'The API must return HTTP 201 with the cached payload and header "Idempotent-Replayed: true", without re-executing business logic'
+  - scenario: "Payload mismatch conflict on identical key"
+    given: 'The key "idemp_9921_x" was already processed with payload A'
+    when: 'A client submits the same key "idemp_9921_x" with a different payload B'
+    then: 'The API must reject with HTTP 422 Unprocessable Entity and error code "idempotency_key_payload_mismatch"'
+  - scenario: "Concurrent in-flight requests sharing the same key"
+    given: 'A request with key "idemp_9921_x" is currently being processed by a worker'
+    when: "A second concurrent request arrives with the exact same key before completion"
+    then: "The API must return HTTP 409 Conflict or hold a distributed lock until the first completes, never executing duplicate parallel routines"
 edge_cases:
-  - "Expiração da chave de idempotência após a janela de retenção (24 horas)."
-  - "Concorrência real de milissegundos tratada via distributed lock (ex: Redis Redlock ou Postgres advisory lock)."
-  - "Salvamento do cabeçalho de resposta original e status code original, não apenas do body JSON."
+  - "Idempotency key TTL expiration after the standard retention window (24 hours)."
+  - "Sub-millisecond race conditions mitigated via distributed locks (e.g. Redis Redlock or Postgres advisory locks)."
+  - "Full header and status code preservation (replaying original response headers, not just raw JSON body)."
 evidence:
   - source: "https://github.com/stripe/stripe-go/issues/632"
     type: "github_issue"
@@ -39,9 +40,9 @@ evidence:
     quote: "Building distributed systems without first-class idempotency in API design is tech debt that will eventually wake someone up at 3 AM with data corruption."
     date: "2025-01-18"
 evaluation_rubric:
-  - "O código valida se a mesma chave foi reutilizada com payload diferente e retorna 422?"
-  - "Existe mecanismo de lock distribuído para requisições em trânsito com a mesma chave?"
-  - "A resposta retransmitida inclui indicação explícita de replay (ex: Idempotent-Replayed: true)?"
+  - "Does the spec or implementation reject reused keys with altered payloads with HTTP 422?"
+  - "Is there a distributed lock mechanism for in-flight concurrent requests sharing the same key?"
+  - "Does the replayed response explicitly notify the client via an Idempotent-Replayed header?"
 tags:
   - api-design
   - idempotency
@@ -49,6 +50,6 @@ tags:
   - reliability
 ---
 
-# Contexto Arquitetural
+# Architectural Context
 
-A ausência de idempotência em APIs modernas é uma das principais fontes de corrupção silenciosa de dados em microsserviços. Quando um timeout de 30 segundos ocorre no client HTTP (ex: Axios, Faraday, Fetch), o servidor pode já ter completado o commit no banco de dados. Sem suporte nativo a `Idempotency-Key`, o retry automático inevitavelmente cria uma entidade duplicada.
+The absence of native idempotency in APIs is the leading cause of silent data corruption in distributed microservices. When a 30-second client-side HTTP timeout fires, the server may have already committed the database transaction. Without first-class `Idempotency-Key` deduplication, automated client retries inevitably spawn duplicate resources.

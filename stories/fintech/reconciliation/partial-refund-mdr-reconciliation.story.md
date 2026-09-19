@@ -1,30 +1,31 @@
 ---
 id: OS-FIN-002
+locale: en
 industry: fintech
 domain: reconciliation
-title: Conciliação proporcional de taxas de MDR e tarifas fixas em estornos parciais
+title: "Proportional Interchange Fee (MDR) and Fixed Gateway Fee Accounting on Partial Refunds"
 demand_score: 9.1
 status: verified
 persona:
-  role: Analista Financeiro / Desenvolvedor de ERP Contábil
-  context: Empresas transacionando alto volume de pagamentos com estornos frequentes (devoluções parciais de itens)
+  role: "Financial Ledger Engineer / ERP Integration Specialist"
+  context: "High-volume e-commerce platforms issuing daily partial returns with card acquiring networks"
 story:
-  as_a: Analista financeiro de um e-commerce
-  i_want: Que o motor de conciliação do sistema deduza proporcionalmente o percentual da taxa de transação (MDR) nos estornos parciais e contabilize corretamente a tarifa fixa não estornada pela adquirente
-  so_that: O saldo contábil no ERP coincida exatamente com o extrato bancário de liquidação da adquirente sem divergências de centavos
+  as_a: "Financial controller or ledger engineer"
+  i_want: "The reconciliation engine to proportionately calculate merchant discount rates (MDR) on partial refunds while properly attributing non-refundable fixed fees"
+  so_that: "Internal accounting ledgers match acquiring settlement bank statements to the penny without accumulating phantom discrepancies"
 acceptance_criteria:
-  - scenario: Estorno parcial com taxa percentual (MDR de 3%)
-    given: Uma venda de R$ 100,00 com MDR de 3% (R$ 3,00 retidos)
-    when: O cliente solicitar a devolução de 1 item no valor de R$ 40,00
-    then: O estorno contábil deve creditar de volta R$ 1,20 de MDR proporcional (3% de R$ 40) e debitar R$ 38,80 do lojista
-  - scenario: Taxa fixa de gateway não estornável
-    given: A operadora cobra R$ 0,50 fixos por transação que não são devolvidos em nenhum caso de cancelamento
-    when: Um estorno (total ou parcial) for liquidado
-    then: A tarifa de R$ 0,50 deve ser classificada como despesa operacional irrecuperável e nunca abatida como estorno
+  - scenario: "Partial refund with percentage fee (3% MDR)"
+    given: "An original sale of $100.00 with a 3% MDR acquiring deduction ($3.00)"
+    when: "A customer initiates a partial return for 1 item valued at $40.00"
+    then: "The ledger must credit back $1.20 in proportional MDR (3% of $40) and debit $38.80 from merchant payout balances"
+  - scenario: "Non-refundable fixed gateway authorization fee"
+    given: "The payment processor charges a fixed $0.30 transaction fee that is non-refundable under all circumstances"
+    when: "A full or partial refund is processed"
+    then: "The $0.30 fixed fee must be recorded as an irrecoverable operational expense and never credited back against the refund principal"
 edge_cases:
-  - Arredondamento monetário de meio centavo (utilizar algoritmo Half-Even / Banker's Rounding para evitar acúmulo de viés contábil).
-  - Estornos que ocorrem em moedas diferentes da moeda de liquidação (flutuação de spread cambial FX).
-  - Estornos solicitados após o fechamento da competência fiscal do mês.
+  - "Half-even rounding (Banker's Rounding) on sub-cent fee calculations to avoid systematic financial drift over millions of transactions."
+  - "Multi-currency foreign exchange (FX) spread fluctuations between purchase authorization and refund execution."
+  - "Refunds processed across closed fiscal calendar months requiring adjusting ledger entries."
 evidence:
   - source: "https://news.ycombinator.com/item?id=37728192"
     type: "hackernews"
@@ -35,9 +36,9 @@ evidence:
     quote: "Every junior developer implements refund as 'total - refund_amount' without accounting for whether the payment processor returns the interchange fee."
     date: "2024-01-14"
 evaluation_rubric:
-  - "O cálculo contábil utiliza Banker's Rounding (Half-Even) para lidar com frações de centavos?"
-  - "A lógica diferencia componentes percentuais de taxas (MDR) de taxas fixas não-estornáveis por transação?"
-  - "O modelo de dados armazena o evento de estorno como registro contábil imutável em partidas dobradas?"
+  - "Does the financial calculation utilize Banker's Rounding (Half-Even) to prevent statistical drift?"
+  - "Does the model explicitly distinguish variable percentage fees from fixed non-refundable transaction fees?"
+  - "Are refund operations persisted as immutable double-entry ledger journal entries?"
 tags:
   - fintech
   - reconciliation
@@ -46,6 +47,6 @@ tags:
   - payments
 ---
 
-# Contexto Contábil e Financeiro
+# Financial Accounting Hazards
 
-A conciliação bancária de pagamentos com cartão de crédito é repleta de armadilhas. A maioria das adquirentes (Stone, Cielo, Stripe, Adyen) devolve a taxa percentual (MDR) proporcional ao valor do estorno, mas retém a tarifa fixa de autorização (ex: R$ 0,39 ou $0.30). Sistemas que tratam o estorno apenas subtraindo o valor bruto geram um furo contábil cumulativo que estoura em auditorias externas.
+Credit card acquiring reconciliation is full of subtle traps. Most payment processors (Stripe, Adyen, Stone, Cielo) rebate the variable percentage component (interchange/MDR) on partial refunds, but retain the fixed per-transaction fee (e.g. $0.30). Naive systems that simply subtract the gross refund amount accumulate serious audit discrepancies that trigger external investigation.

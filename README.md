@@ -19,43 +19,43 @@
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8.svg)](https://golang.org)
 [![Tuturama](https://img.shields.io/badge/Maintained%20by-Tuturama-indigo.svg)](https://tuturama.com)
 
-**Aterre as features e PRs da sua IA em problemas reais da humanidade.**  
-*O primeiro motor open-source de User Stories baseadas em evidências reais (GitHub Issues, post-mortems e discussões de produção) com servidor MCP nativo e Spec Stress-Tester.*
+**Ground your AI agents in real-world human problems and production battle-scars.**  
+*The first open-source engine of evidence-backed user stories grounded in public GitHub issues, production post-mortems, and community outages — featuring a native Model Context Protocol (MCP) server and reality stress-tester.*
 
-[Web Dashboard](https://openstories.tuturama.com) • [Quickstart](#-quickstart-em-30-segundos) • [Integração MCP](#-integração-com-claude-desktop--cursor) • [Spec Stress-Tester](#-o-spec-stress-tester-linter-de-realidade) • [Taxonomia](#-árvore-de-classificação)
+[Web Dashboard](https://openstories.tuturama.com) • [Quickstart in 30s](#-quickstart-in-30-seconds) • [Claude & Cursor Setup](#-1-click-setup-for-claude-code--cursor) • [Spec Stress-Tester](#-reality-stress-tester-the-production-linter) • [Taxonomy](#-curated-taxonomy)
 
 </div>
 
 ---
 
-## 💥 O Problema: O Viés do "Happy Path" nas IAs
+## 💥 The Problem: The "Happy Path" Bias in AI Coding Agents
 
-Quando você pede para **Claude Code**, **Cursor**, **Antigravity** ou **Codex** arquitetar uma funcionalidade:
-- Elas geram especificações e testes de brinquedo (*"happy path"*).
-- Elas não têm ideia das dezenas de incidentes bizarros que acontecem em produção (ex: *scanners corporativos como Microsoft Defender fazendo pre-fetching de Magic Links e invalidando tokens antes do clique humano*, ou *webhooks de pagamento chegando fora de ordem em filas distribuídas*).
-- O desenvolvedor sofre em produção com bugs que usuários reais da internet já reportaram centenas de vezes.
+When you prompt **Claude Code**, **Cursor**, **Codex**, or **Antigravity** to architect a feature:
+- They generate toy specifications and "happy path" assumptions.
+- They have zero context on bizarre, real-world production traps (e.g. *enterprise mail scanners like Microsoft Defender pre-fetching magic links and burning one-time tokens before humans click*, or *payment webhooks arriving out-of-order across distributed message queues*).
+- Engineering teams face critical production outages caused by failure modes that other developers have already documented hundreds of times on GitHub and Reddit.
 
-## 💡 A Solução: OpenStories
+## 💡 The Solution: OpenStories
 
-O **OpenStories** transforma a experiência coletiva de engenheiros e usuários em uma **biblioteca viva de User Stories respaldadas por evidências reais**. 
+**OpenStories** turns the collective operational scars of the software industry into an **executable library of evidence-backed user stories**.
 
-Cada história contém:
-1. **User Story Formal**: `As a... I want... So that...`
-2. **Critérios de Aceitação Gherkin**: `Scenario: ... Given ... When ... Then`
-3. **Casos de Borda de Produção**: Armadilhas documentadas em post-mortems reais.
-4. **Pacote de Evidências com Citações**: Links para GitHub issues, Reddit threads e post-mortems de empresas reais.
-5. **Score Empírico de Demanda**: Calculado a partir da frequência e gravidade dos relatos.
+Every story provides:
+1. **User Story Statement**: `As a... I want... So that...`
+2. **Gherkin Acceptance Criteria**: Executable `Scenario: ... Given ... When ... Then`
+3. **Observed Production Edge Cases**: Specific failure modes extracted from real post-mortems.
+4. **Grounded Evidence with Verifiable Citations**: Direct links and quotes from GitHub issues, Reddit rants, and official incident reports.
+5. **Empirical Demand Score**: Quantitative score calculated from community frequency and outage severity.
 
 ---
 
-## 🚀 Quickstart em 30 Segundos
+## 🚀 Quickstart in 30 Seconds
 
-### 1. Instalação do Binário
-Você pode compilar localmente ou instalar via Go:
+### 1. Installation
+Install directly via Go or compile from source:
 ```bash
 go install github.com/gabrielrondon/openstories/cmd/openstories@latest
 ```
-Ou clonando o repositório:
+Or clone and build the zero-dependency static binary:
 ```bash
 git clone https://github.com/gabrielrondon/openstories.git
 cd openstories
@@ -63,100 +63,89 @@ make build
 ./openstories
 ```
 
-### 2. Buscar Histórias pelo Terminal
+### 2. Search Stories via CLI
 ```bash
-# Busca inteligente por problema ou conceito
-openstories search "idempotência em APIs"
+# Semantic search across all curated stories
+openstories search "idempotency on mutation endpoints"
 
-# Filtrando por indústria
-openstories search "webhooks fora de ordem" --industry fintech
+# Filter by industry
+openstories search "out of order webhooks" --industry fintech
 
-# Visualizar todos os detalhes de uma história
+# Inspect complete Gherkin criteria & citations
 openstories get OS-DEV-001
 ```
 
 ---
 
-## 🛠️ Integração com Claude Desktop & Cursor (1-Click MCP)
+## 🛠️ 1-Click Setup for Claude Code & Cursor
 
-O OpenStories implementa nativamente o **Model Context Protocol (MCP)** sobre `stdio`. Ele roda **localmente na sua máquina, com zero custo e zero infraestrutura de nuvem**.
+OpenStories natively implements the official **Model Context Protocol (MCP)** specification over `stdio`. It runs **100% locally on your machine with zero cloud costs or infrastructure**.
 
-### Instalação Automática (1 Comando):
-
+### Instant Configuration:
 ```bash
-# Configura o Claude Desktop automaticamente
+# Configures both Claude Code CLI (~/.claude.json) and Claude Desktop
 openstories install claude
 
-# Configura o Cursor IDE automaticamente
+# Configures Cursor IDE (~/.cursor/mcp.json)
 openstories install cursor
 ```
 
-Pronto! Ao abrir o Claude Desktop ou Cursor, você terá as ferramentas:
-- `search_stories`: Busca semântica de requisitos reais por indústria/dor.
-- `get_story`: Recupera critérios Gherkin e links de incidentes.
-- `evaluate_spec`: Avalia o plano da feature e aponta pontos cegos de produção.
-- `save_custom_story`: Salva histórias internas na pasta `.openstories/stories/` do seu projeto.
+Restart Claude Code or Cursor, and OpenStories tools are instantly available:
+- `search_stories`: Retrieve verified stories matching your current task.
+- `get_story`: Load full Gherkin criteria and incident evidence.
+- `evaluate_spec`: Reality stress-tester that audits your feature draft against production failures.
+- `save_custom_story`: Persist private company stories in your local `.openstories/stories/` folder.
 
-### Configuração Manual (`claude_desktop_config.json`):
-```json
-{
-  "mcpServers": {
-    "openstories": {
-      "command": "openstories",
-      "args": ["mcp"]
-    }
-  }
-}
-```
+### System Prompt Snippet (Recommended):
+Add this line to your project's `CLAUDE.md`, `.cursorrules`, or system prompt:
+> *"Before implementing any feature or architectural plan, query the `openstories` MCP tools (`search_stories` and `evaluate_spec`) to ground your specification in real-world production incident edge cases."*
 
 ---
 
-## 🛡️ O Spec Stress-Tester (Linter de Realidade)
+## 🛡️ Reality Stress-Tester (The Production Linter)
 
-Antes de escrever qualquer linha de código, você ou o agente podem passar a especificação pelo Stress-Tester:
+Before writing code, run your architectural draft or AI-generated PR plan through the Reality Stress-Tester:
 
 ```bash
-openstories eval --industry devtools "Feature: Criar endpoint POST /charge com retry se houver timeout"
+openstories eval --industry devtools "Feature: POST /charge endpoint that retries Stripe on network timeout"
 ```
 
-### Exemplo de Retorno do OpenStories:
+### Output:
 ```
-🛡️  RELATÓRIO DE STRESS-TEST DE ESPECIFICAÇÃO
-Score de Cobertura de Realidade: 15/100
-Resumo: Atenção: Alta vulnerabilidade a incidentes de produção. A especificação negligenciou múltiplos casos de borda severos com alto volume de reclamações reais na internet.
+🛡️  REALITY STRESS-TEST REPORT
+Reality Coverage Score: 15/100
+Summary: Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.
 
-🚨 CASOS DE BORDA CRÍTICOS NÃO TRATADOS NA SPEC:
-  ❌ [OS-DEV-001] Idempotência obrigatória: Expiração da chave de idempotência após a janela de retenção (24 horas).
-  ❌ [OS-DEV-001] Idempotência obrigatória: Concorrência real de milissegundos tratada via distributed lock.
-  ❌ [OS-DEV-001] Idempotência obrigatória: Salvamento do cabeçalho de resposta original e status code original.
+🚨 PRODUCTION BLIND SPOTS UNHANDLED IN SPEC:
+  ❌ [OS-DEV-001] Mandatory Idempotency Keys: Idempotency key TTL expiration after the standard retention window (24 hours).
+  ❌ [OS-DEV-001] Mandatory Idempotency Keys: Sub-millisecond race conditions mitigated via distributed locks.
+  ❌ [OS-DEV-001] Mandatory Idempotency Keys: Full header and status code preservation (replaying original response headers).
 
-💡 RECOMENDAÇÕES:
-  • Adicionar testes automatizados específicos para os casos de borda listados nos alertas.
-  • Incorporar na documentação do PR ou RFC as respostas aos itens do checklist não atendidos.
+💡 ACTIONABLE RECOMMENDATIONS:
+  • Add explicit integration and failure-injection tests covering the flagged production edge cases.
+  • Document explicit architectural answers to the quality checklist rubrics before writing code.
 ```
 
 ---
 
-## 🌐 Interface Web Embutida (`openstories serve`)
+## 🌐 Embedded Web Dashboard (`openstories serve`)
 
-O OpenStories vem com uma interface web moderna, interativa e responsiva embutida diretamente no binário (via `embed.FS`):
+OpenStories features an embedded, responsive dark-mode web application and REST API compiled directly into the binary:
 
 ```bash
 openstories serve --port 8080
 ```
-Acesse `http://localhost:8080` para:
-- Navegar interativamente pelo catálogo de histórias.
-- Filtrar por indústrias e domínios.
-- Inspecionar critérios Gherkin e citações originais.
-- Usar o playground visual do **Spec Stress-Tester**.
-
-> 💡 **Deploy para Produção**: O código da pasta `web/` está preparado para deploy estático ou via subdomínio **`openstories.tuturama.com`**.
+Open `http://localhost:8080` in your browser to:
+- Browse and search the evidence-backed catalog.
+- Filter by industry and domain.
+- Invert specs interactively in the **Spec Stress-Tester Playground**.
+- Ready for deployment on **`openstories.tuturama.com`**.
 
 ---
 
-## 🌾 Harvester: Mineração Automatizada da Web
+## 🌾 Web Harvester: Mining Real World Issues
 
-O OpenStories possui um coletor que lê discussões e issues públicas e rascunha histórias prontas com evidências:
+Automatically ingest public issues and synthesize draft user stories:
 
 ```bash
 openstories harvest --repo stripe/stripe-go --label bug --industry devtools
@@ -164,38 +153,45 @@ openstories harvest --repo stripe/stripe-go --label bug --industry devtools
 
 ---
 
-## 🌳 Árvore de Classificação
+## 🌳 Curated Taxonomy
 
 ```
 stories/
 ├── devtools/                        # APIs, Auth, CI/CD, Observability
-│   ├── apis-and-sdks/               # OS-DEV-001: Idempotency Keys
-│   └── auth-and-iam/                # OS-DEV-002: Magic Link Pre-fetching
-├── ai-infra/                        # LLM Gateways, Agents, RAG
-│   ├── agentic-workflows/           # OS-AI-001: Tool Calling Loop Breaker
-│   └── llm-gateways/                # OS-AI-002: Token Rate Limit Fallbacks
-├── fintech/                         # Pagamentos, Conciliação, Fraude
-│   ├── payments-and-checkout/       # OS-FIN-001: Out-of-Order Webhooks
-│   └── reconciliation/              # OS-FIN-002: Partial Refund MDR
-└── b2b-saas/                        # Multi-tenancy, Auditoria, Workspaces
-    ├── multi-tenancy/               # OS-SaaS-001: Slug Hijacking Prevention
-    └── audit-logs/                  # OS-SaaS-002: SOC2 Immutable Audit Trail
+│   ├── apis-and-sdks/               # OS-DEV-001: Mandatory Idempotency Keys
+│   └── auth-and-iam/                # OS-DEV-002: Magic Link Scanner Pre-Fetching
+├── ai-infra/                        # LLM Gateways, Agents, Tool Calling
+│   ├── agentic-workflows/           # OS-AI-001: Infinite Tool-Calling Loop Breaker
+│   └── llm-gateways/                # OS-AI-002: Token Rate Limit Fallback Cascades
+├── fintech/                         # Payments, Ledgers, Reconciliation
+│   ├── payments-and-checkout/       # OS-FIN-001: Out-of-Order Webhook Delivery
+│   └── reconciliation/              # OS-FIN-002: Partial Refund MDR Reconciliation
+└── b2b-saas/                        # Multi-Tenancy, Compliance, Workspaces
+    ├── multi-tenancy/               # OS-SaaS-001: Subdomain Hijacking & Homoglyphs
+    └── audit-logs/                  # OS-SaaS-002: Cryptographic Tamper-Proof Audit Trail
 ```
 
 ---
 
-## 🤝 Como Contribuir
+## 🌍 Multi-Language & Internationalization
 
-1. Faça um Fork do projeto.
-2. Crie uma nova história em `stories/<industry>/<domain>/<nome>.story.md`.
-3. Garanta que a história contenha **links e citações de evidências reais**.
-4. Rode os testes: `make test`.
-5. Abra seu Pull Request!
+Stories support an explicit `locale` tag (defaulting to `en`). Community contributions in any language (Portuguese, Spanish, Japanese, etc.) can be contributed as localized companion stories (e.g. `OS-DEV-001.pt.story.md` with `locale: pt-BR`).
 
 ---
 
-## 📄 Licença
+## 🤝 Contributing
 
-Distribuído sob a licença **MIT**. Veja [`LICENSE`](LICENSE) para mais detalhes.
+We welcome community-contributed stories!
+1. Fork the repository.
+2. Create a `.story.md` file in `stories/<industry>/<domain>/`.
+3. Include **verifiable links and citations** to real GitHub issues, forum threads, or post-mortems.
+4. Run tests: `make test`.
+5. Submit your Pull Request!
 
-Criado com dedicação por **Gabriel Rondon** & **Tuturama**.
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+
+Maintained with ❤️ by **Gabriel Rondon** & **Tuturama**.

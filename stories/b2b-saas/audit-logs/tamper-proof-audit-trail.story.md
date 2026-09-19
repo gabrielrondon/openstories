@@ -1,30 +1,31 @@
 ---
 id: OS-SaaS-002
+locale: en
 industry: b2b-saas
 domain: audit-logs
-title: Trilha de auditoria imutável (Audit Trail) com encadeamento criptográfico para conformidade SOC2
+title: "Cryptographically Chained, Tamper-Evident Audit Trail for Enterprise SOC 2 Type II Compliance"
 demand_score: 9.2
 status: verified
 persona:
-  role: Enterprise Compliance Officer / Staff Security Engineer
-  context: Aplicações B2B SaaS vendendo para clientes Enterprise que exigem certificação SOC2 Type II e auditoria forense
+  role: "Enterprise Compliance Director / Staff Security Architect"
+  context: "B2B SaaS products selling to Fortune 500 and regulated entities requiring verifiable forensic non-repudiation"
 story:
-  as_a: Auditor de segurança e conformidade de um cliente corporativo
-  i_want: Que todas as operações de mutação de privilégios, exportação de dados e acessos confidenciais gerem registros de auditoria append-only assinados com hash anterior
-  so_that: Nenhum administrador de banco ou invasor com acesso interno consiga adulterar ou apagar logs retroativamente para ocultar um vazamento
+  as_a: "Security auditor or enterprise compliance officer"
+  i_want: "All privilege mutations, data exports, and sensitive access events to append to an immutable, cryptographically hashed audit log chain"
+  so_that: "No internal DBA, rogue employee, or privileged attacker can retroactively tamper with or truncate audit rows to conceal a data breach"
 acceptance_criteria:
-  - scenario: Criação de novo evento de auditoria
-    given: Um administrador alterando as permissões de um usuário de "Viewer" para "Admin"
-    when: O evento for gravado na tabela de audit log
-    then: O registro deve conter obrigatoriamente actor_id, target_id, ip_address, user_agent, diff de permissões em formato estruturado e prev_hash criptográfico (SHA-256)
-  - scenario: Tentativa de update ou delete direto no banco de logs
-    given: A tabela de trilha de auditoria configurada
-    when: Uma instrução SQL UPDATE ou DELETE for executada diretamente na tabela
-    then: Triggers de banco ou políticas de retenção WORM (Write Once, Read Many) devem abortar a operação com erro de integridade estrita
+  - scenario: "Emitting a new security-critical audit event"
+    given: "An administrator modifying user permissions from 'Viewer' to 'Billing Admin'"
+    when: "The audit event is committed to the persistence layer"
+    then: "The record must strictly include actor_id, target_id, ip_address, user_agent, structured permission diff, UTC timestamp, and a SHA-256 hash chaining to the previous log entry"
+  - scenario: "Direct SQL UPDATE or DELETE tampering attempt"
+    given: "The audit trail database tables configured in production"
+    when: "A rogue operator attempts to execute direct SQL UPDATE or DELETE queries on historical log entries"
+    then: "Database-level append-only rules (or WORM storage policies) must abort the operation with an immutable integrity violation error"
 edge_cases:
-  - Anonimização controlada de PII (dados pessoais sensíveis) para cumprir LGPD/GDPR sem quebrar a integridade criptográfica da cadeia de hashes.
-  - Exportação em massa em formato JSON Lines (JSONL) ou CEF (Common Event Format) para integração com SIEMs (Splunk, Datadog).
-  - Tolerância a alta vazão de escrita através de buffers de agregação ou particionamento mensal.
+  - "Controlled redaction of Personally Identifiable Information (PII) under GDPR/LGPD 'Right to be Forgotten' without breaking the cryptographic hash chain."
+  - "Streaming bulk audit events in JSON Lines (JSONL) or Common Event Format (CEF) to enterprise SIEM collectors (Datadog, Splunk)."
+  - "High-throughput write buffers to prevent database deadlocks under sudden traffic surges."
 evidence:
   - source: "https://news.ycombinator.com/item?id=35890214"
     type: "hackernews"
@@ -35,9 +36,9 @@ evidence:
     quote: "Enterprise buyers require non-repudiation in audit events. If you cannot prove the log wasn't edited in PostgreSQL, procurement won't approve the deal."
     date: "2024-02-19"
 evaluation_rubric:
-  - "Os eventos de auditoria contêm contexto forense completo (ator, IP, tenant, timestamp UTC e payload de diff)?"
-  - "Existe garantia técnica de imutabilidade (tabela append-only, permissões de banco restritas ou hash chain)?"
-  - "O sistema fornece endpoint para streaming ou exportação de logs para ferramentas SIEM do cliente?"
+  - "Do audit records record complete forensic metadata (actor, target, tenant, IP, UTC timestamp, structured payload diff)?"
+  - "Is there an enforceable immutability guarantee (append-only database triggers or hash chaining)?"
+  - "Does the architecture support export and real-time streaming to customer SIEM platforms?"
 tags:
   - security
   - soc2
@@ -47,6 +48,6 @@ tags:
   - b2b-saas
 ---
 
-# Contexto de Conformidade e Negócios
+# Compliance and Enterprise Sales Relevance
 
-A trilha de auditoria é frequentemente o requisito eliminatório ("deal breaker") para fechar vendas com clientes corporativos (Fortune 500 ou bancos). Empresas que implementam logs como simples tabelas relacionais mutáveis falham em auditorias SOC 2 Type II e ISO 27001 por não conseguirem garantir a não-repudiação dos dados.
+In enterprise B2B sales, an unassailable audit log is often the primary prerequisite for procurement approval. Companies that store logs as standard mutable relational rows without cryptographic proofs routinely fail SOC 2 Type II and ISO 27001 audits because they cannot mathematically prove non-repudiation.

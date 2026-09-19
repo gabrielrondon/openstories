@@ -1,30 +1,31 @@
 ---
 id: OS-SaaS-001
+locale: en
 industry: b2b-saas
 domain: multi-tenancy
-title: "Prevenção de sequestro de subdomínio e colisão de slugs reservados em multi-tenancy"
+title: "Preventing Reserved Keyword Collisions, Subdomain Hijacking, and Homoglyph Spoofing in Multi-Tenant SaaS"
 demand_score: 9.3
 status: verified
 persona:
-  role: "Security Architect / SaaS Product Manager"
-  context: "Aplicações multi-tenant com subdomínios ou URLs com slug de organização"
+  role: "Chief Information Security Officer / Principal Architect"
+  context: "Multi-tenant B2B SaaS platforms provisioning vanity subdomains (tenant.saas.com) or organization URL paths"
 story:
-  as_a: "Administrador da plataforma SaaS"
-  i_want: "Que o registro de novos workspaces valide estritamente listas de palavras reservadas, termos de infraestrutura e homóglifos"
-  so_that: "Usuários mal-intencionados não registrem slugs como admin, api, login, billing ou support, sequestrando cookies de sessão ou aplicando phishing"
+  as_a: "SaaS platform security administrator"
+  i_want: "The workspace registration flow to rigorously validate an exhaustive reserved keyword denylist, system infrastructure terms, and Unicode homoglyphs"
+  so_that: "Malicious actors cannot claim reserved slugs such as 'admin', 'api', 'billing', 'oauth', or 'support' to steal session cookies or launch targeted spear-phishing campaigns"
 acceptance_criteria:
-  - scenario: "Tentativa de registrar slug de infraestrutura reservada"
-    given: "Um usuário criando uma nova conta de workspace"
-    when: 'O usuário submeter o slug "admin" ou "billing" ou "auth"'
-    then: "O sistema deve recusar a criação com erro 400 informando que o identificador é reservado pelo sistema"
-  - scenario: "Tentativa de spoofing com caracteres Unicode homóglifos"
-    given: 'O workspace legítimo "paypal" já registrado'
-    when: 'Um atacante tentar registrar "pаypal" usando caractere cirílico visualmente idêntico'
-    then: 'O sistema deve normalizar via punycode/NFKC ou rejeitar caracteres não-alfanuméricos ASCII estritos (regex ^[a-z0-9-]+$)'
+  - scenario: "Attempting to claim an internal infrastructure keyword slug"
+    given: "A user registering a new workspace organization"
+    when: 'The user submits the slug "admin", "billing", "auth", or "api"'
+    then: "The system must reject the registration with HTTP 400 Bad Request and an explicit error indicating the identifier is reserved by system policy"
+  - scenario: "Attempting homoglyph spoofing via lookalike Unicode characters (e.g. Cyrillic 'а' replacing Latin 'a')"
+    given: 'A legitimate enterprise customer is registered with slug "paypal"'
+    when: 'An attacker attempts to register "pаypal" using visually indistinguishable Cyrillic runes'
+    then: "The system must normalize via NFKC/Punycode and strictly enforce ASCII alphanumeric constraints (regex ^[a-z0-9-]+$)"
 edge_cases:
-  - "Renomeação de slug existente (o slug antigo deve entrar em período de quarentena de 90 dias antes de ser liberado para terceiros)."
-  - "Colisões com subdomínios técnicos internos de DNS (ex: ns1, mail, autodiscover, ftp)."
-  - "Escopo de cookies definidos em .saas.com que poderiam vazar para subdomínios de usuários sem isolamento de sufixo público."
+  - "Workspace slug rename quarantine (decommissioned slugs must enter a 90-day cooldown before being released to the public)."
+  - "Internal DNS collision risks (e.g. autodiscover, smtp, imap, ns1, cdn)."
+  - "Parent domain cookie scoping (ensuring cookies defined on .saas.com do not leak into user-controlled tenant subdomains without Public Suffix List isolation)."
 evidence:
   - source: "https://hackerone.com/reports/409850"
     type: "security_bounty_report"
@@ -35,9 +36,9 @@ evidence:
     quote: "If your SaaS permits custom subdomain creation without an exhaustive denylist of over 500 reserved keywords, you have a critical security flaw from day one."
     date: "2024-04-10"
 evaluation_rubric:
-  - "O sistema implementa uma denylist rígida e testada de palavras reservadas do sistema?"
-  - "Existe validação estrita de charset para impedir ataques de homóglifos Unicode?"
-  - "Slugs excluídos ou alterados possuem quarentena temporal para evitar takeover imediato?"
+  - "Does the registration validator enforce an exhaustive system keyword denylist (>200 keywords)?"
+  - "Is there strict alphanumeric charset enforcement preventing internationalized domain (IDN) homoglyph spoofing?"
+  - "Are renamed or deleted tenant slugs placed into a security quarantine to prevent immediate takeover?"
 tags:
   - security
   - multi-tenancy
@@ -46,6 +47,6 @@ tags:
   - isolation
 ---
 
-# Contexto de Segurança
+# Multi-Tenant Isolation Hazards
 
-Em arquiteturas SaaS multi-tenant baseadas em subdomínios (`{tenant}.empresa.com`), uma das vulnerabilidades mais exploradas por bug bounty hunters é o registro de nomes internos que o próprio sistema esqueceu de reservar. Sem uma lista rígida de termos de sistema, atacantes registram subdomínios como `api`, `auth` ou `status` para roubar tokens transmitidos para o domínio pai ou enganar funcionários internos.
+In subdomain-based multi-tenant architectures (`{tenant}.company.com`), one of the most common critical findings reported by bug bounty hunters is the lack of reserved subdomain protections. Failing to reserve names like `api`, `auth`, `status`, or `billing` allows attackers to intercept cookies or manipulate single-sign-on (SSO) redirect flows.

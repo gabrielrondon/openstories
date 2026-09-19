@@ -1,30 +1,31 @@
 ---
 id: OS-FIN-001
+locale: en
 industry: fintech
 domain: payments-and-checkout
-title: "Resiliência a entrega assíncrona e fora de ordem de webhooks de pagamento"
+title: "Resilience to Asynchronous and Out-of-Order Payment Webhook Delivery"
 demand_score: 9.7
 status: verified
 persona:
-  role: "Tech Lead / Engenheiro de Pagamentos"
-  context: "E-commerce e plataformas de assinatura integrando múltiplos gateways de pagamento (Stripe, Mercado Pago, Adyen)"
+  role: "Fintech Lead / Staff Payment Engineer"
+  context: "High-volume checkout and subscription engines consuming asynchronous webhooks from Stripe, Adyen, and PayPal across distributed queues"
 story:
-  as_a: "Engenheiro de pagamentos"
-  i_want: "Que o processador de webhooks do sistema processe eventos com controle de máquina de estados finita e versionamento temporal (event timestamp/version)"
-  so_that: "Um webhook que chegue fora de ordem (ex: charge.refunded antes de charge.succeeded, ou retry de charge.failed após aprovação) não reverta indevidamente o status do pedido nem libere acesso indevido"
+  as_a: "Payment platform engineer"
+  i_want: "The webhook processor to enforce finite state machine (FSM) transitions with temporal event versioning"
+  so_that: "An out-of-order webhook delivery (e.g. charge.refunded arriving prior to charge.succeeded, or a delayed charge.failed retry) never reverts completed orders or unlocks unauthorized access"
 acceptance_criteria:
-  - scenario: "Evento de sucesso chega antes da criação local do pedido"
-    given: 'Um webhook de "payment.approved" recebido antes do endpoint síncrono de checkout salvar a transação'
-    when: "O webhook for processado"
-    then: "O sistema deve enfileirar o evento com backoff exponencial ou realizar um upsert seguro sem lançar erro 500 no gateway"
-  - scenario: "Webhook com timestamp anterior a uma transição mais recente"
-    given: 'O pedido já está com status "DELIVERED" ou "APPROVED"'
-    when: 'Um webhook antigo de retry de "payment.processing" ou "payment.pending" for entregue'
-    then: "O processador deve ignorar a transição de estado, registrar no log de auditoria como evento ignorado por obsolescência e responder HTTP 200 ao gateway"
+  - scenario: "Payment success webhook arrives before local order creation commits"
+    given: 'A payment.approved webhook received before the synchronous checkout endpoint completes database writes'
+    when: "The webhook is processed by the ingestion worker"
+    then: "The system must enqueue the event with exponential backoff retry or perform an atomic upsert without returning HTTP 500 to the payment gateway"
+  - scenario: "Delayed webhook with timestamp older than current order state"
+    given: 'The order is already marked with a terminal state "PAID" or "DELIVERED"'
+    when: 'A delayed retry of an older "payment.pending" or "payment.failed" webhook arrives hours later'
+    then: "The state machine must discard the invalid transition, log an obsolescence audit trail event, and return HTTP 200 to acknowledge gateway delivery"
 edge_cases:
-  - "Gateway que não fornece sequência monotônica ou timestamp com resolução de milissegundos."
-  - "Concorrência de múltiplos webhooks do mesmo checkout disparados em paralelo pela adquirente."
-  - "Retentativas do gateway disparadas por timeout temporário na aplicação."
+  - "Gateways that omit monotonic sequence numbers or millisecond-precision event timestamps."
+  - "Concurrent webhook deliveries for the same payment intent fired in parallel by redundant gateway regions."
+  - "Locking per order ID (distributed redis lock or postgres row lock) during webhook evaluation."
 evidence:
   - source: "https://stripe.com/docs/webhooks#delivery-order"
     type: "official_doc_postmortem"
@@ -35,9 +36,9 @@ evidence:
     quote: "Had customers receiving free subscription access because the initial failed attempt webhook was delayed 4 hours and overwrote the subsequent successful payment state."
     date: "2024-09-17"
 evaluation_rubric:
-  - "O código trata estados terminais como imutáveis contra eventos obsoletos?"
-  - "O webhook handler responde HTTP 200 mesmo em eventos ignorados para evitar tempestade de retries do gateway?"
-  - "Existe lock transacional por ID de transação ou pedido no momento do processamento do webhook?"
+  - "Does the webhook processor treat terminal order states as immutable against older event timestamps?"
+  - "Does the endpoint always return HTTP 200 on handled obsolete events to halt gateway retry storms?"
+  - "Is there transactional row locking per order ID during event processing?"
 tags:
   - fintech
   - webhooks
@@ -46,6 +47,6 @@ tags:
   - concurrency
 ---
 
-# Contexto Técnico
+# Technical Incident Background
 
-A premissa de que webhooks chegam em ordem cronológica de emissão é a causa número 1 de bugs silenciosos de faturamento em SaaS e e-commerce. Como gateways operam em clusters distribuídos com filas concorrentes (Kafka/SQS) e retries exponenciais independentes por falha de rede, um evento disparado 5 segundos antes pode ser entregue 30 minutos depois de um evento posterior.
+Assuming that webhooks arrive in exact chronological order is the primary source of billing discrepancies in subscription businesses. Because modern payment gateways dispatch events via distributed partitioning clusters (Kafka/SQS) with independent retry policies, a webhook generated 5 seconds earlier can easily land 30 minutes after subsequent events.

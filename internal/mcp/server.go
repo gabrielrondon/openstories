@@ -73,7 +73,6 @@ func (s *Server) Run(stdin io.Reader, stdout io.Writer) error {
 	s.logger.Println("OpenStories MCP Server starting on stdio...")
 	scanner := bufio.NewScanner(stdin)
 
-	// Set a 4MB buffer limit to support large specs
 	buf := make([]byte, 1024*1024)
 	scanner.Buffer(buf, 4*1024*1024)
 
@@ -122,7 +121,6 @@ func (s *Server) handleRequest(req *JSONRPCRequest) *JSONRPCResponse {
 		}
 
 	case "notifications/initialized":
-		// No response required for notifications
 		return nil
 
 	case "ping":
@@ -160,34 +158,38 @@ func (s *Server) getToolDefinitions() []ToolDefinition {
 	return []ToolDefinition{
 		{
 			Name: "search_stories",
-			Description: "Busca na biblioteca aberta e privada do OpenStories por histórias de usuários baseadas em evidências reais (reclamações, GitHub issues, post-mortems).",
+			Description: "Search the OpenStories evidence-backed library for real-world user stories, production post-mortems, and edge cases by problem, technology, or domain.",
 			InputSchema: InputSchema{
 				Type: "object",
 				Properties: map[string]PropertyDef{
 					"query": {
 						Type:        "string",
-						Description: "Termos de busca, conceito técnico, dor do usuário ou funcionalidade (ex: 'idempotency retry', 'magic link', 'refund MDR').",
+						Description: "Search terms, technical concepts, user pain points, or feature ideas (e.g. 'idempotency retry', 'magic link pre-fetch', 'out-of-order webhooks').",
 					},
 					"industry": {
 						Type:        "string",
-						Description: "Filtro opcional por indústria (ex: 'devtools', 'fintech', 'ai-infra', 'b2b-saas').",
+						Description: "Optional industry filter (e.g. 'devtools', 'fintech', 'ai-infra', 'b2b-saas').",
 					},
 					"domain": {
 						Type:        "string",
-						Description: "Filtro opcional por domínio específico dentro da indústria.",
+						Description: "Optional domain filter within an industry.",
+					},
+					"locale": {
+						Type:        "string",
+						Description: "Optional language/locale filter (defaults to 'en').",
 					},
 				},
 			},
 		},
 		{
 			Name: "get_story",
-			Description: "Recupera uma história de usuário completa por ID, incluindo personas, critérios de aceitação em formato Gherkin, casos de borda e citações reais com links originais.",
+			Description: "Retrieve a complete evidence-backed user story by ID, including persona, Gherkin acceptance criteria, production edge cases, and real-world citations.",
 			InputSchema: InputSchema{
 				Type: "object",
 				Properties: map[string]PropertyDef{
 					"id": {
 						Type:        "string",
-						Description: "Identificador da história (ex: 'OS-DEV-001', 'OS-AI-001', 'OS-FIN-001').",
+						Description: "Story identifier (e.g. 'OS-DEV-001', 'OS-AI-001', 'OS-FIN-001').",
 					},
 				},
 				Required: []string{"id"},
@@ -195,21 +197,21 @@ func (s *Server) getToolDefinitions() []ToolDefinition {
 		},
 		{
 			Name: "evaluate_spec",
-			Description: "Stress-tester empírico: avalia uma especificação técnica, plano de feature ou PR contra incidentes e casos de borda reais reportados por usuários em produção.",
+			Description: "Empirical reality stress-tester: evaluates a feature plan, PR description, or technical specification against documented real-world production failures and edge cases.",
 			InputSchema: InputSchema{
 				Type: "object",
 				Properties: map[string]PropertyDef{
 					"spec": {
 						Type:        "string",
-						Description: "Texto da proposta, especificação técnica, plano de implementação ou descrição do PR a ser avaliado.",
+						Description: "The architectural spec, feature draft, or PR description to evaluate.",
 					},
 					"industry": {
 						Type:        "string",
-						Description: "Indústria alvo da funcionalidade (ex: 'devtools', 'fintech', 'ai-infra', 'b2b-saas').",
+						Description: "Target industry (e.g. 'devtools', 'fintech', 'ai-infra', 'b2b-saas').",
 					},
 					"domain": {
 						Type:        "string",
-						Description: "Domínio específico (opcional).",
+						Description: "Optional specific domain.",
 					},
 				},
 				Required: []string{"spec"},
@@ -217,7 +219,7 @@ func (s *Server) getToolDefinitions() []ToolDefinition {
 		},
 		{
 			Name: "list_taxonomies",
-			Description: "Lista todas as indústrias e domínios catalogados no OpenStories.",
+			Description: "List all indexed industries and domains currently registered in OpenStories.",
 			InputSchema: InputSchema{
 				Type:       "object",
 				Properties: map[string]PropertyDef{},
@@ -225,19 +227,19 @@ func (s *Server) getToolDefinitions() []ToolDefinition {
 		},
 		{
 			Name: "save_custom_story",
-			Description: "Salva uma nova história de usuário personalizada no repositório local (.openstories/stories/) para que IAs possam lembrar de regras específicas da sua empresa.",
+			Description: "Persist a private custom user story into the local workspace (.openstories/stories/) so AI coding agents can ground and remember internal company rules.",
 			InputSchema: InputSchema{
 				Type: "object",
 				Properties: map[string]PropertyDef{
-					"id":          {Type: "string", Description: "ID único da história (ex: 'CUSTOM-001')"},
-					"industry":    {Type: "string", Description: "Indústria (ex: 'internal', 'fintech')"},
-					"domain":      {Type: "string", Description: "Domínio técnico ou de negócio"},
-					"title":       {Type: "string", Description: "Título claro da história"},
-					"as_a":        {Type: "string", Description: "Papel do usuário (As a...)"},
-					"i_want":      {Type: "string", Description: "O que o usuário deseja fazer (I want...)"},
-					"so_that":     {Type: "string", Description: "Benefício obtido (So that...)"},
-					"edge_cases":  {Type: "string", Description: "Casos de borda separados por vírgula ou ponto e vírgula"},
-					"evidence":    {Type: "string", Description: "Citações, links de tickets ou contexto real de suporte"},
+					"id":          {Type: "string", Description: "Unique story identifier (e.g. 'CUSTOM-001')"},
+					"industry":    {Type: "string", Description: "Industry name (e.g. 'internal', 'fintech')"},
+					"domain":      {Type: "string", Description: "Domain or subsystem name"},
+					"title":       {Type: "string", Description: "Clear title of the user story"},
+					"as_a":        {Type: "string", Description: "Target persona (As a...)"},
+					"i_want":      {Type: "string", Description: "Action or capability (I want...)"},
+					"so_that":     {Type: "string", Description: "Core value or benefit (So that...)"},
+					"edge_cases":  {Type: "string", Description: "Semicolon-separated production edge cases"},
+					"evidence":    {Type: "string", Description: "Real feedback, support ticket quotes, or context"},
 				},
 				Required: []string{"id", "industry", "domain", "title", "as_a", "i_want", "so_that"},
 			},
@@ -267,22 +269,25 @@ func (s *Server) handleToolCall(req *JSONRPCRequest) *JSONRPCResponse {
 		query, _ := params.Arguments["query"].(string)
 		industry, _ := params.Arguments["industry"].(string)
 		domain, _ := params.Arguments["domain"].(string)
+		locale, _ := params.Arguments["locale"].(string)
 
-		results := s.store.Search(query, industry, domain, 0)
+		results := s.store.SearchWithLocale(query, industry, domain, 0, locale)
 		type SummaryItem struct {
-			ID          string   `json:"id"`
-			Title       string   `json:"title"`
-			Industry    string   `json:"industry"`
-			Domain      string   `json:"domain"`
-			DemandScore float64  `json:"demand_score"`
-			EdgeCases   []string `json:"edge_cases"`
-			EvidenceCount int    `json:"evidence_count"`
+			ID            string   `json:"id"`
+			Locale        string   `json:"locale"`
+			Title         string   `json:"title"`
+			Industry      string   `json:"industry"`
+			Domain        string   `json:"domain"`
+			DemandScore   float64  `json:"demand_score"`
+			EdgeCases     []string `json:"edge_cases"`
+			EvidenceCount int      `json:"evidence_count"`
 		}
 
 		out := make([]SummaryItem, 0, len(results))
 		for _, r := range results {
 			out = append(out, SummaryItem{
 				ID:            r.Story.ID,
+				Locale:        r.Story.Locale,
 				Title:         r.Story.Title,
 				Industry:      r.Story.Industry,
 				Domain:        r.Story.Domain,
@@ -299,7 +304,7 @@ func (s *Server) handleToolCall(req *JSONRPCRequest) *JSONRPCResponse {
 		id, _ := params.Arguments["id"].(string)
 		st, ok := s.store.Get(id)
 		if !ok {
-			return createToolResponse(req.ID, fmt.Sprintf("História com ID '%s' não encontrada.", id))
+			return createToolResponse(req.ID, fmt.Sprintf("Story with ID '%s' not found.", id))
 		}
 
 		data, _ := json.MarshalIndent(st, "", "  ")
@@ -350,6 +355,7 @@ func (s *Server) handleToolCall(req *JSONRPCRequest) *JSONRPCResponse {
 
 		customStory := &model.Story{
 			ID:          id,
+			Locale:      "en",
 			Industry:    industry,
 			Domain:      domain,
 			Title:       title,
@@ -370,10 +376,10 @@ func (s *Server) handleToolCall(req *JSONRPCRequest) *JSONRPCResponse {
 
 		path, err := s.store.SaveCustom(customStory)
 		if err != nil {
-			return createToolResponse(req.ID, fmt.Sprintf("Erro ao salvar história customizada: %v", err))
+			return createToolResponse(req.ID, fmt.Sprintf("Error saving custom story: %v", err))
 		}
 
-		return createToolResponse(req.ID, fmt.Sprintf("História '%s' salva com sucesso em: %s", id, path))
+		return createToolResponse(req.ID, fmt.Sprintf("Story '%s' saved successfully to: %s", id, path))
 
 	default:
 		return &JSONRPCResponse{

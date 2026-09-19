@@ -5,6 +5,7 @@ import "time"
 // Story represents an evidence-backed user story.
 type Story struct {
 	ID                 string                `yaml:"id" json:"id"`
+	Locale             string                `yaml:"locale,omitempty" json:"locale,omitempty"` // en, pt-br, etc. (defaults to en)
 	Industry           string                `yaml:"industry" json:"industry"`
 	Domain             string                `yaml:"domain" json:"domain"`
 	Title              string                `yaml:"title" json:"title"`

@@ -47,6 +47,9 @@ func ParseStory(data []byte, filePath string) (*model.Story, error) {
 	if story.Status == "" {
 		story.Status = "verified"
 	}
+	if story.Locale == "" {
+		story.Locale = "en"
+	}
 
 	return &story, nil
 }
