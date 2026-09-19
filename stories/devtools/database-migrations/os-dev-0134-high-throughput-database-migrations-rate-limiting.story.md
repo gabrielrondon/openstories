@@ -26,9 +26,8 @@ acceptance_criteria:
   then: The service must gracefully degrade to local in-memory token buckets without
     failing open to abusive traffic
 edge_cases:
-- Clock drift between distributed nodes skewing sliding window timestamp calculations%!(EXTRA
-  string=database-migrations) exacerbated by Strict Compliance & Regulatory Audit
-  Enforcement
+- Clock drift between distributed nodes skewing sliding window timestamp calculations
+  exacerbated by Strict Compliance & Regulatory Audit Enforcement
 - Cascading failover during Strict Compliance & Regulatory Audit Enforcement
 evidence:
 - source: https://news.ycombinator.com/item?id=38190211
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate clock drift between distributed nodes skewing sliding
-  window timestamp calculations%!(extra string=database-migrations) exacerbated by
-  strict compliance & regulatory audit enforcement without manual intervention?
+  window timestamp calculations exacerbated by strict compliance & regulatory audit
+  enforcement without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - database-migrations

@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Employee relocates without notifying HR until mid-quarter on ats-resume-parsing
     combined with Asynchronous Race Conditions & Deadlocks
   given: An employee moving from New York to New Jersey or Florida
-  when: The address change is retroactively submitted into the payroll system%!(EXTRA
-    string=ats-resume-parsing)
+  when: The address change is retroactively submitted into the payroll system
   then: The payroll engine must compute prior-quarter withholding adjustments and
     generate corrected tax reports
 edge_cases:
 - Local city income taxes (e.g. NYC, Philadelphia, Columbus) missed when using state-level
-  lookup tables%!(EXTRA string=ats-resume-parsing) exacerbated by Asynchronous Race
-  Conditions & Deadlocks
+  lookup tables exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://reddit.com/r/humanresources/comments/16u182a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate local city income taxes (e.g. nyc, philadelphia,
-  columbus) missed when using state-level lookup tables%!(extra string=ats-resume-parsing)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  columbus) missed when using state-level lookup tables exacerbated by asynchronous
+  race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ats-resume-parsing

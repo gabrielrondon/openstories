@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Customer combining percentage discount with dollar-off voucher on returns-rma
     combined with Network Partitions & Distributed Timeout Failures
   given: A promo code granting 20%% off sitewide
-  when: The user applies an additional $50 welcome voucher%!(EXTRA string=returns-rma)
+  when: The user applies an additional $50 welcome voucher
   then: The promotions engine must enforce exclusion rules and reject stacking unless
     explicitly configured
 edge_cases:
 - Customers creating multiple throwaway accounts with the same physical delivery address
-  to bypass limits%!(EXTRA string=returns-rma) exacerbated by Network Partitions &
-  Distributed Timeout Failures
+  to bypass limits exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://news.ycombinator.com/item?id=38902144
@@ -38,9 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate customers creating multiple throwaway accounts
-  with the same physical delivery address to bypass limits%!(extra string=returns-rma)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  with the same physical delivery address to bypass limits exacerbated by network
+  partitions & distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - returns-rma

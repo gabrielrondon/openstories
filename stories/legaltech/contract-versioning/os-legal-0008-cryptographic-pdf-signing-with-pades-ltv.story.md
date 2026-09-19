@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Signatory certificate revocation check during offline contract verification
     on contract-versioning combined with Asynchronous Race Conditions & Deadlocks
   given: A signed legal agreement with embedded OCSP response
-  when: An auditor inspects the PDF document a decade later%!(EXTRA string=contract-versioning)
+  when: An auditor inspects the PDF document a decade later
   then: The embedded LTV record must confirm the certificate was valid at the exact
     second of signing
 edge_cases:
 - PDF visual layer alterations where hidden text layers under black highlight boxes
-  are exposed upon copy-paste%!(EXTRA string=contract-versioning) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  are exposed upon copy-paste exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://news.ycombinator.com/item?id=34918201
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate pdf visual layer alterations where hidden text
-  layers under black highlight boxes are exposed upon copy-paste%!(extra string=contract-versioning)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  layers under black highlight boxes are exposed upon copy-paste exacerbated by asynchronous
+  race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - contract-versioning

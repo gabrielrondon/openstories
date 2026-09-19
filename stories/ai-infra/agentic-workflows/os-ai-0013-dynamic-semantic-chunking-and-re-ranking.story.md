@@ -20,12 +20,12 @@ acceptance_criteria:
 - scenario: Dense document containing conflicting historical revisions of agentic-workflows
     combined with Data Drift & Silent Schema Corruption
   given: A user asking for current active policy
-  when: Vector similarity returns outdated chunks with high cosine score%!(EXTRA string=agentic-workflows)
+  when: Vector similarity returns outdated chunks with high cosine score
   then: The temporal re-ranker must prioritize the chunk with the latest verifiable
     effective date
 edge_cases:
-- Tables and code blocks split across chunk boundaries corrupting syntax during generation%!(EXTRA
-  string=agentic-workflows) exacerbated by Data Drift & Silent Schema Corruption
+- Tables and code blocks split across chunk boundaries corrupting syntax during generation
+  exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://news.ycombinator.com/item?id=39120481
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate tables and code blocks split across chunk boundaries
-  corrupting syntax during generation%!(extra string=agentic-workflows) exacerbated
-  by data drift & silent schema corruption without manual intervention?
+  corrupting syntax during generation exacerbated by data drift & silent schema corruption
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - agentic-workflows

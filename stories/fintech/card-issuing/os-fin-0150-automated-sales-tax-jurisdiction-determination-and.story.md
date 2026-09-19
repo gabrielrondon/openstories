@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Zip+4 boundary spanning two different county tax rates for card-issuing
     combined with Disaster Recovery & Cascading Failover
   given: A customer checking out with physical shipping in California or New York
-  when: The tax calculation engine resolves the street address%!(EXTRA string=card-issuing)
+  when: The tax calculation engine resolves the street address
   then: It must look up precise latitude/longitude tax parcel data rather than generic
     5-digit zip code approximations
 edge_cases:
 - B2B customers presenting tax exemption certificates that have expired or belong
-  to a different state%!(EXTRA string=card-issuing) exacerbated by Disaster Recovery
-  & Cascading Failover
+  to a different state exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://news.ycombinator.com/item?id=35198201
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate b2b customers presenting tax exemption certificates
-  that have expired or belong to a different state%!(extra string=card-issuing) exacerbated
-  by disaster recovery & cascading failover without manual intervention?
+  that have expired or belong to a different state exacerbated by disaster recovery
+  & cascading failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - card-issuing

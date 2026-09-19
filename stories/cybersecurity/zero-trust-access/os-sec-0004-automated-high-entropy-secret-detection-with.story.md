@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Developer pushing commit containing valid production API key for zero-trust-access
     combined with Strict Compliance & Regulatory Audit Enforcement
   given: A git push event received by the VCS server
-  when: The scanner detects a known high-entropy token pattern%!(EXTRA string=zero-trust-access)
+  when: The scanner detects a known high-entropy token pattern
   then: The server must reject the git push with exit code 1 and link the developer
     to secret rotation instructions
 edge_cases:
 - Test mocks and dummy keys generating high false-positive rates that desensitize
-  developers to warnings%!(EXTRA string=zero-trust-access) exacerbated by Strict Compliance
-  & Regulatory Audit Enforcement
+  developers to warnings exacerbated by Strict Compliance & Regulatory Audit Enforcement
 - Cascading failover during Strict Compliance & Regulatory Audit Enforcement
 evidence:
 - source: https://github.com/trufflesecurity/trufflehog/issues/1209
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate test mocks and dummy keys generating high false-positive
-  rates that desensitize developers to warnings%!(extra string=zero-trust-access)
-  exacerbated by strict compliance & regulatory audit enforcement without manual intervention?
+  rates that desensitize developers to warnings exacerbated by strict compliance &
+  regulatory audit enforcement without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - zero-trust-access

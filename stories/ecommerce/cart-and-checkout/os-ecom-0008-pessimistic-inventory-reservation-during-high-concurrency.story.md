@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Checkout abandonment after locking inventory on cart-and-checkout combined
     with Asynchronous Race Conditions & Deadlocks
   given: A customer adding the last remaining unit to cart
-  when: The user closes their browser without completing checkout%!(EXTRA string=cart-and-checkout)
+  when: The user closes their browser without completing checkout
   then: The reservation lock must automatically expire after 10 minutes, returning
     the unit back to active stock
 edge_cases:
 - Payment gateway webhook delay causing release of inventory while customer is legitimately
-  entering 3DS challenge%!(EXTRA string=cart-and-checkout) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  entering 3DS challenge exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://reddit.com/r/ecommerce/comments/17y921a
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate payment gateway webhook delay causing release of
-  inventory while customer is legitimately entering 3ds challenge%!(extra string=cart-and-checkout)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  inventory while customer is legitimately entering 3ds challenge exacerbated by asynchronous
+  race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - cart-and-checkout

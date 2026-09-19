@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Asynchronous database rollback during partial ledger write for card-issuing
     combined with Asynchronous Race Conditions & Deadlocks
   given: A multi-leg balance transfer in progress
-  when: The secondary account credit query times out%!(EXTRA string=card-issuing)
+  when: The secondary account credit query times out
   then: The transaction coordinator must execute a full atomic rollback, preventing
     money from vanishing into thin air
 edge_cases:
 - Concurrent debit operations on accounts with balance near zero triggering race condition
-  overdrafts%!(EXTRA string=card-issuing) exacerbated by Asynchronous Race Conditions
-  & Deadlocks
+  overdrafts exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://news.ycombinator.com/item?id=36192801
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate concurrent debit operations on accounts with balance
-  near zero triggering race condition overdrafts%!(extra string=card-issuing) exacerbated
-  by asynchronous race conditions & deadlocks without manual intervention?
+  near zero triggering race condition overdrafts exacerbated by asynchronous race
+  conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - card-issuing

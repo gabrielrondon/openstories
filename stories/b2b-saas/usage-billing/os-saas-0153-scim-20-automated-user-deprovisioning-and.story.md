@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Okta or Azure AD sends deprovision PATCH command for usage-billing combined
     with Data Drift & Silent Schema Corruption
   given: An active user with valid session tokens in multiple browser tabs
-  when: The identity provider issues a SCIM active=false request%!(EXTRA string=usage-billing)
+  when: The identity provider issues a SCIM active=false request
   then: The backend must revoke all active refresh tokens and WebSocket connections
     in under 500ms
 edge_cases:
 - User reassigned to a different department with reduced permissions while currently
-  holding an active session%!(EXTRA string=usage-billing) exacerbated by Data Drift
-  & Silent Schema Corruption
+  holding an active session exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/boxyhq/jackson/issues/612
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate user reassigned to a different department with
-  reduced permissions while currently holding an active session%!(extra string=usage-billing)
-  exacerbated by data drift & silent schema corruption without manual intervention?
+  reduced permissions while currently holding an active session exacerbated by data
+  drift & silent schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - usage-billing

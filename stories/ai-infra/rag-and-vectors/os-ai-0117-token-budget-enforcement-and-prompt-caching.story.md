@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Cache invalidation due to dynamic timestamp injected in system prompt
     for rag-and-vectors combined with Idempotency & Replay Attack Vulnerabilities
   given: A large 20k token system instructions context
-  when: Dynamic variables are placed at the beginning of the prompt%!(EXTRA string=rag-and-vectors)
+  when: Dynamic variables are placed at the beginning of the prompt
   then: The compiler must automatically hoist static prefixes to maximize provider
     KV-cache hits
 edge_cases:
 - Provider cache eviction during low-traffic night hours causing unexpected latency
-  spikes%!(EXTRA string=rag-and-vectors) exacerbated by Idempotency & Replay Attack
-  Vulnerabilities
+  spikes exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://github.com/BerriAI/litellm/issues/2104
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate provider cache eviction during low-traffic night
-  hours causing unexpected latency spikes%!(extra string=rag-and-vectors) exacerbated
-  by idempotency & replay attack vulnerabilities without manual intervention?
+  hours causing unexpected latency spikes exacerbated by idempotency & replay attack
+  vulnerabilities without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - rag-and-vectors

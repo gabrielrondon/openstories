@@ -21,12 +21,12 @@ acceptance_criteria:
 - scenario: Horizontal privilege escalation attempt via direct ID reference on scim-provisioning
     combined with Multi-Tenant Data Leakage & Isolation Breaches
   given: A user logged into tenant organization Alpha
-  when: The user queries resource ID belonging to tenant Beta%!(EXTRA string=scim-provisioning)
+  when: The user queries resource ID belonging to tenant Beta
   then: The authorization layer must return HTTP 404 Not Found rather than 403 Forbidden
     to prevent resource ID enumeration
 edge_cases:
-- Users belonging to multiple organizations switching active workspace context concurrently%!(EXTRA
-  string=scim-provisioning) exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
+- Users belonging to multiple organizations switching active workspace context concurrently
+  exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://hackerone.com/reports/512091
@@ -37,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate users belonging to multiple organizations switching
-  active workspace context concurrently%!(extra string=scim-provisioning) exacerbated
-  by multi-tenant data leakage & isolation breaches without manual intervention?
+  active workspace context concurrently exacerbated by multi-tenant data leakage &
+  isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - scim-provisioning

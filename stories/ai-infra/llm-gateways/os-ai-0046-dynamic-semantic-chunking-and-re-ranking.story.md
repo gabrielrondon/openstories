@@ -20,12 +20,12 @@ acceptance_criteria:
 - scenario: Dense document containing conflicting historical revisions of llm-gateways
     combined with Cold-Start Latency & Resource Starvation
   given: A user asking for current active policy
-  when: Vector similarity returns outdated chunks with high cosine score%!(EXTRA string=llm-gateways)
+  when: Vector similarity returns outdated chunks with high cosine score
   then: The temporal re-ranker must prioritize the chunk with the latest verifiable
     effective date
 edge_cases:
-- Tables and code blocks split across chunk boundaries corrupting syntax during generation%!(EXTRA
-  string=llm-gateways) exacerbated by Cold-Start Latency & Resource Starvation
+- Tables and code blocks split across chunk boundaries corrupting syntax during generation
+  exacerbated by Cold-Start Latency & Resource Starvation
 - Cascading failover during Cold-Start Latency & Resource Starvation
 evidence:
 - source: https://news.ycombinator.com/item?id=39120481
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate tables and code blocks split across chunk boundaries
-  corrupting syntax during generation%!(extra string=llm-gateways) exacerbated by
-  cold-start latency & resource starvation without manual intervention?
+  corrupting syntax during generation exacerbated by cold-start latency & resource
+  starvation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - llm-gateways

@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: EV charger loses cellular modem connection during active charging session
     on solar-grid-balancing combined with Disaster Recovery & Cascading Failover
   given: An active high-power DC fast charging session delivering 150 kW
-  when: The station's cellular uplink drops%!(EXTRA string=solar-grid-balancing)
+  when: The station's cellular uplink drops
   then: The charger must continue dispensing power safely and buffer meter values
     locally until cloud connectivity recovers
 edge_cases:
 - Emergency stop button pressed during offline session requiring local safety cut-off
-  within 100ms%!(EXTRA string=solar-grid-balancing) exacerbated by Disaster Recovery
-  & Cascading Failover
+  within 100ms exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://github.com/Open-Charge-Alliance/OCPP/issues/219
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate emergency stop button pressed during offline session
-  requiring local safety cut-off within 100ms%!(extra string=solar-grid-balancing)
-  exacerbated by disaster recovery & cascading failover without manual intervention?
+  requiring local safety cut-off within 100ms exacerbated by disaster recovery & cascading
+  failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - solar-grid-balancing

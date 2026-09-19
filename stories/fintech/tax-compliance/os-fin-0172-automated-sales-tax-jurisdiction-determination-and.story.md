@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Zip+4 boundary spanning two different county tax rates for tax-compliance
     combined with Network Partitions & Distributed Timeout Failures
   given: A customer checking out with physical shipping in California or New York
-  when: The tax calculation engine resolves the street address%!(EXTRA string=tax-compliance)
+  when: The tax calculation engine resolves the street address
   then: It must look up precise latitude/longitude tax parcel data rather than generic
     5-digit zip code approximations
 edge_cases:
 - B2B customers presenting tax exemption certificates that have expired or belong
-  to a different state%!(EXTRA string=tax-compliance) exacerbated by Network Partitions
-  & Distributed Timeout Failures
+  to a different state exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://news.ycombinator.com/item?id=35198201
@@ -38,9 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate b2b customers presenting tax exemption certificates
-  that have expired or belong to a different state%!(extra string=tax-compliance)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  that have expired or belong to a different state exacerbated by network partitions
+  & distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - tax-compliance

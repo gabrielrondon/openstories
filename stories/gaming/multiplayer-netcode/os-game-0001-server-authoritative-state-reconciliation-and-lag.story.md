@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Malicious player transmitting spoofed client timestamp packets on multiplayer-netcode
     combined with High Concurrency & Load Spikes
   given: A competitive multiplayer match in progress
-  when: A client reports movement coordinates exceeding physical maximum speed vectors%!(EXTRA
-    string=multiplayer-netcode)
+  when: A client reports movement coordinates exceeding physical maximum speed vectors
   then: The authoritative game server must reject the delta, snap the player back
     to validated state, and flag telemetry
 edge_cases:
-- Legitimate packet loss causing server reconciliation rubber-banding for fair players%!(EXTRA
-  string=multiplayer-netcode) exacerbated by High Concurrency & Load Spikes
+- Legitimate packet loss causing server reconciliation rubber-banding for fair players
+  exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://reddit.com/r/gamedev/comments/15k918a
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate legitimate packet loss causing server reconciliation
-  rubber-banding for fair players%!(extra string=multiplayer-netcode) exacerbated
-  by high concurrency & load spikes without manual intervention?
+  rubber-banding for fair players exacerbated by high concurrency & load spikes without
+  manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - multiplayer-netcode

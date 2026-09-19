@@ -22,12 +22,12 @@ acceptance_criteria:
     with Idempotency & Replay Attack Vulnerabilities
   given: A hotel with 1 remaining suite
   when: Booking.com and Airbnb submit confirmed reservations within 500ms of each
-    other%!(EXTRA string=loyalty-ledger)
+    other
   then: The channel manager must process the first reservation and immediately send
     a zero-inventory push to all other channels
 edge_cases:
-- Channel API latency delays of several minutes during peak holiday booking events%!(EXTRA
-  string=loyalty-ledger) exacerbated by Idempotency & Replay Attack Vulnerabilities
+- Channel API latency delays of several minutes during peak holiday booking events
+  exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://news.ycombinator.com/item?id=37128941
@@ -38,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate channel api latency delays of several minutes during
-  peak holiday booking events%!(extra string=loyalty-ledger) exacerbated by idempotency
-  & replay attack vulnerabilities without manual intervention?
+  peak holiday booking events exacerbated by idempotency & replay attack vulnerabilities
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - loyalty-ledger

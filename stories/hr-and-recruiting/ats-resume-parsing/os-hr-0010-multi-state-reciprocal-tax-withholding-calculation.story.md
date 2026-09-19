@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Employee relocates without notifying HR until mid-quarter on ats-resume-parsing
     combined with Disaster Recovery & Cascading Failover
   given: An employee moving from New York to New Jersey or Florida
-  when: The address change is retroactively submitted into the payroll system%!(EXTRA
-    string=ats-resume-parsing)
+  when: The address change is retroactively submitted into the payroll system
   then: The payroll engine must compute prior-quarter withholding adjustments and
     generate corrected tax reports
 edge_cases:
 - Local city income taxes (e.g. NYC, Philadelphia, Columbus) missed when using state-level
-  lookup tables%!(EXTRA string=ats-resume-parsing) exacerbated by Disaster Recovery
-  & Cascading Failover
+  lookup tables exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://reddit.com/r/humanresources/comments/16u182a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate local city income taxes (e.g. nyc, philadelphia,
-  columbus) missed when using state-level lookup tables%!(extra string=ats-resume-parsing)
-  exacerbated by disaster recovery & cascading failover without manual intervention?
+  columbus) missed when using state-level lookup tables exacerbated by disaster recovery
+  & cascading failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ats-resume-parsing

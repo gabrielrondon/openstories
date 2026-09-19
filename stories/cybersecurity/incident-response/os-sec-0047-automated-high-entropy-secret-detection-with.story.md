@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Developer pushing commit containing valid production API key for incident-response
     combined with Idempotency & Replay Attack Vulnerabilities
   given: A git push event received by the VCS server
-  when: The scanner detects a known high-entropy token pattern%!(EXTRA string=incident-response)
+  when: The scanner detects a known high-entropy token pattern
   then: The server must reject the git push with exit code 1 and link the developer
     to secret rotation instructions
 edge_cases:
 - Test mocks and dummy keys generating high false-positive rates that desensitize
-  developers to warnings%!(EXTRA string=incident-response) exacerbated by Idempotency
-  & Replay Attack Vulnerabilities
+  developers to warnings exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://github.com/trufflesecurity/trufflehog/issues/1209
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate test mocks and dummy keys generating high false-positive
-  rates that desensitize developers to warnings%!(extra string=incident-response)
-  exacerbated by idempotency & replay attack vulnerabilities without manual intervention?
+  rates that desensitize developers to warnings exacerbated by idempotency & replay
+  attack vulnerabilities without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - incident-response

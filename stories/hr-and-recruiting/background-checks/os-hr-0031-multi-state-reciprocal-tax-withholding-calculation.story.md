@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Employee relocates without notifying HR until mid-quarter on background-checks
     combined with High Concurrency & Load Spikes
   given: An employee moving from New York to New Jersey or Florida
-  when: The address change is retroactively submitted into the payroll system%!(EXTRA
-    string=background-checks)
+  when: The address change is retroactively submitted into the payroll system
   then: The payroll engine must compute prior-quarter withholding adjustments and
     generate corrected tax reports
 edge_cases:
 - Local city income taxes (e.g. NYC, Philadelphia, Columbus) missed when using state-level
-  lookup tables%!(EXTRA string=background-checks) exacerbated by High Concurrency
-  & Load Spikes
+  lookup tables exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://reddit.com/r/humanresources/comments/16u182a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate local city income taxes (e.g. nyc, philadelphia,
-  columbus) missed when using state-level lookup tables%!(extra string=background-checks)
-  exacerbated by high concurrency & load spikes without manual intervention?
+  columbus) missed when using state-level lookup tables exacerbated by high concurrency
+  & load spikes without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - background-checks

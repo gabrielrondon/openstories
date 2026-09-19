@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Upstream database drops column or changes int32 to string in schema-drift-detection
     combined with Multi-Tenant Data Leakage & Isolation Breaches
   given: A streaming Debezium CDC connector reading MySQL binlogs
-  when: An event with an incompatible schema alteration arrives%!(EXTRA string=schema-drift-detection)
+  when: An event with an incompatible schema alteration arrives
   then: The consumer must route non-compliant records to a Dead Letter Queue (DLQ)
     without halting stream ingestion
 edge_cases:
 - High-frequency column renames causing silent data loss if mapping rules rely on
-  strict name equality%!(EXTRA string=schema-drift-detection) exacerbated by Multi-Tenant
-  Data Leakage & Isolation Breaches
+  strict name equality exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://github.com/debezium/debezium/issues/4512
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate high-frequency column renames causing silent data
-  loss if mapping rules rely on strict name equality%!(extra string=schema-drift-detection)
-  exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?
+  loss if mapping rules rely on strict name equality exacerbated by multi-tenant data
+  leakage & isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - schema-drift-detection

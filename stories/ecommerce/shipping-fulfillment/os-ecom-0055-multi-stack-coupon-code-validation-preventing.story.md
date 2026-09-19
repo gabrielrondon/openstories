@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Customer combining percentage discount with dollar-off voucher on shipping-fulfillment
     combined with Multi-Tenant Data Leakage & Isolation Breaches
   given: A promo code granting 20%% off sitewide
-  when: The user applies an additional $50 welcome voucher%!(EXTRA string=shipping-fulfillment)
+  when: The user applies an additional $50 welcome voucher
   then: The promotions engine must enforce exclusion rules and reject stacking unless
     explicitly configured
 edge_cases:
 - Customers creating multiple throwaway accounts with the same physical delivery address
-  to bypass limits%!(EXTRA string=shipping-fulfillment) exacerbated by Multi-Tenant
-  Data Leakage & Isolation Breaches
+  to bypass limits exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://news.ycombinator.com/item?id=38902144
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate customers creating multiple throwaway accounts
-  with the same physical delivery address to bypass limits%!(extra string=shipping-fulfillment)
-  exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?
+  with the same physical delivery address to bypass limits exacerbated by multi-tenant
+  data leakage & isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - shipping-fulfillment

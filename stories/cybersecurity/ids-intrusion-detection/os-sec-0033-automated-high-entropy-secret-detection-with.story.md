@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Developer pushing commit containing valid production API key for ids-intrusion-detection
     combined with Data Drift & Silent Schema Corruption
   given: A git push event received by the VCS server
-  when: The scanner detects a known high-entropy token pattern%!(EXTRA string=ids-intrusion-detection)
+  when: The scanner detects a known high-entropy token pattern
   then: The server must reject the git push with exit code 1 and link the developer
     to secret rotation instructions
 edge_cases:
 - Test mocks and dummy keys generating high false-positive rates that desensitize
-  developers to warnings%!(EXTRA string=ids-intrusion-detection) exacerbated by Data
-  Drift & Silent Schema Corruption
+  developers to warnings exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/trufflesecurity/trufflehog/issues/1209
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate test mocks and dummy keys generating high false-positive
-  rates that desensitize developers to warnings%!(extra string=ids-intrusion-detection)
-  exacerbated by data drift & silent schema corruption without manual intervention?
+  rates that desensitize developers to warnings exacerbated by data drift & silent
+  schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ids-intrusion-detection

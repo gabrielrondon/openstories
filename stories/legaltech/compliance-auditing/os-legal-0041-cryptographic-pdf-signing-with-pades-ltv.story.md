@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Signatory certificate revocation check during offline contract verification
     on compliance-auditing combined with High Concurrency & Load Spikes
   given: A signed legal agreement with embedded OCSP response
-  when: An auditor inspects the PDF document a decade later%!(EXTRA string=compliance-auditing)
+  when: An auditor inspects the PDF document a decade later
   then: The embedded LTV record must confirm the certificate was valid at the exact
     second of signing
 edge_cases:
 - PDF visual layer alterations where hidden text layers under black highlight boxes
-  are exposed upon copy-paste%!(EXTRA string=compliance-auditing) exacerbated by High
-  Concurrency & Load Spikes
+  are exposed upon copy-paste exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://news.ycombinator.com/item?id=34918201
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate pdf visual layer alterations where hidden text
-  layers under black highlight boxes are exposed upon copy-paste%!(extra string=compliance-auditing)
-  exacerbated by high concurrency & load spikes without manual intervention?
+  layers under black highlight boxes are exposed upon copy-paste exacerbated by high
+  concurrency & load spikes without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - compliance-auditing

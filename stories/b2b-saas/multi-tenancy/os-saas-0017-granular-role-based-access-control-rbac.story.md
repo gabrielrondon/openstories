@@ -21,12 +21,12 @@ acceptance_criteria:
 - scenario: Horizontal privilege escalation attempt via direct ID reference on multi-tenancy
     combined with Idempotency & Replay Attack Vulnerabilities
   given: A user logged into tenant organization Alpha
-  when: The user queries resource ID belonging to tenant Beta%!(EXTRA string=multi-tenancy)
+  when: The user queries resource ID belonging to tenant Beta
   then: The authorization layer must return HTTP 404 Not Found rather than 403 Forbidden
     to prevent resource ID enumeration
 edge_cases:
-- Users belonging to multiple organizations switching active workspace context concurrently%!(EXTRA
-  string=multi-tenancy) exacerbated by Idempotency & Replay Attack Vulnerabilities
+- Users belonging to multiple organizations switching active workspace context concurrently
+  exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://hackerone.com/reports/512091
@@ -37,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate users belonging to multiple organizations switching
-  active workspace context concurrently%!(extra string=multi-tenancy) exacerbated
-  by idempotency & replay attack vulnerabilities without manual intervention?
+  active workspace context concurrently exacerbated by idempotency & replay attack
+  vulnerabilities without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - multi-tenancy

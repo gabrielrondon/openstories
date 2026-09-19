@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Lab technician approving clinical assay result on clinical-trials combined
     with Multi-Tenant Data Leakage & Isolation Breaches
   given: A completed PCR or genomic sequencing run
-  when: The certifying analyst submits approval%!(EXTRA string=clinical-trials)
+  when: The certifying analyst submits approval
   then: The system must prompt for fresh re-authentication and bind the signature
     cryptographically to the exact file hash
 edge_cases:
 - Sample re-testing producing discordant results requiring formal discrepancy deviation
-  investigations%!(EXTRA string=clinical-trials) exacerbated by Multi-Tenant Data
-  Leakage & Isolation Breaches
+  investigations exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://www.fda.gov/regulatory-information/search-fda-guidance-documents/part-11-electronic-records
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate sample re-testing producing discordant results
-  requiring formal discrepancy deviation investigations%!(extra string=clinical-trials)
-  exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?
+  requiring formal discrepancy deviation investigations exacerbated by multi-tenant
+  data leakage & isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - clinical-trials

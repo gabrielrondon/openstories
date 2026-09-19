@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Okta or Azure AD sends deprovision PATCH command for rbac-permissions
     combined with Asynchronous Race Conditions & Deadlocks
   given: An active user with valid session tokens in multiple browser tabs
-  when: The identity provider issues a SCIM active=false request%!(EXTRA string=rbac-permissions)
+  when: The identity provider issues a SCIM active=false request
   then: The backend must revoke all active refresh tokens and WebSocket connections
     in under 500ms
 edge_cases:
 - User reassigned to a different department with reduced permissions while currently
-  holding an active session%!(EXTRA string=rbac-permissions) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  holding an active session exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://github.com/boxyhq/jackson/issues/612
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate user reassigned to a different department with
-  reduced permissions while currently holding an active session%!(extra string=rbac-permissions)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  reduced permissions while currently holding an active session exacerbated by asynchronous
+  race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - rbac-permissions

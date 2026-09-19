@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Lab technician approving clinical assay result on regulatory-submissions
     combined with Asynchronous Race Conditions & Deadlocks
   given: A completed PCR or genomic sequencing run
-  when: The certifying analyst submits approval%!(EXTRA string=regulatory-submissions)
+  when: The certifying analyst submits approval
   then: The system must prompt for fresh re-authentication and bind the signature
     cryptographically to the exact file hash
 edge_cases:
 - Sample re-testing producing discordant results requiring formal discrepancy deviation
-  investigations%!(EXTRA string=regulatory-submissions) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  investigations exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://www.fda.gov/regulatory-information/search-fda-guidance-documents/part-11-electronic-records
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate sample re-testing producing discordant results
-  requiring formal discrepancy deviation investigations%!(extra string=regulatory-submissions)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  requiring formal discrepancy deviation investigations exacerbated by asynchronous
+  race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - regulatory-submissions

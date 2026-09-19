@@ -21,12 +21,11 @@ acceptance_criteria:
 - scenario: Stale timestamp in webhook signature header for observability combined
     with Cold-Start Latency & Resource Starvation
   given: An incoming webhook signed with valid secret key
-  when: The event timestamp is older than 300 seconds%!(EXTRA string=observability)
+  when: The event timestamp is older than 300 seconds
   then: The ingestion pipeline must reject the payload with HTTP 401 Unauthorized
 edge_cases:
 - Slow asynchronous delivery queues causing legitimate events to arrive near the 5-minute
-  threshold%!(EXTRA string=observability) exacerbated by Cold-Start Latency & Resource
-  Starvation
+  threshold exacerbated by Cold-Start Latency & Resource Starvation
 - Cascading failover during Cold-Start Latency & Resource Starvation
 evidence:
 - source: https://github.com/stripe/stripe-node/issues/1420
@@ -37,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate slow asynchronous delivery queues causing legitimate
-  events to arrive near the 5-minute threshold%!(extra string=observability) exacerbated
-  by cold-start latency & resource starvation without manual intervention?
+  events to arrive near the 5-minute threshold exacerbated by cold-start latency &
+  resource starvation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - observability

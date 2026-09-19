@@ -21,12 +21,12 @@ acceptance_criteria:
 - scenario: Network blip causes batch of usage events for usage-billing to arrive
     after monthly invoice finalization combined with High Concurrency & Load Spikes
   given: The billing cycle closed on midnight of the 1st
-  when: Usage metrics timestamped for the 31st arrive 6 hours late%!(EXTRA string=usage-billing)
+  when: Usage metrics timestamped for the 31st arrive 6 hours late
   then: The engine must record the usage as an adjustment credit/debit on the subsequent
     cycle rather than mutating locked invoices
 edge_cases:
 - Client replay of telemetry batches leading to double-counting of billable compute
-  metrics%!(EXTRA string=usage-billing) exacerbated by High Concurrency & Load Spikes
+  metrics exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://news.ycombinator.com/item?id=37890124
@@ -37,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate client replay of telemetry batches leading to double-counting
-  of billable compute metrics%!(extra string=usage-billing) exacerbated by high concurrency
-  & load spikes without manual intervention?
+  of billable compute metrics exacerbated by high concurrency & load spikes without
+  manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - usage-billing

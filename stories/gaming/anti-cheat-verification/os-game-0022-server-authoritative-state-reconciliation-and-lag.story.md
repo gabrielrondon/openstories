@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Malicious player transmitting spoofed client timestamp packets on anti-cheat-verification
     combined with Network Partitions & Distributed Timeout Failures
   given: A competitive multiplayer match in progress
-  when: A client reports movement coordinates exceeding physical maximum speed vectors%!(EXTRA
-    string=anti-cheat-verification)
+  when: A client reports movement coordinates exceeding physical maximum speed vectors
   then: The authoritative game server must reject the delta, snap the player back
     to validated state, and flag telemetry
 edge_cases:
-- Legitimate packet loss causing server reconciliation rubber-banding for fair players%!(EXTRA
-  string=anti-cheat-verification) exacerbated by Network Partitions & Distributed
-  Timeout Failures
+- Legitimate packet loss causing server reconciliation rubber-banding for fair players
+  exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://reddit.com/r/gamedev/comments/15k918a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate legitimate packet loss causing server reconciliation
-  rubber-banding for fair players%!(extra string=anti-cheat-verification) exacerbated
-  by network partitions & distributed timeout failures without manual intervention?
+  rubber-banding for fair players exacerbated by network partitions & distributed
+  timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - anti-cheat-verification
