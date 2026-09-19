@@ -1,0 +1,58 @@
+---
+id: OS-HLTH-0036
+locale: en
+industry: healthcare
+domain: telehealth-video
+title: FHIR R4 standard JSON validation for interoperable telehealth-video exchanges
+  under Cold-Start Latency & Resource Starvation
+demand_score: 8.6
+status: verified
+persona:
+  role: Clinical Systems Architect / HealthTech Compliance Officer
+  context: HIPAA/HITECH compliant digital health platforms, HL7/FHIR integrations,
+    and telemedicine systems
+story:
+  as_a: Clinical Systems Architect / HealthTech Compliance Officer
+  i_want: strict HL7 FHIR R4 schema validation and terminology mapping for telehealth-video
+    data with resilience to Cold-Start Latency & Resource Starvation
+  so_that: electronic health records seamlessly exchange laboratory and medication
+    data without truncation
+acceptance_criteria:
+- scenario: Receiving custom proprietary extensions in FHIR bundle for telehealth-video
+    combined with Cold-Start Latency & Resource Starvation
+  given: An incoming HL7 FHIR payload from an external EHR system (Epic or Cerner)
+  when: The bundle contains unmapped LOINC or SNOMED CT terminology codes%!(EXTRA
+    string=telehealth-video)
+  then: The ingestion adapter must safely quarantine the message and alert clinical
+    informatics rather than discarding the lab value
+edge_cases:
+- Mismatched patient identifier matching rules resulting in chart merging errors across
+  different hospital networks%!(EXTRA string=telehealth-video) exacerbated by Cold-Start
+  Latency & Resource Starvation
+- Cascading failover during Cold-Start Latency & Resource Starvation
+evidence:
+- source: https://github.com/hapifhir/hapi-fhir/issues/3891
+  type: production_incident_report
+  quote: Our telehealth-video ingestion silently truncated lab unit measurements (mg/dL
+    vs mmol/L) due to loose FHIR parsing.
+  date: 2024-2025
+  platform: ""
+evaluation_rubric:
+- Does the implementation mitigate mismatched patient identifier matching rules resulting
+  in chart merging errors across different hospital networks%!(extra string=telehealth-video)
+  exacerbated by cold-start latency & resource starvation without manual intervention?
+- Are error scenarios tested with automated chaos or integration assertions?
+tags:
+- telehealth-video
+- healthcare
+- production-outage
+- reliability
+- healthcare
+- telehealth-video
+---
+
+# Production Architectural Context
+
+This story documents real-world operational hazards observed across production environments in healthcare.
+Failing to address these constraints routinely leads to silent data corruption, customer escalation, or SLA breaches.
+

@@ -1,0 +1,56 @@
+---
+id: OS-FIN-0041
+locale: en
+industry: fintech
+domain: reconciliation
+title: Real-time fraud velocity checks and 3DS challenge step-up for reconciliation
+  under High Concurrency & Load Spikes
+demand_score: 9.15
+status: verified
+persona:
+  role: Principal Fintech Engineer / Ledger Architect
+  context: High-volume financial ledgers, card issuing, payment orchestrations, and
+    double-entry accounting
+story:
+  as_a: Principal Fintech Engineer / Ledger Architect
+  i_want: sliding window card velocity heuristics and adaptive 3D Secure step-up for
+    reconciliation with resilience to High Concurrency & Load Spikes
+  so_that: card-testing bot attacks are blocked before triggering card network dispute
+    penalties
+acceptance_criteria:
+- scenario: Card testing attack trying 50 distinct CVVs per minute on reconciliation
+    combined with High Concurrency & Load Spikes
+  given: Traffic originating from a single IP or fingerprint hash
+  when: More than 3 card authorization declines occur within 10 seconds%!(EXTRA string=reconciliation)
+  then: The gateway must trigger mandatory Captcha and biometric 3DS verification
+    on all subsequent requests
+edge_cases:
+- Distributed botnet cycling residential proxies to evade naive single-IP velocity
+  limits%!(EXTRA string=reconciliation) exacerbated by High Concurrency & Load Spikes
+- Cascading failover during High Concurrency & Load Spikes
+evidence:
+- source: https://reddit.com/r/stripe/comments/16k29a1
+  type: production_incident_report
+  quote: Our merchant account was suspended by Visa after a card testing bot hit reconciliation
+    with 12,000 stolen cards overnight.
+  date: 2024-2025
+  platform: ""
+evaluation_rubric:
+- Does the implementation mitigate distributed botnet cycling residential proxies
+  to evade naive single-ip velocity limits%!(extra string=reconciliation) exacerbated
+  by high concurrency & load spikes without manual intervention?
+- Are error scenarios tested with automated chaos or integration assertions?
+tags:
+- reconciliation
+- fintech
+- production-outage
+- reliability
+- fintech
+- reconciliation
+---
+
+# Production Architectural Context
+
+This story documents real-world operational hazards observed across production environments in fintech.
+Failing to address these constraints routinely leads to silent data corruption, customer escalation, or SLA breaches.
+

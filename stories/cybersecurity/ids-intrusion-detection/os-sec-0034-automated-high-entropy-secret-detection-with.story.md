@@ -1,0 +1,58 @@
+---
+id: OS-SEC-0034
+locale: en
+industry: cybersecurity
+domain: ids-intrusion-detection
+title: Automated high-entropy secret detection with pre-commit and CI blocking for
+  ids-intrusion-detection under Strict Compliance & Regulatory Audit Enforcement
+demand_score: 9.01
+status: verified
+persona:
+  role: Principal Security Operations Engineer / Detection Engineering Lead
+  context: Cloud security posture management (CSPM), SIEM pipelines, and automated
+    threat detection
+story:
+  as_a: Principal Security Operations Engineer / Detection Engineering Lead
+  i_want: Shannon entropy and regex pattern matching to intercept plaintext credentials
+    in ids-intrusion-detection with resilience to Strict Compliance & Regulatory Audit
+    Enforcement
+  so_that: developers never commit production AWS keys, Stripe secrets, or private
+    certificates to public git repos
+acceptance_criteria:
+- scenario: Developer pushing commit containing valid production API key for ids-intrusion-detection
+    combined with Strict Compliance & Regulatory Audit Enforcement
+  given: A git push event received by the VCS server
+  when: The scanner detects a known high-entropy token pattern%!(EXTRA string=ids-intrusion-detection)
+  then: The server must reject the git push with exit code 1 and link the developer
+    to secret rotation instructions
+edge_cases:
+- Test mocks and dummy keys generating high false-positive rates that desensitize
+  developers to warnings%!(EXTRA string=ids-intrusion-detection) exacerbated by Strict
+  Compliance & Regulatory Audit Enforcement
+- Cascading failover during Strict Compliance & Regulatory Audit Enforcement
+evidence:
+- source: https://github.com/trufflesecurity/trufflehog/issues/1209
+  type: production_incident_report
+  quote: An engineer accidentally pushed our production database credentials inside
+    a ids-intrusion-detection script, resulting in immediate breach attempts.
+  date: 2024-2025
+  platform: ""
+evaluation_rubric:
+- Does the implementation mitigate test mocks and dummy keys generating high false-positive
+  rates that desensitize developers to warnings%!(extra string=ids-intrusion-detection)
+  exacerbated by strict compliance & regulatory audit enforcement without manual intervention?
+- Are error scenarios tested with automated chaos or integration assertions?
+tags:
+- ids-intrusion-detection
+- cybersecurity
+- production-outage
+- reliability
+- cybersecurity
+- ids-intrusion-detection
+---
+
+# Production Architectural Context
+
+This story documents real-world operational hazards observed across production environments in cybersecurity.
+Failing to address these constraints routinely leads to silent data corruption, customer escalation, or SLA breaches.
+

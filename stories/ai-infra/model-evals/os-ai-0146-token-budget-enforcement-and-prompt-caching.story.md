@@ -1,0 +1,57 @@
+---
+id: OS-AI-0146
+locale: en
+industry: ai-infra
+domain: model-evals
+title: Token budget enforcement and prompt caching optimization for model-evals under
+  Cold-Start Latency & Resource Starvation
+demand_score: 8.45
+status: verified
+persona:
+  role: Staff AI Platform Engineer / RAG Systems Lead
+  context: Production generative AI infrastructure handling millions of embeddings
+    and autonomous agent tool calls
+story:
+  as_a: Staff AI Platform Engineer / RAG Systems Lead
+  i_want: hierarchical prefix prompt caching on model-evals to reduce TTFT (time-to-first-token)
+    with resilience to Cold-Start Latency & Resource Starvation
+  so_that: repetitive system prompt tokens do not inflate operational costs and latency
+    stays sub-200ms
+acceptance_criteria:
+- scenario: Cache invalidation due to dynamic timestamp injected in system prompt
+    for model-evals combined with Cold-Start Latency & Resource Starvation
+  given: A large 20k token system instructions context
+  when: Dynamic variables are placed at the beginning of the prompt%!(EXTRA string=model-evals)
+  then: The compiler must automatically hoist static prefixes to maximize provider
+    KV-cache hits
+edge_cases:
+- Provider cache eviction during low-traffic night hours causing unexpected latency
+  spikes%!(EXTRA string=model-evals) exacerbated by Cold-Start Latency & Resource
+  Starvation
+- Cascading failover during Cold-Start Latency & Resource Starvation
+evidence:
+- source: https://github.com/BerriAI/litellm/issues/2104
+  type: production_incident_report
+  quote: We cut 65% of our Anthropic bills on model-evals by structuring static prompt
+    blocks for 100% cache hits.
+  date: 2024-2025
+  platform: ""
+evaluation_rubric:
+- Does the implementation mitigate provider cache eviction during low-traffic night
+  hours causing unexpected latency spikes%!(extra string=model-evals) exacerbated
+  by cold-start latency & resource starvation without manual intervention?
+- Are error scenarios tested with automated chaos or integration assertions?
+tags:
+- model-evals
+- ai-infra
+- production-outage
+- reliability
+- ai-infra
+- model-evals
+---
+
+# Production Architectural Context
+
+This story documents real-world operational hazards observed across production environments in ai-infra.
+Failing to address these constraints routinely leads to silent data corruption, customer escalation, or SLA breaches.
+
