@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Customer combining percentage discount with dollar-off voucher on cart-and-checkout
     combined with Disaster Recovery & Cascading Failover
   given: A promo code granting 20%% off sitewide
-  when: The user applies an additional $50 welcome voucher%!(EXTRA string=cart-and-checkout)
+  when: The user applies an additional $50 welcome voucher
   then: The promotions engine must enforce exclusion rules and reject stacking unless
     explicitly configured
 edge_cases:
 - Customers creating multiple throwaway accounts with the same physical delivery address
-  to bypass limits%!(EXTRA string=cart-and-checkout) exacerbated by Disaster Recovery
-  & Cascading Failover
+  to bypass limits exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://news.ycombinator.com/item?id=38902144
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate customers creating multiple throwaway accounts
-  with the same physical delivery address to bypass limits%!(extra string=cart-and-checkout)
-  exacerbated by disaster recovery & cascading failover without manual intervention?
+  with the same physical delivery address to bypass limits exacerbated by disaster
+  recovery & cascading failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - cart-and-checkout

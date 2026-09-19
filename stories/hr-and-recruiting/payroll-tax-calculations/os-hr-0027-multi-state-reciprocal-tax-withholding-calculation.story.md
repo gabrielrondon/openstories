@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Employee relocates without notifying HR until mid-quarter on payroll-tax-calculations
     combined with Idempotency & Replay Attack Vulnerabilities
   given: An employee moving from New York to New Jersey or Florida
-  when: The address change is retroactively submitted into the payroll system%!(EXTRA
-    string=payroll-tax-calculations)
+  when: The address change is retroactively submitted into the payroll system
   then: The payroll engine must compute prior-quarter withholding adjustments and
     generate corrected tax reports
 edge_cases:
 - Local city income taxes (e.g. NYC, Philadelphia, Columbus) missed when using state-level
-  lookup tables%!(EXTRA string=payroll-tax-calculations) exacerbated by Idempotency
-  & Replay Attack Vulnerabilities
+  lookup tables exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://reddit.com/r/humanresources/comments/16u182a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate local city income taxes (e.g. nyc, philadelphia,
-  columbus) missed when using state-level lookup tables%!(extra string=payroll-tax-calculations)
-  exacerbated by idempotency & replay attack vulnerabilities without manual intervention?
+  columbus) missed when using state-level lookup tables exacerbated by idempotency
+  & replay attack vulnerabilities without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - payroll-tax-calculations

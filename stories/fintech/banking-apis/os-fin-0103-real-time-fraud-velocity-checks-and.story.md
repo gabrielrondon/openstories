@@ -21,12 +21,12 @@ acceptance_criteria:
 - scenario: Card testing attack trying 50 distinct CVVs per minute on banking-apis
     combined with Data Drift & Silent Schema Corruption
   given: Traffic originating from a single IP or fingerprint hash
-  when: More than 3 card authorization declines occur within 10 seconds%!(EXTRA string=banking-apis)
+  when: More than 3 card authorization declines occur within 10 seconds
   then: The gateway must trigger mandatory Captcha and biometric 3DS verification
     on all subsequent requests
 edge_cases:
 - Distributed botnet cycling residential proxies to evade naive single-IP velocity
-  limits%!(EXTRA string=banking-apis) exacerbated by Data Drift & Silent Schema Corruption
+  limits exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://reddit.com/r/stripe/comments/16k29a1
@@ -37,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate distributed botnet cycling residential proxies
-  to evade naive single-ip velocity limits%!(extra string=banking-apis) exacerbated
-  by data drift & silent schema corruption without manual intervention?
+  to evade naive single-ip velocity limits exacerbated by data drift & silent schema
+  corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - banking-apis

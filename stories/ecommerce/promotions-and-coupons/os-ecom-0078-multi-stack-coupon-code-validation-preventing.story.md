@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Customer combining percentage discount with dollar-off voucher on promotions-and-coupons
     combined with Asynchronous Race Conditions & Deadlocks
   given: A promo code granting 20%% off sitewide
-  when: The user applies an additional $50 welcome voucher%!(EXTRA string=promotions-and-coupons)
+  when: The user applies an additional $50 welcome voucher
   then: The promotions engine must enforce exclusion rules and reject stacking unless
     explicitly configured
 edge_cases:
 - Customers creating multiple throwaway accounts with the same physical delivery address
-  to bypass limits%!(EXTRA string=promotions-and-coupons) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  to bypass limits exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://news.ycombinator.com/item?id=38902144
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate customers creating multiple throwaway accounts
-  with the same physical delivery address to bypass limits%!(extra string=promotions-and-coupons)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  with the same physical delivery address to bypass limits exacerbated by asynchronous
+  race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - promotions-and-coupons

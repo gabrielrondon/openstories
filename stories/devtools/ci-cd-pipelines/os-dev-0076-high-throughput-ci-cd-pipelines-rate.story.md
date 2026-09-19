@@ -25,8 +25,8 @@ acceptance_criteria:
   then: The service must gracefully degrade to local in-memory token buckets without
     failing open to abusive traffic
 edge_cases:
-- Clock drift between distributed nodes skewing sliding window timestamp calculations%!(EXTRA
-  string=ci-cd-pipelines) exacerbated by Cold-Start Latency & Resource Starvation
+- Clock drift between distributed nodes skewing sliding window timestamp calculations
+  exacerbated by Cold-Start Latency & Resource Starvation
 - Cascading failover during Cold-Start Latency & Resource Starvation
 evidence:
 - source: https://news.ycombinator.com/item?id=38190211
@@ -37,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate clock drift between distributed nodes skewing sliding
-  window timestamp calculations%!(extra string=ci-cd-pipelines) exacerbated by cold-start
-  latency & resource starvation without manual intervention?
+  window timestamp calculations exacerbated by cold-start latency & resource starvation
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ci-cd-pipelines

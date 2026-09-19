@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Receiving custom proprietary extensions in FHIR bundle for telehealth-video
     combined with Data Drift & Silent Schema Corruption
   given: An incoming HL7 FHIR payload from an external EHR system (Epic or Cerner)
-  when: The bundle contains unmapped LOINC or SNOMED CT terminology codes%!(EXTRA
-    string=telehealth-video)
+  when: The bundle contains unmapped LOINC or SNOMED CT terminology codes
   then: The ingestion adapter must safely quarantine the message and alert clinical
     informatics rather than discarding the lab value
 edge_cases:
 - Mismatched patient identifier matching rules resulting in chart merging errors across
-  different hospital networks%!(EXTRA string=telehealth-video) exacerbated by Data
-  Drift & Silent Schema Corruption
+  different hospital networks exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/hapifhir/hapi-fhir/issues/3891
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate mismatched patient identifier matching rules resulting
-  in chart merging errors across different hospital networks%!(extra string=telehealth-video)
-  exacerbated by data drift & silent schema corruption without manual intervention?
+  in chart merging errors across different hospital networks exacerbated by data drift
+  & silent schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - telehealth-video

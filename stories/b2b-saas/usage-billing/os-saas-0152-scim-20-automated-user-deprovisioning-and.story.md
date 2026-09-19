@@ -21,13 +21,13 @@ acceptance_criteria:
 - scenario: Okta or Azure AD sends deprovision PATCH command for usage-billing combined
     with Network Partitions & Distributed Timeout Failures
   given: An active user with valid session tokens in multiple browser tabs
-  when: The identity provider issues a SCIM active=false request%!(EXTRA string=usage-billing)
+  when: The identity provider issues a SCIM active=false request
   then: The backend must revoke all active refresh tokens and WebSocket connections
     in under 500ms
 edge_cases:
 - User reassigned to a different department with reduced permissions while currently
-  holding an active session%!(EXTRA string=usage-billing) exacerbated by Network Partitions
-  & Distributed Timeout Failures
+  holding an active session exacerbated by Network Partitions & Distributed Timeout
+  Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://github.com/boxyhq/jackson/issues/612
@@ -38,9 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate user reassigned to a different department with
-  reduced permissions while currently holding an active session%!(extra string=usage-billing)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  reduced permissions while currently holding an active session exacerbated by network
+  partitions & distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - usage-billing

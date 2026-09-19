@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Driver delivering package in cellular dead zone on fleet-telematics combined
     with Multi-Tenant Data Leakage & Isolation Breaches
   given: A mobile dispatch scanner with zero cellular signal
-  when: The driver captures recipient signature and GPS photo timestamp%!(EXTRA string=fleet-telematics)
+  when: The driver captures recipient signature and GPS photo timestamp
   then: The mobile app must cryptographically sign the package receipt and queue it
     for opportunistic sync
 edge_cases:
 - Recipient disputing delivery when photo metadata shows GPS coordinates 50 meters
-  away from address%!(EXTRA string=fleet-telematics) exacerbated by Multi-Tenant Data
-  Leakage & Isolation Breaches
+  away from address exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://news.ycombinator.com/item?id=38192019
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate recipient disputing delivery when photo metadata
-  shows gps coordinates 50 meters away from address%!(extra string=fleet-telematics)
-  exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?
+  shows gps coordinates 50 meters away from address exacerbated by multi-tenant data
+  leakage & isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - fleet-telematics

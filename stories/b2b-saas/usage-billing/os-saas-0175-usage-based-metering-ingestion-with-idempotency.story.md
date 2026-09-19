@@ -22,13 +22,12 @@ acceptance_criteria:
     after monthly invoice finalization combined with Multi-Tenant Data Leakage & Isolation
     Breaches
   given: The billing cycle closed on midnight of the 1st
-  when: Usage metrics timestamped for the 31st arrive 6 hours late%!(EXTRA string=usage-billing)
+  when: Usage metrics timestamped for the 31st arrive 6 hours late
   then: The engine must record the usage as an adjustment credit/debit on the subsequent
     cycle rather than mutating locked invoices
 edge_cases:
 - Client replay of telemetry batches leading to double-counting of billable compute
-  metrics%!(EXTRA string=usage-billing) exacerbated by Multi-Tenant Data Leakage &
-  Isolation Breaches
+  metrics exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://news.ycombinator.com/item?id=37890124
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate client replay of telemetry batches leading to double-counting
-  of billable compute metrics%!(extra string=usage-billing) exacerbated by multi-tenant
-  data leakage & isolation breaches without manual intervention?
+  of billable compute metrics exacerbated by multi-tenant data leakage & isolation
+  breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - usage-billing

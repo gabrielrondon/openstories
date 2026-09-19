@@ -21,12 +21,12 @@ acceptance_criteria:
 - scenario: Horizontal privilege escalation attempt via direct ID reference on sso-saml
     combined with High Concurrency & Load Spikes
   given: A user logged into tenant organization Alpha
-  when: The user queries resource ID belonging to tenant Beta%!(EXTRA string=sso-saml)
+  when: The user queries resource ID belonging to tenant Beta
   then: The authorization layer must return HTTP 404 Not Found rather than 403 Forbidden
     to prevent resource ID enumeration
 edge_cases:
-- Users belonging to multiple organizations switching active workspace context concurrently%!(EXTRA
-  string=sso-saml) exacerbated by High Concurrency & Load Spikes
+- Users belonging to multiple organizations switching active workspace context concurrently
+  exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://hackerone.com/reports/512091
@@ -37,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate users belonging to multiple organizations switching
-  active workspace context concurrently%!(extra string=sso-saml) exacerbated by high
-  concurrency & load spikes without manual intervention?
+  active workspace context concurrently exacerbated by high concurrency & load spikes
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - sso-saml

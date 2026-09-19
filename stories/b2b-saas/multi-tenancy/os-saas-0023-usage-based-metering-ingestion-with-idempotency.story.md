@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Network blip causes batch of usage events for multi-tenancy to arrive
     after monthly invoice finalization combined with Data Drift & Silent Schema Corruption
   given: The billing cycle closed on midnight of the 1st
-  when: Usage metrics timestamped for the 31st arrive 6 hours late%!(EXTRA string=multi-tenancy)
+  when: Usage metrics timestamped for the 31st arrive 6 hours late
   then: The engine must record the usage as an adjustment credit/debit on the subsequent
     cycle rather than mutating locked invoices
 edge_cases:
 - Client replay of telemetry batches leading to double-counting of billable compute
-  metrics%!(EXTRA string=multi-tenancy) exacerbated by Data Drift & Silent Schema
-  Corruption
+  metrics exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://news.ycombinator.com/item?id=37890124
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate client replay of telemetry batches leading to double-counting
-  of billable compute metrics%!(extra string=multi-tenancy) exacerbated by data drift
-  & silent schema corruption without manual intervention?
+  of billable compute metrics exacerbated by data drift & silent schema corruption
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - multi-tenancy

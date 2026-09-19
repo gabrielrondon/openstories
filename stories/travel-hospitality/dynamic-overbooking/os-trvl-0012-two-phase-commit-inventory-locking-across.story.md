@@ -23,13 +23,12 @@ acceptance_criteria:
     with Network Partitions & Distributed Timeout Failures
   given: A hotel with 1 remaining suite
   when: Booking.com and Airbnb submit confirmed reservations within 500ms of each
-    other%!(EXTRA string=dynamic-overbooking)
+    other
   then: The channel manager must process the first reservation and immediately send
     a zero-inventory push to all other channels
 edge_cases:
-- Channel API latency delays of several minutes during peak holiday booking events%!(EXTRA
-  string=dynamic-overbooking) exacerbated by Network Partitions & Distributed Timeout
-  Failures
+- Channel API latency delays of several minutes during peak holiday booking events
+  exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://news.ycombinator.com/item?id=37128941
@@ -40,8 +39,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate channel api latency delays of several minutes during
-  peak holiday booking events%!(extra string=dynamic-overbooking) exacerbated by network
-  partitions & distributed timeout failures without manual intervention?
+  peak holiday booking events exacerbated by network partitions & distributed timeout
+  failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - dynamic-overbooking

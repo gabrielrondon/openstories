@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Upstream database drops column or changes int32 to string in change-data-capture
     combined with Idempotency & Replay Attack Vulnerabilities
   given: A streaming Debezium CDC connector reading MySQL binlogs
-  when: An event with an incompatible schema alteration arrives%!(EXTRA string=change-data-capture)
+  when: An event with an incompatible schema alteration arrives
   then: The consumer must route non-compliant records to a Dead Letter Queue (DLQ)
     without halting stream ingestion
 edge_cases:
 - High-frequency column renames causing silent data loss if mapping rules rely on
-  strict name equality%!(EXTRA string=change-data-capture) exacerbated by Idempotency
-  & Replay Attack Vulnerabilities
+  strict name equality exacerbated by Idempotency & Replay Attack Vulnerabilities
 - Cascading failover during Idempotency & Replay Attack Vulnerabilities
 evidence:
 - source: https://github.com/debezium/debezium/issues/4512
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate high-frequency column renames causing silent data
-  loss if mapping rules rely on strict name equality%!(extra string=change-data-capture)
-  exacerbated by idempotency & replay attack vulnerabilities without manual intervention?
+  loss if mapping rules rely on strict name equality exacerbated by idempotency &
+  replay attack vulnerabilities without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - change-data-capture

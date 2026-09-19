@@ -21,12 +21,11 @@ acceptance_criteria:
 - scenario: Stale timestamp in webhook signature header for observability combined
     with Data Drift & Silent Schema Corruption
   given: An incoming webhook signed with valid secret key
-  when: The event timestamp is older than 300 seconds%!(EXTRA string=observability)
+  when: The event timestamp is older than 300 seconds
   then: The ingestion pipeline must reject the payload with HTTP 401 Unauthorized
 edge_cases:
 - Slow asynchronous delivery queues causing legitimate events to arrive near the 5-minute
-  threshold%!(EXTRA string=observability) exacerbated by Data Drift & Silent Schema
-  Corruption
+  threshold exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://github.com/stripe/stripe-node/issues/1420
@@ -37,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate slow asynchronous delivery queues causing legitimate
-  events to arrive near the 5-minute threshold%!(extra string=observability) exacerbated
-  by data drift & silent schema corruption without manual intervention?
+  events to arrive near the 5-minute threshold exacerbated by data drift & silent
+  schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - observability

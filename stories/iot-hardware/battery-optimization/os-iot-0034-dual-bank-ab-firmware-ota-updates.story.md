@@ -21,13 +21,13 @@ acceptance_criteria:
 - scenario: Device loses power mid-flash during firmware update on battery-optimization
     combined with Strict Compliance & Regulatory Audit Enforcement
   given: An embedded device writing new firmware to Partition B
-  when: Power is cut at 80% completion and restored%!(EXTRA string=battery-optimization)
+  when: Power is cut at 80%% completion and restored
   then: The bootloader must detect invalid CRC checksum and boot immediately back
     into the operational Partition A
 edge_cases:
 - Firmware that boots successfully but crashes after 5 minutes when connecting to
-  WiFi, evading simple boot watchdogs%!(EXTRA string=battery-optimization) exacerbated
-  by Strict Compliance & Regulatory Audit Enforcement
+  WiFi, evading simple boot watchdogs exacerbated by Strict Compliance & Regulatory
+  Audit Enforcement
 - Cascading failover during Strict Compliance & Regulatory Audit Enforcement
 evidence:
 - source: https://github.com/espressif/esp-idf/issues/5291
@@ -38,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate firmware that boots successfully but crashes after
-  5 minutes when connecting to wifi, evading simple boot watchdogs%!(extra string=battery-optimization)
-  exacerbated by strict compliance & regulatory audit enforcement without manual intervention?
+  5 minutes when connecting to wifi, evading simple boot watchdogs exacerbated by
+  strict compliance & regulatory audit enforcement without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - battery-optimization

@@ -21,14 +21,13 @@ acceptance_criteria:
 - scenario: Receiving custom proprietary extensions in FHIR bundle for ehr-fhir-integration
     combined with Multi-Tenant Data Leakage & Isolation Breaches
   given: An incoming HL7 FHIR payload from an external EHR system (Epic or Cerner)
-  when: The bundle contains unmapped LOINC or SNOMED CT terminology codes%!(EXTRA
-    string=ehr-fhir-integration)
+  when: The bundle contains unmapped LOINC or SNOMED CT terminology codes
   then: The ingestion adapter must safely quarantine the message and alert clinical
     informatics rather than discarding the lab value
 edge_cases:
 - Mismatched patient identifier matching rules resulting in chart merging errors across
-  different hospital networks%!(EXTRA string=ehr-fhir-integration) exacerbated by
-  Multi-Tenant Data Leakage & Isolation Breaches
+  different hospital networks exacerbated by Multi-Tenant Data Leakage & Isolation
+  Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://github.com/hapifhir/hapi-fhir/issues/3891
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate mismatched patient identifier matching rules resulting
-  in chart merging errors across different hospital networks%!(extra string=ehr-fhir-integration)
-  exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?
+  in chart merging errors across different hospital networks exacerbated by multi-tenant
+  data leakage & isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - ehr-fhir-integration

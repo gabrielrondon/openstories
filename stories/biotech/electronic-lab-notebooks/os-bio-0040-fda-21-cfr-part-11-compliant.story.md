@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Lab technician approving clinical assay result on electronic-lab-notebooks
     combined with Disaster Recovery & Cascading Failover
   given: A completed PCR or genomic sequencing run
-  when: The certifying analyst submits approval%!(EXTRA string=electronic-lab-notebooks)
+  when: The certifying analyst submits approval
   then: The system must prompt for fresh re-authentication and bind the signature
     cryptographically to the exact file hash
 edge_cases:
 - Sample re-testing producing discordant results requiring formal discrepancy deviation
-  investigations%!(EXTRA string=electronic-lab-notebooks) exacerbated by Disaster
-  Recovery & Cascading Failover
+  investigations exacerbated by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://www.fda.gov/regulatory-information/search-fda-guidance-documents/part-11-electronic-records
@@ -39,8 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate sample re-testing producing discordant results
-  requiring formal discrepancy deviation investigations%!(extra string=electronic-lab-notebooks)
-  exacerbated by disaster recovery & cascading failover without manual intervention?
+  requiring formal discrepancy deviation investigations exacerbated by disaster recovery
+  & cascading failover without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - electronic-lab-notebooks

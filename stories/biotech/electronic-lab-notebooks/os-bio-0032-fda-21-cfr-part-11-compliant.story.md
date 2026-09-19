@@ -22,13 +22,12 @@ acceptance_criteria:
 - scenario: Lab technician approving clinical assay result on electronic-lab-notebooks
     combined with Network Partitions & Distributed Timeout Failures
   given: A completed PCR or genomic sequencing run
-  when: The certifying analyst submits approval%!(EXTRA string=electronic-lab-notebooks)
+  when: The certifying analyst submits approval
   then: The system must prompt for fresh re-authentication and bind the signature
     cryptographically to the exact file hash
 edge_cases:
 - Sample re-testing producing discordant results requiring formal discrepancy deviation
-  investigations%!(EXTRA string=electronic-lab-notebooks) exacerbated by Network Partitions
-  & Distributed Timeout Failures
+  investigations exacerbated by Network Partitions & Distributed Timeout Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://www.fda.gov/regulatory-information/search-fda-guidance-documents/part-11-electronic-records
@@ -39,9 +38,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate sample re-testing producing discordant results
-  requiring formal discrepancy deviation investigations%!(extra string=electronic-lab-notebooks)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  requiring formal discrepancy deviation investigations exacerbated by network partitions
+  & distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - electronic-lab-notebooks

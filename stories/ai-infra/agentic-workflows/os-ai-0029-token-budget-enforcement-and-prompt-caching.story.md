@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Cache invalidation due to dynamic timestamp injected in system prompt
     for agentic-workflows combined with Zero-Trust Authentication & Token Invalidation
   given: A large 20k token system instructions context
-  when: Dynamic variables are placed at the beginning of the prompt%!(EXTRA string=agentic-workflows)
+  when: Dynamic variables are placed at the beginning of the prompt
   then: The compiler must automatically hoist static prefixes to maximize provider
     KV-cache hits
 edge_cases:
 - Provider cache eviction during low-traffic night hours causing unexpected latency
-  spikes%!(EXTRA string=agentic-workflows) exacerbated by Zero-Trust Authentication
-  & Token Invalidation
+  spikes exacerbated by Zero-Trust Authentication & Token Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://github.com/BerriAI/litellm/issues/2104
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate provider cache eviction during low-traffic night
-  hours causing unexpected latency spikes%!(extra string=agentic-workflows) exacerbated
-  by zero-trust authentication & token invalidation without manual intervention?
+  hours causing unexpected latency spikes exacerbated by zero-trust authentication
+  & token invalidation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - agentic-workflows

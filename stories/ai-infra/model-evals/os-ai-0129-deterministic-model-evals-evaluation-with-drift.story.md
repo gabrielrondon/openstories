@@ -21,11 +21,11 @@ acceptance_criteria:
 - scenario: Upstream model provider alters system prompt formatting for model-evals
     combined with Zero-Trust Authentication & Token Invalidation
   given: An automated test suite evaluating baseline responses
-  when: Model accuracy drops by more than 3% on standard benchmarks%!(EXTRA string=model-evals)
+  when: Model accuracy drops by more than 3%% on standard benchmarks
   then: The CI pipeline must block model deployment and alert the on-call AI engineer
 edge_cases:
-- Non-deterministic temperature output causing sporadic false-positive test failures%!(EXTRA
-  string=model-evals) exacerbated by Zero-Trust Authentication & Token Invalidation
+- Non-deterministic temperature output causing sporadic false-positive test failures
+  exacerbated by Zero-Trust Authentication & Token Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://github.com/vllm-project/vllm/issues/3102
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate non-deterministic temperature output causing sporadic
-  false-positive test failures%!(extra string=model-evals) exacerbated by zero-trust
-  authentication & token invalidation without manual intervention?
+  false-positive test failures exacerbated by zero-trust authentication & token invalidation
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - model-evals

@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Checkout abandonment after locking inventory on returns-rma combined with
     Multi-Tenant Data Leakage & Isolation Breaches
   given: A customer adding the last remaining unit to cart
-  when: The user closes their browser without completing checkout%!(EXTRA string=returns-rma)
+  when: The user closes their browser without completing checkout
   then: The reservation lock must automatically expire after 10 minutes, returning
     the unit back to active stock
 edge_cases:
 - Payment gateway webhook delay causing release of inventory while customer is legitimately
-  entering 3DS challenge%!(EXTRA string=returns-rma) exacerbated by Multi-Tenant Data
-  Leakage & Isolation Breaches
+  entering 3DS challenge exacerbated by Multi-Tenant Data Leakage & Isolation Breaches
 - Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches
 evidence:
 - source: https://reddit.com/r/ecommerce/comments/17y921a
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate payment gateway webhook delay causing release of
-  inventory while customer is legitimately entering 3ds challenge%!(extra string=returns-rma)
-  exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?
+  inventory while customer is legitimately entering 3ds challenge exacerbated by multi-tenant
+  data leakage & isolation breaches without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - returns-rma

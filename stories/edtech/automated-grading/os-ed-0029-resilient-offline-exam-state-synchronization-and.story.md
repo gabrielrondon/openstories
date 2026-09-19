@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Internet connection drops while student is submitting timed exam on automated-grading
     combined with Zero-Trust Authentication & Token Invalidation
   given: A student actively answering a 60-minute certification test
-  when: The browser loses network connectivity 3 minutes before the timer expires%!(EXTRA
-    string=automated-grading)
+  when: The browser loses network connectivity 3 minutes before the timer expires
   then: The client must continue storing encrypted keystrokes locally and automatically
     synchronize upon reconnect
 edge_cases:
 - System clock tampering on student laptops to artificially extend examination time
-  limits%!(EXTRA string=automated-grading) exacerbated by Zero-Trust Authentication
-  & Token Invalidation
+  limits exacerbated by Zero-Trust Authentication & Token Invalidation
 - Cascading failover during Zero-Trust Authentication & Token Invalidation
 evidence:
 - source: https://reddit.com/r/professors/comments/18k192a
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate system clock tampering on student laptops to artificially
-  extend examination time limits%!(extra string=automated-grading) exacerbated by
-  zero-trust authentication & token invalidation without manual intervention?
+  extend examination time limits exacerbated by zero-trust authentication & token
+  invalidation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - automated-grading

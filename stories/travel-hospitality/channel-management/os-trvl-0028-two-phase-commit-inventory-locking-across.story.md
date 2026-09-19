@@ -23,12 +23,12 @@ acceptance_criteria:
     with Asynchronous Race Conditions & Deadlocks
   given: A hotel with 1 remaining suite
   when: Booking.com and Airbnb submit confirmed reservations within 500ms of each
-    other%!(EXTRA string=channel-management)
+    other
   then: The channel manager must process the first reservation and immediately send
     a zero-inventory push to all other channels
 edge_cases:
-- Channel API latency delays of several minutes during peak holiday booking events%!(EXTRA
-  string=channel-management) exacerbated by Asynchronous Race Conditions & Deadlocks
+- Channel API latency delays of several minutes during peak holiday booking events
+  exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://news.ycombinator.com/item?id=37128941
@@ -39,8 +39,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate channel api latency delays of several minutes during
-  peak holiday booking events%!(extra string=channel-management) exacerbated by asynchronous
-  race conditions & deadlocks without manual intervention?
+  peak holiday booking events exacerbated by asynchronous race conditions & deadlocks
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - channel-management

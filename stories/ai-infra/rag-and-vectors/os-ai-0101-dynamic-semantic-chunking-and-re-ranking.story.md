@@ -20,12 +20,12 @@ acceptance_criteria:
 - scenario: Dense document containing conflicting historical revisions of rag-and-vectors
     combined with High Concurrency & Load Spikes
   given: A user asking for current active policy
-  when: Vector similarity returns outdated chunks with high cosine score%!(EXTRA string=rag-and-vectors)
+  when: Vector similarity returns outdated chunks with high cosine score
   then: The temporal re-ranker must prioritize the chunk with the latest verifiable
     effective date
 edge_cases:
-- Tables and code blocks split across chunk boundaries corrupting syntax during generation%!(EXTRA
-  string=rag-and-vectors) exacerbated by High Concurrency & Load Spikes
+- Tables and code blocks split across chunk boundaries corrupting syntax during generation
+  exacerbated by High Concurrency & Load Spikes
 - Cascading failover during High Concurrency & Load Spikes
 evidence:
 - source: https://news.ycombinator.com/item?id=39120481
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate tables and code blocks split across chunk boundaries
-  corrupting syntax during generation%!(extra string=rag-and-vectors) exacerbated
-  by high concurrency & load spikes without manual intervention?
+  corrupting syntax during generation exacerbated by high concurrency & load spikes
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - rag-and-vectors

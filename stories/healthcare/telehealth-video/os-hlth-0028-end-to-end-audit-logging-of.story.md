@@ -21,14 +21,12 @@ acceptance_criteria:
 - scenario: Staff member querying patient records without assigned care relationship
     on telehealth-video combined with Asynchronous Race Conditions & Deadlocks
   given: A logged-in nurse or doctor in the hospital network
-  when: The user views the medical chart of a patient not under their direct care%!(EXTRA
-    string=telehealth-video)
+  when: The user views the medical chart of a patient not under their direct care
   then: The system must log a high-priority compliance audit event and prompt the
     clinician for a clinical justification reason
 edge_cases:
 - Emergency department 'break-the-glass' protocols requiring immediate chart override
-  during life-threatening triage%!(EXTRA string=telehealth-video) exacerbated by Asynchronous
-  Race Conditions & Deadlocks
+  during life-threatening triage exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/index.html
@@ -39,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate emergency department 'break-the-glass' protocols
-  requiring immediate chart override during life-threatening triage%!(extra string=telehealth-video)
-  exacerbated by asynchronous race conditions & deadlocks without manual intervention?
+  requiring immediate chart override during life-threatening triage exacerbated by
+  asynchronous race conditions & deadlocks without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - telehealth-video

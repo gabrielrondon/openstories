@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Asynchronous database rollback during partial ledger write for reconciliation
     combined with Data Drift & Silent Schema Corruption
   given: A multi-leg balance transfer in progress
-  when: The secondary account credit query times out%!(EXTRA string=reconciliation)
+  when: The secondary account credit query times out
   then: The transaction coordinator must execute a full atomic rollback, preventing
     money from vanishing into thin air
 edge_cases:
 - Concurrent debit operations on accounts with balance near zero triggering race condition
-  overdrafts%!(EXTRA string=reconciliation) exacerbated by Data Drift & Silent Schema
-  Corruption
+  overdrafts exacerbated by Data Drift & Silent Schema Corruption
 - Cascading failover during Data Drift & Silent Schema Corruption
 evidence:
 - source: https://news.ycombinator.com/item?id=36192801
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate concurrent debit operations on accounts with balance
-  near zero triggering race condition overdrafts%!(extra string=reconciliation) exacerbated
-  by data drift & silent schema corruption without manual intervention?
+  near zero triggering race condition overdrafts exacerbated by data drift & silent
+  schema corruption without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - reconciliation

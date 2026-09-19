@@ -22,13 +22,13 @@ acceptance_criteria:
 - scenario: PDF export containing redacted text layer on tax-filing-systems combined
     with Network Partitions & Distributed Timeout Failures
   given: A public records release containing confidential citizen documents
-  when: The redaction tool processes the document%!(EXTRA string=tax-filing-systems)
+  when: The redaction tool processes the document
   then: It must completely burn down the vector font glyphs into flattened pixels,
     ensuring zero OCR or clipboard retrieval
 edge_cases:
 - Metadata properties (author, document edit history, comment annotations) left intact
-  leaking confidential data%!(EXTRA string=tax-filing-systems) exacerbated by Network
-  Partitions & Distributed Timeout Failures
+  leaking confidential data exacerbated by Network Partitions & Distributed Timeout
+  Failures
 - Cascading failover during Network Partitions & Distributed Timeout Failures
 evidence:
 - source: https://news.ycombinator.com/item?id=36190281
@@ -39,9 +39,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate metadata properties (author, document edit history,
-  comment annotations) left intact leaking confidential data%!(extra string=tax-filing-systems)
-  exacerbated by network partitions & distributed timeout failures without manual
-  intervention?
+  comment annotations) left intact leaking confidential data exacerbated by network
+  partitions & distributed timeout failures without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - tax-filing-systems

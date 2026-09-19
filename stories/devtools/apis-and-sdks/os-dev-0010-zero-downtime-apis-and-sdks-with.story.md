@@ -24,8 +24,8 @@ acceptance_criteria:
   then: The deployment must automatically rollback if error rates exceed 0.05%% within
     60 seconds
 edge_cases:
-- Database lock timeouts when altering tables with >10M rows during high traffic%!(EXTRA
-  string=apis-and-sdks) exacerbated by Disaster Recovery & Cascading Failover
+- Database lock timeouts when altering tables with >10M rows during high traffic exacerbated
+  by Disaster Recovery & Cascading Failover
 - Cascading failover during Disaster Recovery & Cascading Failover
 evidence:
 - source: https://github.com/flyway/flyway/issues/2891
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate database lock timeouts when altering tables with
-  >10m rows during high traffic%!(extra string=apis-and-sdks) exacerbated by disaster
-  recovery & cascading failover without manual intervention?
+  >10m rows during high traffic exacerbated by disaster recovery & cascading failover
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - apis-and-sdks

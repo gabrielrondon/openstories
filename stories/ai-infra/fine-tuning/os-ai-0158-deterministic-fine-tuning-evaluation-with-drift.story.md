@@ -21,11 +21,11 @@ acceptance_criteria:
 - scenario: Upstream model provider alters system prompt formatting for fine-tuning
     combined with Asynchronous Race Conditions & Deadlocks
   given: An automated test suite evaluating baseline responses
-  when: Model accuracy drops by more than 3% on standard benchmarks%!(EXTRA string=fine-tuning)
+  when: Model accuracy drops by more than 3%% on standard benchmarks
   then: The CI pipeline must block model deployment and alert the on-call AI engineer
 edge_cases:
-- Non-deterministic temperature output causing sporadic false-positive test failures%!(EXTRA
-  string=fine-tuning) exacerbated by Asynchronous Race Conditions & Deadlocks
+- Non-deterministic temperature output causing sporadic false-positive test failures
+  exacerbated by Asynchronous Race Conditions & Deadlocks
 - Cascading failover during Asynchronous Race Conditions & Deadlocks
 evidence:
 - source: https://github.com/vllm-project/vllm/issues/3102
@@ -36,8 +36,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate non-deterministic temperature output causing sporadic
-  false-positive test failures%!(extra string=fine-tuning) exacerbated by asynchronous
-  race conditions & deadlocks without manual intervention?
+  false-positive test failures exacerbated by asynchronous race conditions & deadlocks
+  without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - fine-tuning

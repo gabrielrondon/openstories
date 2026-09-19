@@ -21,13 +21,12 @@ acceptance_criteria:
 - scenario: Card testing attack trying 50 distinct CVVs per minute on card-issuing
     combined with Cold-Start Latency & Resource Starvation
   given: Traffic originating from a single IP or fingerprint hash
-  when: More than 3 card authorization declines occur within 10 seconds%!(EXTRA string=card-issuing)
+  when: More than 3 card authorization declines occur within 10 seconds
   then: The gateway must trigger mandatory Captcha and biometric 3DS verification
     on all subsequent requests
 edge_cases:
 - Distributed botnet cycling residential proxies to evade naive single-IP velocity
-  limits%!(EXTRA string=card-issuing) exacerbated by Cold-Start Latency & Resource
-  Starvation
+  limits exacerbated by Cold-Start Latency & Resource Starvation
 - Cascading failover during Cold-Start Latency & Resource Starvation
 evidence:
 - source: https://reddit.com/r/stripe/comments/16k29a1
@@ -38,8 +37,8 @@ evidence:
   platform: ""
 evaluation_rubric:
 - Does the implementation mitigate distributed botnet cycling residential proxies
-  to evade naive single-ip velocity limits%!(extra string=card-issuing) exacerbated
-  by cold-start latency & resource starvation without manual intervention?
+  to evade naive single-ip velocity limits exacerbated by cold-start latency & resource
+  starvation without manual intervention?
 - Are error scenarios tested with automated chaos or integration assertions?
 tags:
 - card-issuing
