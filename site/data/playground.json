@@ -1,0 +1,582 @@
+[
+ {
+  "spec": "Passwordless login with magic links sent by email; the link is single-use and expires in 15 minutes.",
+  "industry": "devtools",
+  "domain": "",
+  "result": {
+   "target_industry": "devtools",
+   "score": 16,
+   "summary": "Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.",
+   "matched_stories": [
+    {
+     "story_id": "OS-DEV-002",
+     "title": "Preventing Magic Link Token Invalidation by Enterprise Email Security Scanners (Pre-fetching)",
+     "demand_score": 9.4,
+     "covered": false,
+     "missed_cases": [
+      "Client fingerprint matching (IP subnet or User-Agent heuristics) between token issuance and confirmation."
+     ]
+    },
+    {
+     "story_id": "OS-DEV-001",
+     "title": "Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries",
+     "demand_score": 9.6,
+     "covered": false,
+     "missed_cases": [
+      "Idempotency key TTL expiration after the standard retention window (24 hours).",
+      "Sub-millisecond race conditions mitigated via distributed locks (e.g. Redis Redlock or Postgres advisory locks).",
+      "Full header and status code preservation (replaying original response headers, not just raw JSON body)."
+     ]
+    },
+    {
+     "story_id": "OS-DEV-0032",
+     "title": "Zero-downtime auth-and-iam with atomic rollback validation under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Database lock timeouts when altering tables with >10M rows during high traffic exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-DEV-0092",
+     "title": "Zero-downtime observability with atomic rollback validation under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Database lock timeouts when altering tables with >10M rows during high traffic exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-DEV-0062",
+     "title": "Zero-downtime ci-cd-pipelines with atomic rollback validation under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Database lock timeouts when altering tables with >10M rows during high traffic exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    }
+   ],
+   "critical_gaps": [
+    "[OS-DEV-002] Unaddressed Quality Rubric: Does the initial GET handler explicitly avoid consuming or expiring the one-time authentication token?",
+    "[OS-DEV-002] Unaddressed Quality Rubric: Is there an explicit human interaction (POST form submission or button click) required to finalize authentication?",
+    "[OS-DEV-002] Unaddressed Quality Rubric: Are brute-force rate limiters active on the token verification endpoint?",
+    "[OS-DEV-001] Unaddressed Quality Rubric: Does the spec or implementation reject reused keys with altered payloads with HTTP 422?",
+    "[OS-DEV-001] Unaddressed Quality Rubric: Is there a distributed lock mechanism for in-flight concurrent requests sharing the same key?",
+    "[OS-DEV-001] Unaddressed Quality Rubric: Does the replayed response explicitly notify the client via an Idempotent-Replayed header?",
+    "[OS-DEV-0032] Unaddressed Quality Rubric: Does the implementation mitigate database lock timeouts when altering tables with >10m rows during high traffic exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-DEV-0032] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-0092] Unaddressed Quality Rubric: Does the implementation mitigate database lock timeouts when altering tables with >10m rows during high traffic exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-DEV-0092] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-0062] Unaddressed Quality Rubric: Does the implementation mitigate database lock timeouts when altering tables with >10m rows during high traffic exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-DEV-0062] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?"
+   ],
+   "edge_case_alerts": [
+    "[OS-DEV-002] Preventing Magic Link Token Invalidation by Enterprise Email Security Scanners (Pre-fetching): Client fingerprint matching (IP subnet or User-Agent heuristics) between token issuance and confirmation.",
+    "[OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries: Idempotency key TTL expiration after the standard retention window (24 hours).",
+    "[OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries: Sub-millisecond race conditions mitigated via distributed locks (e.g. Redis Redlock or Postgres advisory locks).",
+    "[OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries: Full header and status code preservation (replaying original response headers, not just raw JSON body).",
+    "[OS-DEV-0032] Zero-downtime auth-and-iam with atomic rollback validation under Network Partitions & Distributed Timeout Failures: Database lock timeouts when altering tables with >10M rows during high traffic exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-DEV-0032] Zero-downtime auth-and-iam with atomic rollback validation under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-DEV-0092] Zero-downtime observability with atomic rollback validation under Network Partitions & Distributed Timeout Failures: Database lock timeouts when altering tables with >10M rows during high traffic exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-DEV-0092] Zero-downtime observability with atomic rollback validation under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-DEV-0062] Zero-downtime ci-cd-pipelines with atomic rollback validation under Network Partitions & Distributed Timeout Failures: Database lock timeouts when altering tables with >10M rows during high traffic exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-DEV-0062] Zero-downtime ci-cd-pipelines with atomic rollback validation under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures"
+   ],
+   "recommendations": [
+    "Add explicit integration and failure-injection tests covering the flagged production edge cases.",
+    "Document explicit architectural answers to the quality checklist rubrics before writing code.",
+    "Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite."
+   ]
+  }
+ },
+ {
+  "spec": "Stripe webhook consumer that updates subscription status when a payment_intent.succeeded event arrives.",
+  "industry": "fintech",
+  "domain": "payments-and-checkout",
+  "result": {
+   "target_industry": "fintech",
+   "score": 27,
+   "summary": "Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.",
+   "matched_stories": [
+    {
+     "story_id": "OS-FIN-001",
+     "title": "Resilience to Asynchronous and Out-of-Order Payment Webhook Delivery",
+     "demand_score": 9.7,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-FIN-0002",
+     "title": "Double-entry immutable ledger journaling for payments-and-checkout transactions under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-FIN-0001",
+     "title": "Double-entry immutable ledger journaling for payments-and-checkout transactions under High Concurrency & Load Spikes",
+     "demand_score": 9.3,
+     "covered": false,
+     "missed_cases": [
+      "Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by High Concurrency & Load Spikes",
+      "Cascading failover during High Concurrency & Load Spikes"
+     ]
+    },
+    {
+     "story_id": "OS-FIN-0007",
+     "title": "Double-entry immutable ledger journaling for payments-and-checkout transactions under Idempotency & Replay Attack Vulnerabilities",
+     "demand_score": 9.22,
+     "covered": false,
+     "missed_cases": [
+      "Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Idempotency & Replay Attack Vulnerabilities",
+      "Cascading failover during Idempotency & Replay Attack Vulnerabilities"
+     ]
+    },
+    {
+     "story_id": "OS-FIN-0005",
+     "title": "Double-entry immutable ledger journaling for payments-and-checkout transactions under Multi-Tenant Data Leakage & Isolation Breaches",
+     "demand_score": 9.180000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Multi-Tenant Data Leakage & Isolation Breaches",
+      "Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches"
+     ]
+    }
+   ],
+   "critical_gaps": [
+    "[OS-FIN-001] Unaddressed Quality Rubric: Does the endpoint always return HTTP 200 on handled obsolete events to halt gateway retry storms?",
+    "[OS-FIN-0002] Unaddressed Quality Rubric: Does the implementation mitigate concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-FIN-0002] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-FIN-0001] Unaddressed Quality Rubric: Does the implementation mitigate concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by high concurrency & load spikes without manual intervention?",
+    "[OS-FIN-0001] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-FIN-0007] Unaddressed Quality Rubric: Does the implementation mitigate concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by idempotency & replay attack vulnerabilities without manual intervention?",
+    "[OS-FIN-0007] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-FIN-0005] Unaddressed Quality Rubric: Does the implementation mitigate concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?",
+    "[OS-FIN-0005] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?"
+   ],
+   "edge_case_alerts": [
+    "[OS-FIN-0002] Double-entry immutable ledger journaling for payments-and-checkout transactions under Network Partitions & Distributed Timeout Failures: Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-FIN-0002] Double-entry immutable ledger journaling for payments-and-checkout transactions under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-FIN-0001] Double-entry immutable ledger journaling for payments-and-checkout transactions under High Concurrency & Load Spikes: Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by High Concurrency & Load Spikes",
+    "[OS-FIN-0001] Double-entry immutable ledger journaling for payments-and-checkout transactions under High Concurrency & Load Spikes: Cascading failover during High Concurrency & Load Spikes",
+    "[OS-FIN-0007] Double-entry immutable ledger journaling for payments-and-checkout transactions under Idempotency & Replay Attack Vulnerabilities: Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Idempotency & Replay Attack Vulnerabilities",
+    "[OS-FIN-0007] Double-entry immutable ledger journaling for payments-and-checkout transactions under Idempotency & Replay Attack Vulnerabilities: Cascading failover during Idempotency & Replay Attack Vulnerabilities",
+    "[OS-FIN-0005] Double-entry immutable ledger journaling for payments-and-checkout transactions under Multi-Tenant Data Leakage & Isolation Breaches: Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Multi-Tenant Data Leakage & Isolation Breaches",
+    "[OS-FIN-0005] Double-entry immutable ledger journaling for payments-and-checkout transactions under Multi-Tenant Data Leakage & Isolation Breaches: Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches"
+   ],
+   "recommendations": [
+    "Add explicit integration and failure-injection tests covering the flagged production edge cases.",
+    "Document explicit architectural answers to the quality checklist rubrics before writing code.",
+    "Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite."
+   ]
+  }
+ },
+ {
+  "spec": "AI agent that calls tools in a loop until the task is done, with GPT-4o as the planner.",
+  "industry": "ai-infra",
+  "domain": "agentic-workflows",
+  "result": {
+   "target_industry": "ai-infra",
+   "score": 9,
+   "summary": "Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.",
+   "matched_stories": [
+    {
+     "story_id": "OS-AI-001",
+     "title": "Automated Infinite Tool-Calling Loop Breaker with Graceful Degradation",
+     "demand_score": 9.8,
+     "covered": false,
+     "missed_cases": [
+      "Subtle argument permutations generated by the LLM to evade naive string equality checks (requires semantic or fuzzy parameter diffing).",
+      "Preserving complete execution traces and intermediate outputs for post-run debugging."
+     ]
+    },
+    {
+     "story_id": "OS-AI-0002",
+     "title": "Deterministic agentic-workflows evaluation with drift detection and latency budgets under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-AI-0010",
+     "title": "Deterministic agentic-workflows evaluation with drift detection and latency budgets under Disaster Recovery & Cascading Failover",
+     "demand_score": 9.13,
+     "covered": false,
+     "missed_cases": [
+      "Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Disaster Recovery & Cascading Failover",
+      "Cascading failover during Disaster Recovery & Cascading Failover"
+     ]
+    },
+    {
+     "story_id": "OS-AI-0012",
+     "title": "Dynamic semantic chunking and re-ranking for agentic-workflows in vector search under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.22,
+     "covered": false,
+     "missed_cases": [
+      "Tables and code blocks split across chunk boundaries corrupting syntax during generation exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-AI-0022",
+     "title": "Token budget enforcement and prompt caching optimization for agentic-workflows under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.07,
+     "covered": false,
+     "missed_cases": [
+      "Provider cache eviction during low-traffic night hours causing unexpected latency spikes exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    }
+   ],
+   "critical_gaps": [
+    "[OS-AI-001] Unaddressed Quality Rubric: Does the runtime enforce a hard, configurable step and dollar budget limit?",
+    "[OS-AI-001] Unaddressed Quality Rubric: Is there cyclic oscillation detection (A-B-A-B patterns) in the execution supervisor?",
+    "[OS-AI-001] Unaddressed Quality Rubric: Does the system provide a clear degradation summary to the user rather than crashing silently or timing out?",
+    "[OS-AI-0002] Unaddressed Quality Rubric: Does the implementation mitigate non-deterministic temperature output causing sporadic false-positive test failures exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-AI-0002] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-AI-0010] Unaddressed Quality Rubric: Does the implementation mitigate non-deterministic temperature output causing sporadic false-positive test failures exacerbated by disaster recovery & cascading failover without manual intervention?",
+    "[OS-AI-0010] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-AI-0012] Unaddressed Quality Rubric: Does the implementation mitigate tables and code blocks split across chunk boundaries corrupting syntax during generation exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-AI-0012] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-AI-0022] Unaddressed Quality Rubric: Does the implementation mitigate provider cache eviction during low-traffic night hours causing unexpected latency spikes exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-AI-0022] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?"
+   ],
+   "edge_case_alerts": [
+    "[OS-AI-001] Automated Infinite Tool-Calling Loop Breaker with Graceful Degradation: Subtle argument permutations generated by the LLM to evade naive string equality checks (requires semantic or fuzzy parameter diffing).",
+    "[OS-AI-001] Automated Infinite Tool-Calling Loop Breaker with Graceful Degradation: Preserving complete execution traces and intermediate outputs for post-run debugging.",
+    "[OS-AI-0002] Deterministic agentic-workflows evaluation with drift detection and latency budgets under Network Partitions & Distributed Timeout Failures: Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-AI-0002] Deterministic agentic-workflows evaluation with drift detection and latency budgets under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-AI-0010] Deterministic agentic-workflows evaluation with drift detection and latency budgets under Disaster Recovery & Cascading Failover: Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Disaster Recovery & Cascading Failover",
+    "[OS-AI-0010] Deterministic agentic-workflows evaluation with drift detection and latency budgets under Disaster Recovery & Cascading Failover: Cascading failover during Disaster Recovery & Cascading Failover",
+    "[OS-AI-0012] Dynamic semantic chunking and re-ranking for agentic-workflows in vector search under Network Partitions & Distributed Timeout Failures: Tables and code blocks split across chunk boundaries corrupting syntax during generation exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-AI-0012] Dynamic semantic chunking and re-ranking for agentic-workflows in vector search under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-AI-0022] Token budget enforcement and prompt caching optimization for agentic-workflows under Network Partitions & Distributed Timeout Failures: Provider cache eviction during low-traffic night hours causing unexpected latency spikes exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-AI-0022] Token budget enforcement and prompt caching optimization for agentic-workflows under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures"
+   ],
+   "recommendations": [
+    "Add explicit integration and failure-injection tests covering the flagged production edge cases.",
+    "Document explicit architectural answers to the quality checklist rubrics before writing code.",
+    "Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite."
+   ]
+  }
+ },
+ {
+  "spec": "LLM gateway that routes requests to OpenAI with a fallback to Anthropic when errors occur.",
+  "industry": "ai-infra",
+  "domain": "llm-gateways",
+  "result": {
+   "target_industry": "ai-infra",
+   "score": 18,
+   "summary": "Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.",
+   "matched_stories": [
+    {
+     "story_id": "OS-AI-002",
+     "title": "Graceful Multi-Provider Fallback Cascade Against HTTP 429 Token Rate Limits",
+     "demand_score": 9.5,
+     "covered": false,
+     "missed_cases": [
+      "Preserving Server-Sent Events (SSE) streaming connections across failovers."
+     ]
+    },
+    {
+     "story_id": "OS-AI-0032",
+     "title": "Deterministic llm-gateways evaluation with drift detection and latency budgets under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-AI-0031",
+     "title": "Deterministic llm-gateways evaluation with drift detection and latency budgets under High Concurrency & Load Spikes",
+     "demand_score": 9.3,
+     "covered": false,
+     "missed_cases": [
+      "Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by High Concurrency & Load Spikes",
+      "Cascading failover during High Concurrency & Load Spikes"
+     ]
+    },
+    {
+     "story_id": "OS-AI-0037",
+     "title": "Deterministic llm-gateways evaluation with drift detection and latency budgets under Idempotency & Replay Attack Vulnerabilities",
+     "demand_score": 9.22,
+     "covered": false,
+     "missed_cases": [
+      "Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Idempotency & Replay Attack Vulnerabilities",
+      "Cascading failover during Idempotency & Replay Attack Vulnerabilities"
+     ]
+    },
+    {
+     "story_id": "OS-AI-0035",
+     "title": "Deterministic llm-gateways evaluation with drift detection and latency budgets under Multi-Tenant Data Leakage & Isolation Breaches",
+     "demand_score": 9.180000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Multi-Tenant Data Leakage & Isolation Breaches",
+      "Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches"
+     ]
+    }
+   ],
+   "critical_gaps": [
+    "[OS-AI-002] Unaddressed Quality Rubric: Does the architecture implement automatic, transparent model switching on 429/503 upstream responses?",
+    "[OS-AI-002] Unaddressed Quality Rubric: Is there local client-side token bucket buffering to prevent sudden burst overruns?",
+    "[OS-AI-002] Unaddressed Quality Rubric: Are system prompts and tool schemas dynamically normalized across target providers?",
+    "[OS-AI-0032] Unaddressed Quality Rubric: Does the implementation mitigate non-deterministic temperature output causing sporadic false-positive test failures exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-AI-0031] Unaddressed Quality Rubric: Does the implementation mitigate non-deterministic temperature output causing sporadic false-positive test failures exacerbated by high concurrency & load spikes without manual intervention?",
+    "[OS-AI-0037] Unaddressed Quality Rubric: Does the implementation mitigate non-deterministic temperature output causing sporadic false-positive test failures exacerbated by idempotency & replay attack vulnerabilities without manual intervention?",
+    "[OS-AI-0035] Unaddressed Quality Rubric: Does the implementation mitigate non-deterministic temperature output causing sporadic false-positive test failures exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?"
+   ],
+   "edge_case_alerts": [
+    "[OS-AI-002] Graceful Multi-Provider Fallback Cascade Against HTTP 429 Token Rate Limits: Preserving Server-Sent Events (SSE) streaming connections across failovers.",
+    "[OS-AI-0032] Deterministic llm-gateways evaluation with drift detection and latency budgets under Network Partitions & Distributed Timeout Failures: Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-AI-0032] Deterministic llm-gateways evaluation with drift detection and latency budgets under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-AI-0031] Deterministic llm-gateways evaluation with drift detection and latency budgets under High Concurrency & Load Spikes: Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by High Concurrency & Load Spikes",
+    "[OS-AI-0031] Deterministic llm-gateways evaluation with drift detection and latency budgets under High Concurrency & Load Spikes: Cascading failover during High Concurrency & Load Spikes",
+    "[OS-AI-0037] Deterministic llm-gateways evaluation with drift detection and latency budgets under Idempotency & Replay Attack Vulnerabilities: Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Idempotency & Replay Attack Vulnerabilities",
+    "[OS-AI-0037] Deterministic llm-gateways evaluation with drift detection and latency budgets under Idempotency & Replay Attack Vulnerabilities: Cascading failover during Idempotency & Replay Attack Vulnerabilities",
+    "[OS-AI-0035] Deterministic llm-gateways evaluation with drift detection and latency budgets under Multi-Tenant Data Leakage & Isolation Breaches: Non-deterministic temperature output causing sporadic false-positive test failures exacerbated by Multi-Tenant Data Leakage & Isolation Breaches",
+    "[OS-AI-0035] Deterministic llm-gateways evaluation with drift detection and latency budgets under Multi-Tenant Data Leakage & Isolation Breaches: Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches"
+   ],
+   "recommendations": [
+    "Add explicit integration and failure-injection tests covering the flagged production edge cases.",
+    "Document explicit architectural answers to the quality checklist rubrics before writing code.",
+    "Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite."
+   ]
+  }
+ },
+ {
+  "spec": "Refund endpoint that refunds part of an order and updates the ledger.",
+  "industry": "fintech",
+  "domain": "reconciliation",
+  "result": {
+   "target_industry": "fintech",
+   "score": 18,
+   "summary": "Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.",
+   "matched_stories": [
+    {
+     "story_id": "OS-FIN-002",
+     "title": "Proportional Interchange Fee (MDR) and Fixed Gateway Fee Accounting on Partial Refunds",
+     "demand_score": 9.1,
+     "covered": false,
+     "missed_cases": [
+      "Half-even rounding (Banker's Rounding) on sub-cent fee calculations to avoid systematic financial drift over millions of transactions."
+     ]
+    },
+    {
+     "story_id": "OS-FIN-0032",
+     "title": "Double-entry immutable ledger journaling for reconciliation transactions under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-FIN-0035",
+     "title": "Double-entry immutable ledger journaling for reconciliation transactions under Multi-Tenant Data Leakage & Isolation Breaches",
+     "demand_score": 9.180000000000001,
+     "covered": false,
+     "missed_cases": [
+      "Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Multi-Tenant Data Leakage & Isolation Breaches",
+      "Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches"
+     ]
+    },
+    {
+     "story_id": "OS-FIN-0042",
+     "title": "Real-time fraud velocity checks and 3DS challenge step-up for reconciliation under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.22,
+     "covered": false,
+     "missed_cases": [
+      "Distributed botnet cycling residential proxies to evade naive single-IP velocity limits exacerbated by Network Partitions & Distributed Timeout Failures",
+      "Cascading failover during Network Partitions & Distributed Timeout Failures"
+     ]
+    },
+    {
+     "story_id": "OS-FIN-0034",
+     "title": "Double-entry immutable ledger journaling for reconciliation transactions under Strict Compliance & Regulatory Audit Enforcement",
+     "demand_score": 9.01,
+     "covered": false,
+     "missed_cases": [
+      "Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Strict Compliance & Regulatory Audit Enforcement",
+      "Cascading failover during Strict Compliance & Regulatory Audit Enforcement"
+     ]
+    }
+   ],
+   "critical_gaps": [
+    "[OS-FIN-002] Unaddressed Quality Rubric: Does the financial calculation utilize Banker's Rounding (Half-Even) to prevent statistical drift?",
+    "[OS-FIN-002] Unaddressed Quality Rubric: Does the model explicitly distinguish variable percentage fees from fixed non-refundable transaction fees?",
+    "[OS-FIN-0032] Unaddressed Quality Rubric: Does the implementation mitigate concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-FIN-0032] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-FIN-0035] Unaddressed Quality Rubric: Does the implementation mitigate concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by multi-tenant data leakage & isolation breaches without manual intervention?",
+    "[OS-FIN-0035] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-FIN-0042] Unaddressed Quality Rubric: Does the implementation mitigate distributed botnet cycling residential proxies to evade naive single-ip velocity limits exacerbated by network partitions & distributed timeout failures without manual intervention?",
+    "[OS-FIN-0042] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-FIN-0034] Unaddressed Quality Rubric: Does the implementation mitigate concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by strict compliance & regulatory audit enforcement without manual intervention?",
+    "[OS-FIN-0034] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?"
+   ],
+   "edge_case_alerts": [
+    "[OS-FIN-002] Proportional Interchange Fee (MDR) and Fixed Gateway Fee Accounting on Partial Refunds: Half-even rounding (Banker's Rounding) on sub-cent fee calculations to avoid systematic financial drift over millions of transactions.",
+    "[OS-FIN-0032] Double-entry immutable ledger journaling for reconciliation transactions under Network Partitions & Distributed Timeout Failures: Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-FIN-0032] Double-entry immutable ledger journaling for reconciliation transactions under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-FIN-0035] Double-entry immutable ledger journaling for reconciliation transactions under Multi-Tenant Data Leakage & Isolation Breaches: Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Multi-Tenant Data Leakage & Isolation Breaches",
+    "[OS-FIN-0035] Double-entry immutable ledger journaling for reconciliation transactions under Multi-Tenant Data Leakage & Isolation Breaches: Cascading failover during Multi-Tenant Data Leakage & Isolation Breaches",
+    "[OS-FIN-0042] Real-time fraud velocity checks and 3DS challenge step-up for reconciliation under Network Partitions & Distributed Timeout Failures: Distributed botnet cycling residential proxies to evade naive single-IP velocity limits exacerbated by Network Partitions & Distributed Timeout Failures",
+    "[OS-FIN-0042] Real-time fraud velocity checks and 3DS challenge step-up for reconciliation under Network Partitions & Distributed Timeout Failures: Cascading failover during Network Partitions & Distributed Timeout Failures",
+    "[OS-FIN-0034] Double-entry immutable ledger journaling for reconciliation transactions under Strict Compliance & Regulatory Audit Enforcement: Concurrent debit operations on accounts with balance near zero triggering race condition overdrafts exacerbated by Strict Compliance & Regulatory Audit Enforcement",
+    "[OS-FIN-0034] Double-entry immutable ledger journaling for reconciliation transactions under Strict Compliance & Regulatory Audit Enforcement: Cascading failover during Strict Compliance & Regulatory Audit Enforcement"
+   ],
+   "recommendations": [
+    "Add explicit integration and failure-injection tests covering the flagged production edge cases.",
+    "Document explicit architectural answers to the quality checklist rubrics before writing code.",
+    "Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite."
+   ]
+  }
+ },
+ {
+  "spec": "Credit card charge endpoint that retries Stripe on network timeout.",
+  "industry": "devtools",
+  "domain": "apis-and-sdks",
+  "result": {
+   "target_industry": "devtools",
+   "score": 54,
+   "summary": "Severe Production Vulnerability Alert: Multiple high-impact failure modes observed in real-world outages were ignored in this specification.",
+   "matched_stories": [
+    {
+     "story_id": "OS-DEV-0012",
+     "title": "High-throughput apis-and-sdks rate limiting with distributed sliding window under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.22,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-DEV-0002",
+     "title": "Zero-downtime apis-and-sdks with atomic rollback validation under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-DEV-0022",
+     "title": "Cryptographic verification of apis-and-sdks webhooks and replay attack prevention under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.07,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-DEV-001",
+     "title": "Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries",
+     "demand_score": 9.6,
+     "covered": false,
+     "missed_cases": [
+      "Idempotency key TTL expiration after the standard retention window (24 hours).",
+      "Sub-millisecond race conditions mitigated via distributed locks (e.g. Redis Redlock or Postgres advisory locks).",
+      "Full header and status code preservation (replaying original response headers, not just raw JSON body)."
+     ]
+    },
+    {
+     "story_id": "OS-DEV-0011",
+     "title": "High-throughput apis-and-sdks rate limiting with distributed sliding window under High Concurrency & Load Spikes",
+     "demand_score": 9.15,
+     "covered": false,
+     "missed_cases": [
+      "Clock drift between distributed nodes skewing sliding window timestamp calculations exacerbated by High Concurrency & Load Spikes",
+      "Cascading failover during High Concurrency & Load Spikes"
+     ]
+    }
+   ],
+   "critical_gaps": [
+    "[OS-DEV-0012] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-0002] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-0022] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-001] Unaddressed Quality Rubric: Does the spec or implementation reject reused keys with altered payloads with HTTP 422?",
+    "[OS-DEV-001] Unaddressed Quality Rubric: Is there a distributed lock mechanism for in-flight concurrent requests sharing the same key?",
+    "[OS-DEV-001] Unaddressed Quality Rubric: Does the replayed response explicitly notify the client via an Idempotent-Replayed header?",
+    "[OS-DEV-0011] Unaddressed Quality Rubric: Does the implementation mitigate clock drift between distributed nodes skewing sliding window timestamp calculations exacerbated by high concurrency & load spikes without manual intervention?",
+    "[OS-DEV-0011] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?"
+   ],
+   "edge_case_alerts": [
+    "[OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries: Idempotency key TTL expiration after the standard retention window (24 hours).",
+    "[OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries: Sub-millisecond race conditions mitigated via distributed locks (e.g. Redis Redlock or Postgres advisory locks).",
+    "[OS-DEV-001] Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries: Full header and status code preservation (replaying original response headers, not just raw JSON body).",
+    "[OS-DEV-0011] High-throughput apis-and-sdks rate limiting with distributed sliding window under High Concurrency & Load Spikes: Clock drift between distributed nodes skewing sliding window timestamp calculations exacerbated by High Concurrency & Load Spikes",
+    "[OS-DEV-0011] High-throughput apis-and-sdks rate limiting with distributed sliding window under High Concurrency & Load Spikes: Cascading failover during High Concurrency & Load Spikes"
+   ],
+   "recommendations": [
+    "Add explicit integration and failure-injection tests covering the flagged production edge cases.",
+    "Document explicit architectural answers to the quality checklist rubrics before writing code.",
+    "Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite."
+   ]
+  }
+ },
+ {
+  "spec": "Credit card charge endpoint that retries Stripe on network timeout. Uses an Idempotency-Key header with atomic deduplication and cached responses, a 24h TTL, a distributed lock for concurrent requests, and returns 422 on payload mismatch.",
+  "industry": "devtools",
+  "domain": "apis-and-sdks",
+  "result": {
+   "target_industry": "devtools",
+   "score": 100,
+   "summary": "High resilience! The technical specification preemptively mitigates known production failure modes documented in field reports.",
+   "matched_stories": [
+    {
+     "story_id": "OS-DEV-001",
+     "title": "Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries",
+     "demand_score": 9.6,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-DEV-0002",
+     "title": "Zero-downtime apis-and-sdks with atomic rollback validation under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.370000000000001,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-DEV-0012",
+     "title": "High-throughput apis-and-sdks rate limiting with distributed sliding window under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.22,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-DEV-0022",
+     "title": "Cryptographic verification of apis-and-sdks webhooks and replay attack prevention under Network Partitions & Distributed Timeout Failures",
+     "demand_score": 9.07,
+     "covered": true,
+     "missed_cases": []
+    },
+    {
+     "story_id": "OS-DEV-0007",
+     "title": "Zero-downtime apis-and-sdks with atomic rollback validation under Idempotency & Replay Attack Vulnerabilities",
+     "demand_score": 9.22,
+     "covered": true,
+     "missed_cases": []
+    }
+   ],
+   "critical_gaps": [
+    "[OS-DEV-001] Unaddressed Quality Rubric: Does the spec or implementation reject reused keys with altered payloads with HTTP 422?",
+    "[OS-DEV-0002] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-0012] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-0022] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?",
+    "[OS-DEV-0007] Unaddressed Quality Rubric: Are error scenarios tested with automated chaos or integration assertions?"
+   ],
+   "edge_case_alerts": [],
+   "recommendations": [
+    "Document explicit architectural answers to the quality checklist rubrics before writing code.",
+    "Utilize the Gherkin acceptance criteria from matched user stories as an automated E2E test suite."
+   ]
+  }
+ }
+]

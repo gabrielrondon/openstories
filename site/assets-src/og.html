@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; }
+  .og { width: 1200px; height: 630px; background: #0b0b10; color: #ececf3; font-family: "Inter Tight", Inter, system-ui, sans-serif; position: relative; overflow: hidden; }
+  .glow { position: absolute; left: 40%; top: -40%; width: 900px; height: 700px; background: radial-gradient(closest-side, rgba(124,58,237,.55), transparent 70%); }
+  .in { position: absolute; inset: 0; padding: 64px 72px; display: flex; flex-direction: column; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 28px; font-weight: 700; }
+  .brand b { color: #a78bfa; }
+  .brand .tag { font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 15px; color: #9a9ab0; border: 1px solid #2a2a36; border-radius: 999px; padding: 4px 12px; margin-left: 6px; }
+  h1 { margin: 0; font-size: 62px; line-height: 1.02; letter-spacing: -0.025em; max-width: 19ch; font-weight: 700; }
+  h1 em { font-style: normal; background: linear-gradient(90deg, #a78bfa, #7c3aed 60%, #4f46e5); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stats { display: flex; gap: 48px; }
+  .stats b { display: block; font-size: 46px; letter-spacing: -0.03em; line-height: 1; }
+  .stats span { color: #9a9ab0; font-size: 17px; }
+  .foot { display: flex; align-items: center; justify-content: space-between; color: #9a9ab0; font-size: 18px; }
+  .t { display: inline-flex; align-items: center; gap: 12px; }
+  .tmark { width: 44px; height: 44px; border-radius: 12px; background: #0e100f; border: 1px solid #42433d; color: #fffce1; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 22px; letter-spacing: -0.04em; }
+  .tmark span { color: #abff84; }
+</style>
+</head>
+<body>
+<div class="og" id="og">
+  <div class="glow"></div>
+  <div class="in">
+    <div class="brand">
+      <svg width="40" height="40" viewBox="0 0 32 32"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="url(#g)"/><path d="M9 11h14M9 16h14M9 21h9" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      Open<b>Stories</b><span class="tag">go · MIT · MCP</span>
+    </div>
+    <h1>Ground your AI agents in <em>real-world problems</em> and production battle-scars.</h1>
+    <div class="stats">
+      <div><b>1,628</b><span>evidence-backed stories</span></div>
+      <div><b>20</b><span>industries</span></div>
+      <div><b>104</b><span>domains</span></div>
+      <div><b>MCP</b><span>native server + spec linter</span></div>
+    </div>
+    <div class="foot">
+      <span>openstories.tuturama.com · github.com/gabrielrondon/openstories</span>
+      <span class="t"><span class="tmark"><span>{</span>t<span>}</span></span> Tuturama</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

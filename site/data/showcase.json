@@ -1,0 +1,337 @@
+[
+ {
+  "id": "OS-DEV-002",
+  "locale": "en",
+  "industry": "devtools",
+  "domain": "auth-and-iam",
+  "title": "Preventing Magic Link Token Invalidation by Enterprise Email Security Scanners (Pre-fetching)",
+  "demand_score": 9.4,
+  "status": "verified",
+  "persona": {
+   "role": "Security Engineer / Full-Stack Lead",
+   "context": "B2B SaaS applications serving enterprise customers equipped with automated mail defense suites (Microsoft Defender SafeLinks, Proofpoint, Mimecast)"
+  },
+  "story": {
+   "as_a": "Corporate user logging in via an emailed Magic Link",
+   "i_want": "The link in my email to avoid instant invalidation before my deliberate human click",
+   "so_that": "I can sign in without seeing the dreaded 'Token expired or already used' error caused by automated antivirus bots pre-fetching every URL"
+  },
+  "acceptance_criteria": [
+   {
+    "scenario": "Automated GET request scanner pre-fetch by corporate antivirus",
+    "given": "A single-use authentication token link sent via email",
+    "when": "An automated enterprise mail security bot issues a background GET request to inspect the target page for phishing",
+    "then": "The server must render an intermediate landing page with a 'Confirm Sign-In' button WITHOUT burning or consuming the token on GET"
+   },
+   {
+    "scenario": "Deliberate human confirmation click (POST request)",
+    "given": "The user has arrived at the confirmation landing page",
+    "when": "The user clicks the 'Confirm Sign-In' button submitting a POST request",
+    "then": "The token is consumed atomically, an authenticated session is established, and the token is invalidated"
+   }
+  ],
+  "edge_cases": [
+   "Advanced email security crawlers with headless browsers simulating mouse movements or executing JavaScript.",
+   "Strict 15-minute token TTL expiration regardless of click state.",
+   "Client fingerprint matching (IP subnet or User-Agent heuristics) between token issuance and confirmation."
+  ],
+  "evidence": [
+   {
+    "source": "https://github.com/supabase/gotrue/issues/1204",
+    "type": "github_issue",
+    "quote": "Enterprise customers using Outlook SafeLinks / Microsoft Defender have all magic links pre-fetched. When users click it 5 seconds later, it says link is expired.",
+    "date": "2024-03-22"
+   },
+   {
+    "source": "https://reddit.com/r/webdev/comments/182k9p1",
+    "type": "reddit_thread",
+    "quote": "Never, ever consume a magic link token on a GET request. Mail security gateways fetch every link automatically and burn the token instantly.",
+    "date": "2024-11-05"
+   }
+  ],
+  "evaluation_rubric": [
+   "Does the initial GET handler explicitly avoid consuming or expiring the one-time authentication token?",
+   "Is there an explicit human interaction (POST form submission or button click) required to finalize authentication?",
+   "Are brute-force rate limiters active on the token verification endpoint?"
+  ],
+  "tags": [
+   "auth",
+   "magic-link",
+   "security",
+   "enterprise"
+  ],
+  "body": "# Production Failure Context\n\nHundreds of startups implement passwordless email authentication only to discover that 100% of their enterprise customers fail to log in. Enterprise email security solutions (Office 365 Advanced Threat Protection, Proofpoint URL Defense, Mimecast) crawl incoming links programmatically. If the endpoint `/auth/callback?token=XYZ` burns the token on the initial HTTP GET, the human recipient arrives at an already-expired link.",
+  "file_path": "devtools/auth-and-iam/magic-link-pre-fetching.story.md",
+  "is_custom": false
+ },
+ {
+  "id": "OS-FIN-001",
+  "locale": "en",
+  "industry": "fintech",
+  "domain": "payments-and-checkout",
+  "title": "Resilience to Asynchronous and Out-of-Order Payment Webhook Delivery",
+  "demand_score": 9.7,
+  "status": "verified",
+  "persona": {
+   "role": "Fintech Lead / Staff Payment Engineer",
+   "context": "High-volume checkout and subscription engines consuming asynchronous webhooks from Stripe, Adyen, and PayPal across distributed queues"
+  },
+  "story": {
+   "as_a": "Payment platform engineer",
+   "i_want": "The webhook processor to enforce finite state machine (FSM) transitions with temporal event versioning",
+   "so_that": "An out-of-order webhook delivery (e.g. charge.refunded arriving prior to charge.succeeded, or a delayed charge.failed retry) never reverts completed orders or unlocks unauthorized access"
+  },
+  "acceptance_criteria": [
+   {
+    "scenario": "Payment success webhook arrives before local order creation commits",
+    "given": "A payment.approved webhook received before the synchronous checkout endpoint completes database writes",
+    "when": "The webhook is processed by the ingestion worker",
+    "then": "The system must enqueue the event with exponential backoff retry or perform an atomic upsert without returning HTTP 500 to the payment gateway"
+   },
+   {
+    "scenario": "Delayed webhook with timestamp older than current order state",
+    "given": "The order is already marked with a terminal state \"PAID\" or \"DELIVERED\"",
+    "when": "A delayed retry of an older \"payment.pending\" or \"payment.failed\" webhook arrives hours later",
+    "then": "The state machine must discard the invalid transition, log an obsolescence audit trail event, and return HTTP 200 to acknowledge gateway delivery"
+   }
+  ],
+  "edge_cases": [
+   "Gateways that omit monotonic sequence numbers or millisecond-precision event timestamps.",
+   "Concurrent webhook deliveries for the same payment intent fired in parallel by redundant gateway regions.",
+   "Locking per order ID (distributed redis lock or postgres row lock) during webhook evaluation."
+  ],
+  "evidence": [
+   {
+    "source": "https://stripe.com/docs/webhooks#delivery-order",
+    "type": "official_doc_postmortem",
+    "quote": "Stripe does not guarantee delivery of webhooks in the order in which they are generated. Your webhook handling endpoint must not assume events arrive sequentially.",
+    "date": "2024-05-15"
+   },
+   {
+    "source": "https://reddit.com/r/rails/comments/16k1wz8",
+    "type": "reddit_thread",
+    "quote": "Had customers receiving free subscription access because the initial failed attempt webhook was delayed 4 hours and overwrote the subsequent successful payment state.",
+    "date": "2024-09-17"
+   }
+  ],
+  "evaluation_rubric": [
+   "Does the webhook processor treat terminal order states as immutable against older event timestamps?",
+   "Does the endpoint always return HTTP 200 on handled obsolete events to halt gateway retry storms?",
+   "Is there transactional row locking per order ID during event processing?"
+  ],
+  "tags": [
+   "fintech",
+   "webhooks",
+   "payments",
+   "state-machine",
+   "concurrency"
+  ],
+  "body": "# Technical Incident Background\n\nAssuming that webhooks arrive in exact chronological order is the primary source of billing discrepancies in subscription businesses. Because modern payment gateways dispatch events via distributed partitioning clusters (Kafka/SQS) with independent retry policies, a webhook generated 5 seconds earlier can easily land 30 minutes after subsequent events.",
+  "file_path": "fintech/payments-and-checkout/out-of-order-webhooks.story.md",
+  "is_custom": false
+ },
+ {
+  "id": "OS-AI-001",
+  "locale": "en",
+  "industry": "ai-infra",
+  "domain": "agentic-workflows",
+  "title": "Automated Infinite Tool-Calling Loop Breaker with Graceful Degradation",
+  "demand_score": 9.8,
+  "status": "verified",
+  "persona": {
+   "role": "AI Systems Engineer / Autonomous Agent Architect",
+   "context": "Production agentic workflows orchestrating multiple tool calls with budget constraints and user-facing SLAs"
+  },
+  "story": {
+   "as_a": "Platform engineer deploying LLM autonomous agents",
+   "i_want": "The agent execution runtime to detect repetitive tool invocations (identical parameters or ping-pong tool oscillation) and break execution loops",
+   "so_that": "The system does not burn thousands of dollars in token runaway loops and users receive actionable partial answers instead of hanging indefinitely"
+  },
+  "acceptance_criteria": [
+   {
+    "scenario": "Agent invoking the same tool with identical arguments 3 consecutive times",
+    "given": "An autonomous agent executing with a configured step budget of 15 iterations",
+    "when": "The agent invokes the tool \"search_api\" with identical arguments 3 times consecutively",
+    "then": "The runtime must intercept the call, inject an explicit system notification about redundant execution, and force the agent to synthesize a conclusion or admit failure"
+   },
+   {
+    "scenario": "Ping-pong oscillatory tool loop between two tools (A -> B -> A -> B)",
+    "given": "An execution history tracking the last 4 tool invocations",
+    "when": "The agent alternates cyclically between two tools without extracting new distinct state",
+    "then": "The circuit breaker must trip, logging an alert metric and terminating the run with status \"agent_loop_detected\""
+   }
+  ],
+  "edge_cases": [
+   "Legitimate pagination loops where the agent calls the same tool while incrementing page or cursor parameters.",
+   "Subtle argument permutations generated by the LLM to evade naive string equality checks (requires semantic or fuzzy parameter diffing).",
+   "Preserving complete execution traces and intermediate outputs for post-run debugging."
+  ],
+  "evidence": [
+   {
+    "source": "https://github.com/langchain-ai/langgraph/issues/412",
+    "type": "github_issue",
+    "quote": "An agent got stuck calling the weather tool with minor variations in loop overnight, resulting in a $1,400 OpenAI bill and no final answer.",
+    "date": "2024-08-03"
+   },
+   {
+    "source": "https://news.ycombinator.com/item?id=39912044",
+    "type": "hackernews",
+    "quote": "If your LLM agent framework doesn't have a hard circuit breaker for repetitive tool loops, you are running an unmonitored money furnace in production.",
+    "date": "2024-12-19"
+   }
+  ],
+  "evaluation_rubric": [
+   "Does the runtime enforce a hard, configurable step and dollar budget limit?",
+   "Is there cyclic oscillation detection (A-B-A-B patterns) in the execution supervisor?",
+   "Does the system provide a clear degradation summary to the user rather than crashing silently or timing out?"
+  ],
+  "tags": [
+   "ai-agents",
+   "tool-calling",
+   "cost-control",
+   "reliability",
+   "circuit-breaker"
+  ],
+  "body": "# Operational Production Risks\n\nLooping hallucination in autonomous agents represents one of the largest financial and reliability hazards in modern AI engineering. When an external tool returns output that does not satisfy an LLM's internal system prompt, the model often reformulates minor phrasing variations in a tight loop until credit quotas are completely exhausted.",
+  "file_path": "ai-infra/agentic-workflows/tool-calling-loop-breaker.story.md",
+  "is_custom": false
+ },
+ {
+  "id": "OS-AI-002",
+  "locale": "en",
+  "industry": "ai-infra",
+  "domain": "llm-gateways",
+  "title": "Graceful Multi-Provider Fallback Cascade Against HTTP 429 Token Rate Limits",
+  "demand_score": 9.5,
+  "status": "verified",
+  "persona": {
+   "role": "AI Platform Infrastructure Lead / Site Reliability Engineer",
+   "context": "High-throughput production LLM gateways serving enterprise traffic across OpenAI, Anthropic, and Gemini with spiky demand"
+  },
+  "story": {
+   "as_a": "Platform engineer maintaining AI infrastructure",
+   "i_want": "The AI gateway to proactively manage rate limits using a local Token Bucket algorithm and trigger seamless failover to secondary providers",
+   "so_that": "Sudden concurrency surges or exhausted Tokens Per Minute (TPM) quotas never surface HTTP 500 error screens to end users"
+  },
+  "acceptance_criteria": [
+   {
+    "scenario": "Primary model provider returns HTTP 429 Too Many Requests",
+    "given": "The default routing policy directs requests to Claude 3.5 Sonnet",
+    "when": "The upstream provider returns HTTP 429 with header \"Retry-After: 15\"",
+    "then": "The gateway must dynamically reroute the request to an equivalent fallback model (e.g. Gemini 1.5 Pro) in under 100ms without exposing upstream failure to the client"
+   },
+   {
+    "scenario": "Pre-flight token estimation exceeds local safety threshold",
+    "given": "The current rolling TPM usage tracking window",
+    "when": "A large prompt is submitted and estimated token consumption exceeds 90% of provider quota",
+    "then": "The gateway must preemptively divert the prompt to an alternative provider pool before hitting the upstream rate limit"
+   }
+  ],
+  "edge_cases": [
+   "Translating provider-specific dialect nuances (e.g. tool call formatting, function calling schemas, JSON mode across OpenAI vs Anthropic).",
+   "Preserving Server-Sent Events (SSE) streaming connections across failovers.",
+   "Emitting real-time Prometheus / Datadog telemetry alerts when fallback routes are activated."
+  ],
+  "evidence": [
+   {
+    "source": "https://news.ycombinator.com/item?id=38419201",
+    "type": "hackernews",
+    "quote": "During OpenAI dev day outages, our entire platform died because we didn't have multi-provider fallbacks. A single 429 cascaded into 20,000 failed user sessions.",
+    "date": "2023-11-28"
+   },
+   {
+    "source": "https://github.com/BerriAI/litellm/issues/1402",
+    "type": "github_issue",
+    "quote": "Without local pre-emptive token tracking, sudden concurrent spikes trigger burst 429 limits that lock out the API key for minutes.",
+    "date": "2024-04-09"
+   }
+  ],
+  "evaluation_rubric": [
+   "Does the architecture implement automatic, transparent model switching on 429/503 upstream responses?",
+   "Is there local client-side token bucket buffering to prevent sudden burst overruns?",
+   "Are system prompts and tool schemas dynamically normalized across target providers?"
+  ],
+  "tags": [
+   "llm",
+   "gateway",
+   "rate-limiting",
+   "fallback",
+   "resiliency",
+   "ai-infra"
+  ],
+  "body": "# Operational Reliability Context\n\nCoupling production systems to a single model provider without dynamic fallback routing is an unacceptable availability risk. Token limits (TPM) and request limits (RPM) are enforced abruptly during global traffic surges. A resilient AI gateway estimates prompt tokens locally and maintains hot standby routes to ensure zero user-visible disruption.",
+  "file_path": "ai-infra/llm-gateways/token-rate-limit-cascade.story.md",
+  "is_custom": false
+ },
+ {
+  "id": "OS-DEV-001",
+  "locale": "en",
+  "industry": "devtools",
+  "domain": "apis-and-sdks",
+  "title": "Mandatory Idempotency Keys on Mutation Endpoints with Automatic Retries",
+  "demand_score": 9.6,
+  "status": "verified",
+  "persona": {
+   "role": "Backend Integration Engineer / API Platform Lead",
+   "context": "Mission-critical microservices and payment gateways handling distributed transactions and webhooks"
+  },
+  "story": {
+   "as_a": "Backend engineer integrating third-party APIs",
+   "i_want": "Mutation endpoints (POST/PATCH) to support an Idempotency-Key header with atomic deduplication and response caching",
+   "so_that": "Transient network drops, client timeouts, or connection resets never duplicate state mutations or charge customers twice"
+  },
+  "acceptance_criteria": [
+   {
+    "scenario": "Replaying an identical request with the same idempotency key within 24h",
+    "given": "A previous request with Idempotency-Key \"idemp_9921_x\" completed with HTTP 201 and payload {\"id\": \"tx_123\"}",
+    "when": "A new request arrives with the exact same key \"idemp_9921_x\" and identical payload",
+    "then": "The API must return HTTP 201 with the cached payload and header \"Idempotent-Replayed: true\", without re-executing business logic"
+   },
+   {
+    "scenario": "Payload mismatch conflict on identical key",
+    "given": "The key \"idemp_9921_x\" was already processed with payload A",
+    "when": "A client submits the same key \"idemp_9921_x\" with a different payload B",
+    "then": "The API must reject with HTTP 422 Unprocessable Entity and error code \"idempotency_key_payload_mismatch\""
+   },
+   {
+    "scenario": "Concurrent in-flight requests sharing the same key",
+    "given": "A request with key \"idemp_9921_x\" is currently being processed by a worker",
+    "when": "A second concurrent request arrives with the exact same key before completion",
+    "then": "The API must return HTTP 409 Conflict or hold a distributed lock until the first completes, never executing duplicate parallel routines"
+   }
+  ],
+  "edge_cases": [
+   "Idempotency key TTL expiration after the standard retention window (24 hours).",
+   "Sub-millisecond race conditions mitigated via distributed locks (e.g. Redis Redlock or Postgres advisory locks).",
+   "Full header and status code preservation (replaying original response headers, not just raw JSON body)."
+  ],
+  "evidence": [
+   {
+    "source": "https://github.com/stripe/stripe-go/issues/632",
+    "type": "github_issue",
+    "quote": "During network drops on cloud providers, client retries without idempotency keys produced duplicate customer charges totaling over $45k in less than 20 minutes.",
+    "date": "2024-09-14"
+   },
+   {
+    "source": "https://news.ycombinator.com/item?id=38192801",
+    "type": "hackernews",
+    "quote": "Building distributed systems without first-class idempotency in API design is tech debt that will eventually wake someone up at 3 AM with data corruption.",
+    "date": "2025-01-18"
+   }
+  ],
+  "evaluation_rubric": [
+   "Does the spec or implementation reject reused keys with altered payloads with HTTP 422?",
+   "Is there a distributed lock mechanism for in-flight concurrent requests sharing the same key?",
+   "Does the replayed response explicitly notify the client via an Idempotent-Replayed header?"
+  ],
+  "tags": [
+   "api-design",
+   "idempotency",
+   "distributed-systems",
+   "reliability"
+  ],
+  "body": "# Architectural Context\n\nThe absence of native idempotency in APIs is the leading cause of silent data corruption in distributed microservices. When a 30-second client-side HTTP timeout fires, the server may have already committed the database transaction. Without first-class `Idempotency-Key` deduplication, automated client retries inevitably spawn duplicate resources.",
+  "file_path": "devtools/apis-and-sdks/idempotency-keys.story.md",
+  "is_custom": false
+ }
+]
